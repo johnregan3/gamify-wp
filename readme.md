@@ -1,6 +1,6 @@
 # Gamify WP Plugin
 
-***Reward your Users for interacing with your WordPress site.***
+***Reward your Users for interacting with your WordPress site.***
 
 ---
 
