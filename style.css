@@ -1,0 +1,16 @@
+
+#spinner-image, #spinner-rw-image {
+	background: url('img/spinner.gif') no-repeat;
+	width: 35px;
+	height: 35px;
+}
+
+#points-notice, #points-notice, #spinner, #spinner-rw {
+	position: fixed;
+	right: 10px;
+	bottom: 10px;
+	background:#fff;
+	padding: 10px;
+	border:1px solid #aaa;
+	border-radius: 3px;
+}
