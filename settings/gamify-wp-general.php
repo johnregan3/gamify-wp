@@ -129,7 +129,9 @@ function set_default_actions() {
 
 	foreach( $action_array  as $action => $action_value ) {
 		foreach ( $action_value as $field => $field_value ) {
-			echo '<input type="hidden" name="gamwp_settings[' . $action . '][' . $field . ']" id="gamwp_settings[' . $action . '][' . $field . ']" value ="' . $field_value. '" >';
+				$settings_title = $action . '_' . $field;
+				$settings_value = $help->input_setup( $action, $field );
+			echo '<input type="hidden" name="gamwp_settings[' . esc_attr( $settings_title ) . ']" id="gamwp_settings[' . esc_attr( $settings_title ) . ']" value ="' . $field_value. '" >';
 		} // end foreach
 	} // end foreach
 
