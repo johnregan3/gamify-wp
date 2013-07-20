@@ -83,9 +83,9 @@ Class GAMWP_Settings {
 
 		$options = get_option('gamwp_settings');
 		$settings_title = $action . '_' . $field;
-		$settings_name = (isset($options[$settings_title]) ? $options[$settings_title] : '');
+		$settings = (isset($options[$settings_title]) ? $options[$settings_title] : '');
 
-		return $settings_name;
+		return $settings;
 
 	} //input_setup
 

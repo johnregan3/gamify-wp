@@ -27,12 +27,13 @@ function gamwp_custom_actions_post_type() {
 	);
 
 	$args = array(
-		'description'	=> 'Assign Custom Actions for the Gamify WP Plugin.',
-		'has_archive'	=> true,
-		'labels'		=> $labels,
-		'menu_position'	=> 5,
-		'public'		=> true,
-		'supports'		=> array( 'title' )
+		'exclude_from_search'	=> true,
+		'description'			=> 'Assign Custom Actions for the Gamify WP Plugin.',
+		'has_archive'			=> true,
+		'labels'				=> $labels,
+		'menu_position'			=> 5,
+		'public'				=> true,
+		'supports'				=> array( 'title' )
 	);
 
 	register_post_type( 'Custom Actions', $args );
@@ -86,21 +87,15 @@ function gamwp_ca_meta_box() {
 	$gamwp_ca_limit = get_post_meta( $post->ID, 'gamwp_ca_limit', true );
 
 	if ( ! isset( $gamwp_ca_action_hook ) ) {
-
 		$gamwp_ca_action_hook = '';
-
 	}
 
 	if ( ! isset( $gamwp_ca_points ) ) {
-
 		$gamwp_ca_points = 0;
-
 	}
 
 	if ( ! isset( $gamwp_ca_limit ) ) {
-
 		$gamwp_ca_limit = 0;
-
 	}
 
 	//display input fields
@@ -127,86 +122,57 @@ function gamwp_ca_meta_box() {
 function gamwp_ca_save( $post_id ) {
 
 	if ( !isset( $_POST['gamwp_nonce'] ) || !wp_verify_nonce( $_POST['gamwp_nonce'], basename( __FILE__ ) ) ) {
-
 		return $post_id;
-
 	}
 
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-
 		return $post_id;
-
 	}
 
 	//check permissions
 
 	if ( 'Custom Action' == $_POST['post_type'] ) {
-
 		if ( !current_user_can('edit_page', $post_id ) ) {
-
 			return $post_id;
-
 		}
-
 	} elseif ( !current_user_can('edit_post', $post_id) ) {
-
 		return $post_id;
-
 	}
 
 
 	//save the data for each field
 
 	//action hook value
-
 	$old = get_post_meta( $post_id, 'gamwp_ca_action_hook', true );
 
 	if ( ! isset( $_POST['gamwp_ca_action_hook'] ) ) {
-
 		$new = '';
-
 	} else {
-
 		$new = $_POST['gamwp_ca_action_hook'];
-
 	}
 
 	if ( $new && $new != $old ) {
-
 		update_post_meta( $post_id, 'gamwp_ca_action_hook', $new );
-
 	} elseif ( '' == $new && $old ) {
-
 		delete_post_meta( $post_id, 'gamwp_ca_action_hook', $old );
-
 	}
 
-	//action hook value
-
+	//points value
 	$old = get_post_meta( $post_id, 'gamwp_ca_points', true );
 
 	if ( ! isset( $_POST['gamwp_ca_points'] ) ) {
-
 		$new = '';
-
 	} else {
-
 		$new = $_POST['gamwp_ca_points'];
-
 	}
 
 	if ( $new && $new != $old ) {
-
 		update_post_meta( $post_id, 'gamwp_ca_points', $new );
-
 	} elseif ( '' == $new && $old ) {
-
 		delete_post_meta( $post_id, 'gamwp_ca_points', $old );
-
 	}
 
 	//daily total value
-
 	$check = isset( $_POST['gamwp_ca_limit'] ) ? 1 : 0 ;
 	update_post_meta( $post_id, 'gamwp_ca_limit', $check );
 

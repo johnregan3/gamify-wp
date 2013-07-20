@@ -37,19 +37,17 @@ function gamwp_comment( $comment_id, $status ) {
 	$process = New GAMWP_Process;
 
 	if ( $status == 1 ) {
-
-	$user_id = get_current_user_id();
-	$process = New GAMWP_Process;
-	$action = 'comment';
-	$action_title = $process->get_action_settings($action, 'action_title');
-	$points = $process->get_action_settings($action, 'points');
-	$process->save_process_results( $user_id, $action_title, $points );
-
+		$user_id = get_current_user_id();
+		$process = New GAMWP_Process;
+		$action = 'comment';
+		$action_title = $process->get_action_settings($action, 'action_title');
+		$points = $process->get_action_settings($action, 'points');
+		$process->save_process_results( $user_id, $action_title, $points );
 	}
 
 } // End gamwp_comment
 
-add_action('comment_post', 'gamwp_comment', 10 ,2);
+add_action('comment_post', 'gamwp_comment', 10, 2);
 
 
 

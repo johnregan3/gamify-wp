@@ -27,12 +27,13 @@ function gamwp_rewards_post_type() {
 	);
 
 	$args = array(
-		'description'	=> 'Assign Rewards for the Gamify WP Plugin.',
-		'has_archive'	=> true,
-		'labels'		=> $labels,
-		'menu_position'	=> 5,
-		'public'		=> true,
-		'supports'		=> array( 'title', 'thumbnail' )
+		'exclude_from_search'	=> true,
+		'description'			=> 'Assign Rewards for the Gamify WP Plugin.',
+		'has_archive'			=> true,
+		'labels'				=> $labels,
+		'menu_position'			=> 5,
+		'public'				=> true,
+		'supports'				=> array( 'title', 'thumbnail' )
 	);
 
 	register_post_type( 'Rewards', $args );
@@ -66,7 +67,6 @@ add_action( 'admin_menu' , 'gamwp_remove_rew_meta_boxes' );
 function gamwp_rew_image_box() {
 
 	remove_meta_box( 'postimagediv', 'rewards', 'side' );
-
 	add_meta_box( 'postimagediv', __('Reward Image'), 'post_thumbnail_meta_box', 'rewards', 'side', 'low' );
 
 }
@@ -77,13 +77,9 @@ add_action('do_meta_boxes', 'gamwp_rew_image_box');
 function gamwp_rew_image_box_text( $content ) {
 
 	if ( 'rewards' == get_post_type() ) {
-
 		return $content = str_replace( __( 'Set featured image' ), __( 'Set Reward image' ), $content );
-
 	} else {
-
 	return $content = str_replace( __( 'Set featured image' ), __( 'Set featured image' ), $content );
-
 	}
 
 }
@@ -115,38 +111,24 @@ function gamwp_rew_meta_box() {
 	global $post;
 
 	//load field meta information
-
 	$gamwp_rew_type = get_post_meta( $post->ID, 'gamwp_rew_type', true );
 	$gamwp_rew_goal_points = get_post_meta( $post->ID, 'gamwp_rew_goal_points', true );
 	$gamwp_rew_action_types = get_post_meta( $post->ID, 'gamwp_rew_action_types', true );
 
 	if ( ! isset( $gamwp_rew_goal_points ) ) {
-
 		$gamwp_rew_goal_points = '';
-
 	}
 
 	if ( ! isset( $gamwp_rew_points ) ) {
-
 		$gamwp_rew_points = 0;
-
 	}
 
-		$actions_array = array( "Comment" => 1, "Registration" => 1, "Publish Post" => 1 );
-
-		$gamwp_rew_action_types = array_merge( $actions_array, $gamwp_rew_action_types );
-
-
-
-	//display input fields
+	$actions_array = array( "Comment" => 1, "Registration" => 1, "Publish Post" => 1 );
+	$gamwp_rew_action_types = array_merge( $actions_array, $gamwp_rew_action_types );
 
 	wp_nonce_field( basename( __FILE__ ), 'gamwp_nonce' );
 
-print_r($gamwp_rew_action_types);
-
 	?>
-
-
 
 	<table class="form-table">
 
@@ -196,58 +178,37 @@ print_r($gamwp_rew_action_types);
 function gamwp_rew_save( $post_id ) {
 
 	if ( !isset( $_POST['gamwp_nonce'] ) || !wp_verify_nonce( $_POST['gamwp_nonce'], basename( __FILE__ ) ) ) {
-
 		return $post_id;
-
 	}
 
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-
 		return $post_id;
-
 	}
 
 	//check permissions
 
 	if ( 'Reward' == $_POST['post_type'] ) {
-
 		if ( !current_user_can('edit_page', $post_id ) ) {
-
 			return $post_id;
-
 		}
-
 	} elseif ( !current_user_can('edit_post', $post_id) ) {
-
 		return $post_id;
-
 	}
-
 
 	//save the data for each field
 
 	//action hook value
-
 	$old = get_post_meta( $post_id, 'gamwp_rew_type', true );
-
 	if ( ! isset( $_POST['gamwp_rew_type'] ) ) {
-
 		$new = '';
-
 	} else {
-
 		$new = $_POST['gamwp_rew_type'];
-
 	}
 
 	if ( $new && $new != $old ) {
-
 		update_post_meta( $post_id, 'gamwp_rew_type', $new );
-
 	} elseif ( '' == $new && $old ) {
-
 		delete_post_meta( $post_id, 'gamwp_rew_type', $old );
-
 	}
 
 	//action hook value
@@ -255,43 +216,29 @@ function gamwp_rew_save( $post_id ) {
 	$old = get_post_meta( $post_id, 'gamwp_rew_goal_points', true );
 
 	if ( ! isset( $_POST['gamwp_rew_goal_points'] ) ) {
-
 		$new = '';
-
 	} else {
-
 		$new = $_POST['gamwp_rew_goal_points'];
-
 	}
 
 	if ( $new && $new != $old ) {
-
 		update_post_meta( $post_id, 'gamwp_rew_goal_points', $new );
-
 	} elseif ( '' == $new && $old ) {
-
 		delete_post_meta( $post_id, 'gamwp_rew_goal_points', $old );
-
 	}
 
 	//Checkboxes
 
-$actions_array = array( "Comment" => 0, "Registration" => 0, "Publish Post" => 0 );
+	$actions_array = array( "Comment" => 0, "Registration" => 0, "Publish Post" => 0 );
 
 	$action_type_array = array();
 
 	foreach( $actions_array as $action => $val ) {
-
 		if ( isset( $_POST[$action] ) ) {
-
 			$action_type_array[$action] = 1;
-
 		} else {
-
 			$action_type_array[$action] = 0;
-
 		}// End check = 1
-
 	} // End foreach
 
 	update_post_meta( $post_id, 'gamwp_rew_action_types', $action_type_array );

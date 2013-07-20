@@ -13,10 +13,11 @@ include_once( plugin_dir_path(__FILE__) . 'settings/settings-class.php' ); 		//S
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-wp-general.php' ); 	//Settings Page
 
 include_once( plugin_dir_path(__FILE__) . 'process-class.php' ); 				//Processor Class
-include_once( plugin_dir_path(__FILE__) . 'process.php' ); 						//AJAX Processor
+include_once( plugin_dir_path(__FILE__) . 'process.php' ); 						//Action Processor
 
 include_once( plugin_dir_path(__FILE__) . 'default-actions.php' ); 				//Default Actions
 include_once( plugin_dir_path(__FILE__) . 'cpt/custom-actions.php' ); 			//Custom Actions Custom Post Type
+include_once( plugin_dir_path(__FILE__) . 'custom-actions.php' ); 				//Custom Actions
 
 include_once( plugin_dir_path(__FILE__) . 'shortcode/link.php' );				//Link Action Shortcode
 include_once( plugin_dir_path(__FILE__) . 'shortcode/user-stats.php' );			//User Stats Shortcode

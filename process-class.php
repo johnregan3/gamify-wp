@@ -23,17 +23,13 @@ Class GAMWP_Process {
 		reset ( $array );
 
 		foreach ( $array as $ii => $va ) {
-
 			$sorter[$ii] = $va[$key];
-
 		}
 
 		asort ( $sorter );
 
 		foreach ( $sorter as $ii => $va ) {
-
 			$ret[$ii] = $array[$ii];
-
 		}
 
 		$array = $ret;
@@ -51,9 +47,7 @@ Class GAMWP_Process {
 		$total_score = get_user_meta( $user_id, 'gamwp_score', true );
 
 		if ( ! isset( $total_score ) ) {
-
 			$total_score = 0;
-
 		}
 
 		$new_score = $total_score + $points;
@@ -82,16 +76,12 @@ Class GAMWP_Process {
 		$updated_actions = update_user_meta( $user_id, 'gamwp_actions', $actions_array );
 
 		if( $updated_actions === false ) {
-
-		$action_result['actions']['type'] = 'error';
-
+			$action_result['actions']['type'] = 'error';
 		}
 
 		else {
-
 			$action_result['actions']['type'] = 'success';
 			$action_result['actions']['action'] = $latest_action; //most recent action
-
 		}
 
 		return $action_result;
@@ -110,14 +100,10 @@ Class GAMWP_Process {
 		$updated_score = update_user_meta( $user_id, 'gamwp_score', $new_score );
 
 			if( $updated_score === false ) {
-
 				$score_result['score']['type'] = 'error';
-
 			} else {
-
 				$score_result['score']['type'] = 'success';
 				$score_result['score']['value'] = $points;
-
 			}
 
 		return $score_result;
@@ -146,11 +132,16 @@ Class GAMWP_Process {
 
 		return $result;
 
-	}// End save_process_results
+	} // End save_process_results
 
 
 
-	public function get_action_settings($action, $field) {
+	/**
+	* Returns the setting for a given field
+	* Used in default/custom-actions processing
+	*/
+
+	public function get_action_settings( $action, $field ) {
 
 		$options = get_option('gamwp_settings');
 		$settings_title = $action . '_' . $field;
@@ -158,6 +149,33 @@ Class GAMWP_Process {
 
 		return $settings;
 
+	} // End get_action_settings
+
+
+
+/*
+	/**
+	* Converts Post Titles into strings that can be used for variable names
+	* Used in default/custom-actions processing
+	*
+
+	public function prep_action_title( $string ) {
+
+		//lower case everything
+		$string = strtolower($string);
+
+		//make alphaunermic
+		$string = preg_replace("/[^a-z0-9_\s-]/", "", $string);
+
+		//Clean multiple dashes or whitespaces
+		$string = preg_replace("/[\s-]+/", " ", $string);
+
+		//Convert whitespaces and underscore to dash
+		$string = preg_replace("/[\s_]/", "-", $string);
+
+		return $string;
+
 	}
+*/
 
 } //End Class Process
