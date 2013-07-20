@@ -2,7 +2,7 @@
 
 /*
  *
- * Preset Actions
+ * Preset Actions Hooks
  *
  */
 
@@ -16,15 +16,14 @@
 function gamwp_register_user( $user_id ) {
 
 	$process = New GAMWP_Process;
-
-	$action_title = "Registered";
-	$points = 10;
-
+	$action = 'register';
+	$action_title = $process->get_action_settings($action, 'action_title');
+	$points = $process->get_action_settings($action, 'points');
 	$process->save_process_results( $user_id, $action_title, $points );
 
-} // End gamwp_publish_post
+} // End gamwp_user_register
 
-add_action('publish_post', 'gamwp_register_user');
+add_action('user_register', 'gamwp_register_user');
 
 
 /*
@@ -39,11 +38,12 @@ function gamwp_comment( $comment_id, $status ) {
 
 	if ( $status == 1 ) {
 
-		$user_id = get_current_user_id();
-		$action_title = "Commented";
-		$points = 10;
-
-		$process->save_process_results( $user_id, $action_title, $points );
+	$user_id = get_current_user_id();
+	$process = New GAMWP_Process;
+	$action = 'comment';
+	$action_title = $process->get_action_settings($action, 'action_title');
+	$points = $process->get_action_settings($action, 'points');
+	$process->save_process_results( $user_id, $action_title, $points );
 
 	}
 
@@ -62,11 +62,10 @@ add_action('comment_post', 'gamwp_comment', 10 ,2);
 function gamwp_publish_post( $post_id ) {
 
 	$process = New GAMWP_Process;
-
 	$user_id = $post->post_author;
-	$action_title = "Published a Post";
-	$points = 10;
-
+	$action = 'post_action';
+	$action_title = $process->get_action_settings($action, 'action_title');
+	$points = $process->get_action_settings($action, 'points');
 	$process->save_process_results( $user_id, $action_title, $points );
 
 } // End gamwp_publish_post

@@ -148,4 +148,16 @@ Class GAMWP_Process {
 
 	}// End save_process_results
 
+
+
+	public function get_action_settings($action, $field) {
+
+		$options = get_option('gamwp_settings');
+		$settings_title = $action . '_' . $field;
+		$settings = (isset($options[$settings_title]) ? $options[$settings_title] : '');
+
+		return $settings;
+
+	}
+
 } //End Class Process
