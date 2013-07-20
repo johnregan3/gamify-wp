@@ -8,52 +8,86 @@
 
 Class GAMWP_Settings {
 
-		private $action_array = array(
-			'register' => array(
-				'action_title' => 'Registered',
-				'action_hook' => '1'
-			),
-			'comment' => array(
-				'action_title' => 'Commented',
-				'action_hook' => '1'
-			),
-			'post_action' => array(
-				'action_title' => 'Posted',
-				'action_hook' => '1'
-			)
-		);
+	/**
+	* Array of Default Actions and their hooks
+	*/
 
-	// input:$action is a string
-	// fetch array from within action array
-	public function get_action($action) {
+	public $action_array = array(
+		'register' => array(
+			'action_title' => 'Registered',
+			'action_hook' => 'user_register'
+		),
+		'comment' => array(
+			'action_title' => 'Commented',
+			'action_hook' => 'comment_post'
+		),
+		'post_action' => array(
+			'action_title' => 'Posted',
+			'action_hook' => 'publish_post'
+		)
+	);
+
+
+
+	/**
+	* Get the array of action names to dynamically generate hidden fields for default actions
+	*/
+
+	public function get_action_name_array( $action_name ) {
 
 		$action_array = $this->action_array;
+		$actions = array_keys( $action_array );
 
-		$array_list_item = array_keys( $action_array );
+		foreach ( $actions as $action => $value ) {
+			if ( $action_name = $action_array[$value] ) {
+				$value = $action_array[$value];
+			} else {
+				$value = '';
+			} // endif
+		} // endforeach
 
-		foreach ( $action_array as $array_list_item );
+		return $value;
 
-		if ( $action = $action_array[$array_list_item] ) {
+	} // get_action_name_array
 
-			$list_item = $action_array[$array_list_item][$action];
 
-		}
 
-		return $list_item;
+	/**
+	* Get the array of field names to dynamically generate hidden fields for default actions
+	*/
 
-	} // get_action;
+	public function get_field_value( $action_name, $field_name ) {
 
-	public function get_attr( $action_item, $action_item_attr ) {
+		$action_array = $this->action_array;
+		$action_fields = $this->get_action_name_array( $action_name );
+		$fields = array_keys( $action_fields );
 
-		$list_item = $this->get_action($action_item);
+		foreach ( $fields as $field => $value ) {
+			if ( $field_name = $action_array[$action_name][$value] ) {
+				$value = $action_array[$action_name][$value];
+			} else {
+				$value = '';
+			} // endif
+		} // endforeach
 
-		$list_item_attrs = array_keys( $action_item );
+		return $value;
 
-		$list_item_attr = $action_item[$action_item_attr];
+	} //get_name_attr_field
 
-		return $list_item_attr;
 
-	} // get_action;
+	/**
+	* Get if option is not set, set it to ''.
+	*/
+
+	public function input_setup( $action, $field ){
+
+		$options = get_option('gamwp_settings');
+		$settings_title = $action . '_' . $field;
+		$settings_name = (isset($options[$settings_title]) ? $options[$settings_title] : '');
+
+		return $settings_name;
+
+	} //input_setup
 
 } // End Class GAMWP_Settings_Helpers
 
@@ -76,19 +110,24 @@ function gamwp_render_fields() {
 	register_setting( 'gamwp_settings', 'gamwp_settings', 'validate_gamwp_settings' );
 
 	add_settings_section('daily_limit_section', __( 'Daily Points Limit', 'gamwp' ), 'daily_limit_section_cb', __FILE__ );
-	add_settings_field( 'daily_limit_activate', __( 'Enforce Daily Limit', 'gamwp' ), 'daily_limit_activate', __FILE__, 'daily_limit_section' );
+	add_settings_field( 'daily_limit_activate', __( 'Enforce Daily Points Limit', 'gamwp' ), 'daily_limit_activate', __FILE__, 'daily_limit_section' );
 	add_settings_field( 'daily_limit', __( 'Daily Limit Amount', 'gamwp' ), 'daily_limit', __FILE__, 'daily_limit_section' );
 
 	add_settings_field( 'set_default_actions', '', 'set_default_actions', __FILE__, 'default_actions_section' );
 	add_settings_section('default_actions_section', __( 'Default Actions', 'gamwp' ), 'default_actions_section_cb', __FILE__ );
-	add_settings_field( 'registration_amount', __( 'Points Earned for <strong>Registering a New User</strong>', 'gamwp' ), 'registration_amount', __FILE__, 'default_actions_section' );
+
+	add_settings_field( 'registration_amount', __( 'Points for <strong>Registering a New User</strong>', 'gamwp' ), 'registration_amount', __FILE__, 'default_actions_section' );
 	add_settings_field( 'registration_activate', __( 'Activate "Registraion" Action', 'gamwp' ), 'registration_activate', __FILE__, 'default_actions_section' );
-	add_settings_field( 'comment_amount', __( 'Points Earned for <strong>Posting a Comment</strong>', 'gamwp' ), 'comment_amount', __FILE__, 'default_actions_section' );
+	add_settings_field( 'registration_limit', __( 'Include Registration in Daily Limit', 'gamwp' ), 'registration_limit', __FILE__, 'default_actions_section' );
+
+	add_settings_field( 'comment_amount', __( 'Points for <strong>Posting a Comment</strong>', 'gamwp' ), 'comment_amount', __FILE__, 'default_actions_section' );
 	add_settings_field( 'comment_activate', __( 'Activate "Comments" Action', 'gamwp' ), 'comment_activate', __FILE__, 'default_actions_section' );
-	add_settings_field( 'comment_limit', __( 'Include Comments in Daily Points Limit', 'gamwp' ), 'comment_limit', __FILE__, 'default_actions_section' );
-	add_settings_field( 'post_amount', __( 'Points Earned for <strong>Publishing a Post</strong>', 'gamwp' ), 'post_amount', __FILE__, 'default_actions_section' );
-	add_settings_field( 'post_activate', __( 'Activate "Post" Action', 'gamwp' ), 'post_activate', __FILE__, 'default_actions_section' );
-	add_settings_field( 'post_limit', __( 'Include Posts in Daily Points Limit', 'gamwp' ), 'post_limit', __FILE__, 'default_actions_section' );
+	add_settings_field( 'comment_limit', __( 'Include Comments in Daily Limit', 'gamwp' ), 'comment_limit', __FILE__, 'default_actions_section' );
+
+	add_settings_field( 'post_amount', __( 'Points for <strong>Publishing a Post</strong>', 'gamwp' ), 'post_amount', __FILE__, 'default_actions_section' );
+	add_settings_field( 'post_activate', __( 'Activate "Publish Post" Action', 'gamwp' ), 'post_activate', __FILE__, 'default_actions_section' );
+	add_settings_field( 'post_limit', __( 'Include Posts in Daily Limit', 'gamwp' ), 'post_limit', __FILE__, 'default_actions_section' );
+
 
 	add_settings_section('notification_section', __( 'Notification Popup', 'gamwp' ), 'notification_section_cb', __FILE__ );
 	add_settings_field( 'notice_css', __( 'Custom CSS Properties', 'gamwp' ), 'notice_css', __FILE__, 'notification_section' );
@@ -123,34 +162,24 @@ function gamwp_general_settings() {
 ?>
 
 	<div id="gamwp-settings-wrap" class="wrap">
-
 		<div class="icon32" id="icon-options-general">
-
 				<br />
-
 		</div>
-
 		<?php _e( '<h2>Gamify WP General Settings</h2>', 'gamwp'); ?>
-
 		<form method="post" action="options.php" enctype="multipart/form-data">
-
 			<?php settings_fields( 'gamwp_settings' ); ?>
-
 			<?php do_settings_sections( __FILE__ ); ?>
-
 			<p class="submit">
-
 				<input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
-
 			</p>
-
 		</form>
-
 	</div>
 
 <?php
 
 } // gamwp_general_settings
+
+
 
 function daily_limit_section_cb() {
 
@@ -178,52 +207,21 @@ function daily_limit() {
 
 }
 
+
 // Set Default Actions
 function set_default_actions() {
 
-	$options = get_option('gamwp_settings');
+	$help = NEW GAMWP_SETTINGS;
+	$action_array = $help->action_array;
 
-	$action_list = array(
-		'register' => array(
-			'action_title' => 'Registered',
-			'action_hook' => ''
-		),
-		'comment' => array(
-			'action_title' => 'Commented',
-			'action_hook' => ''
-		),
-		'post_action' => array(
-			'action_title' => 'Posted',
-			'action_hook' => ''
-		)
-	);
-
-	$action_list_keys =  array_keys( $action_list );
-
-		foreach ( $action_list_keys as $key => $list_item ) {
-
-		$list_item_fields = $action_list[$list_item];
-
-			foreach($list_item_fields as $field => $value) {
-
-				echo "<br/>" . $list_item . ' = ' . $field . " = " . $value;
-				echo "<input type=\"hidden\" name=\"gamwp_settings[action_list][$list_item][$field][$value]\" id=\"'gamwp_settings[action_list][$list_item][$field][$value]\" />";
-
-			} // End foreach
-
-		} // End foreach
-
-echo '<br />';
-$help = NEW GAMWP_SETTINGS;
-$register_item = $help->get_action('register');
-
-print_r($register_item);
-echo '<br />';
-$register_item_attr = $help->get_attr( $register_item, 'points');
-
-print_r($register_item_attr);
+	foreach( $action_array  as $action => $action_value ) {
+		foreach ( $action_value as $field => $field_value ) {
+			echo '<input type="hidden" name="gamwp_settings[' . $action . '][' . $field . ']" id="gamwp_settings[' . $action . '][' . $field . ']" value ="' . $field_value. '" >';
+		} // end foreach
+	} // end foreach
 
 }
+
 
 function default_actions_section_cb() {
 
@@ -235,82 +233,136 @@ function default_actions_section_cb() {
 // Registration Points Amount
 function registration_amount() {
 
-	global $action_list;
-	global $registration;
-	global $points;
+	$help = NEW GAMWP_SETTINGS;
 
-	$options = get_option('gamwp_settings');
+	$action = 'register';
+	$field = 'points';
+	$settings_title = $action . '_' . $field;
+	$settings_value = $help->input_setup( $action, $field );
 
-	echo "<input name='gamwp_settings[action_list][registration][points]' type='text' value='{$options[$action_list][$registration][$points]}' />";
+	echo '<input type="text" name="gamwp_settings[' . esc_attr( $settings_title ) . ']" id="gamwp_settings[' . esc_attr( $settings_title ) . ']" value ="' . $settings_value . '" />';
 
- print_r($options[$action_list][$registration][$points]);
 }
+
 
 // Activate Registration Action
 function registration_activate() {
 
-	$options = get_option('gamwp_settings');
+	$help = NEW GAMWP_SETTINGS;
 
-	echo "<input type='checkbox' id='gamwp_settings[action_list][registration][active]' name='gamwp_settings[action_list][registration][active]' value='1' " . checked( $options['action_list']['registration']['active'], 1, false ) . "/>";
+	$action = 'register';
+	$field = 'active';
+	$settings_title = $action . '_' . $field;
+	$settings_value = $help->input_setup( $action, $field );
+
+	echo '<input type="checkbox" id="gamwp_settings[' . esc_attr( $settings_title ) . ']" name="gamwp_settings[' . esc_attr( $settings_title ) . ']" value="1" '. checked( 1, isset( $settings_value ) ? $settings_value : 0, false ) .'/>';
 
 }
+
+
+// Check for Points Limit
+function registration_limit() {
+
+	$help = NEW GAMWP_SETTINGS;
+
+	$action = 'register';
+	$field = 'limit';
+	$settings_title = $action . '_' . $field;
+	$settings_value = $help->input_setup( $action, $field );
+
+	echo '<input type="checkbox" id="gamwp_settings[' . esc_attr( $settings_title ) . ']" name="gamwp_settings[' . esc_attr( $settings_title ) . ']" value="1" '. checked( 1, isset( $settings_value ) ? $settings_value : 0, false ) .'/>';
+
+}
+
 
 // Comment Amount
 function comment_amount() {
 
-	$options = get_option('gamwp_settings');
+	$help = NEW GAMWP_SETTINGS;
 
-	echo "<input name='gamwp_settings[action_list][comment][points]' type='text' value='{$options['action_list']['comment']['points']}' />";
+	$action = 'comment';
+	$field = 'points';
+	$settings_title = $action . '_' . $field;
+	$settings_value = $help->input_setup( $action, $field );
+
+	echo '<input type="text" name="gamwp_settings[' . esc_attr( $settings_title ) . ']" id="gamwp_settings[' . esc_attr( $settings_title ) . ']" value ="' . $settings_value . '" />';
 
 }
+
 
 // Activate Comments Action
 function comment_activate() {
 
-	$options = get_option('gamwp_settings');
+	$help = NEW GAMWP_SETTINGS;
 
-	echo "<input type='checkbox' id='gamwp_settings[action_list][comment][active]' name='gamwp_settings[action_list][comment][activ']' value='1' " . checked( $options['action_list']['comment']['active'], 1, false ) . "/>";
+	$action = 'comment';
+	$field = 'active';
+	$settings_title = $action . '_' . $field;
+	$settings_value = $help->input_setup( $action, $field );
+
+	echo '<input type="checkbox" id="gamwp_settings[' . esc_attr( $settings_title ) . ']" name="gamwp_settings[' . esc_attr( $settings_title ) . ']" value="1" '. checked( 1, isset( $settings_value ) ? $settings_value : 0, false ) .'/>';
 
 }
+
 
 // Check for Points Limit
 function comment_limit() {
 
-	$options = get_option('gamwp_settings');
+	$help = NEW GAMWP_SETTINGS;
 
-	echo "<input type='checkbox' id='gamwp_settings[action_list][comment'][limit]' name='gamwp_settings[action_list][comment][limit]' value='1' " . checked( $options['action_list']['comment']['limit'], 1, false ) . "/>";
+	$action = 'comment';
+	$field = 'limit';
+	$settings_title = $action . '_' . $field;
+	$settings_value = $help->input_setup( $action, $field );
+
+	echo '<input type="checkbox" id="gamwp_settings[' . esc_attr( $settings_title ) . ']" name="gamwp_settings[' . esc_attr( $settings_title ) . ']" value="1" '. checked( 1, isset( $settings_value ) ? $settings_value : 0, false ) .'/>';
 
 }
-
 
 
 // Post Action Amount
 function post_amount() {
 
-	$options = get_option('gamwp_settings');
+	$help = NEW GAMWP_SETTINGS;
 
-	echo "<input name='gamwp_settings[action_list][post][points]' type='text' value='{$options['action_list']['post']['points']}' />";
+	$action = 'post';
+	$field = 'points';
+	$settings_title = $action . '_' . $field;
+	$settings_value = $help->input_setup( $action, $field );
+
+	echo '<input type="text" name="gamwp_settings[' . esc_attr( $settings_title ) . ']" id="gamwp_settings[' . esc_attr( $settings_title ) . ']" value ="' . $settings_value . '" />';
 
 }
+
 
 // Activate Post Action
 function post_activate() {
 
-	$options = get_option('gamwp_settings');
+	$help = NEW GAMWP_SETTINGS;
 
-	echo "<input type='checkbox' id='gamwp_settings[action_list][post][active]' name='gamwp_settings[action_list][post][active]' value='1' " . checked( $options['action_list']['comment']['active'], 1, false ) . "/>";
+	$action = 'post_action';
+	$field = 'active';
+	$settings_title = $action . '_' . $field;
+	$settings_value = $help->input_setup( $action, $field );
+
+	echo '<input type="checkbox" id="gamwp_settings[' . esc_attr( $settings_title ) . ']" name="gamwp_settings[' . esc_attr( $settings_title ) . ']" value="1" '. checked( 1, isset( $settings_value ) ? $settings_value : 0, false ) .'/>';
 
 }
+
 
 // Check for Daily Limit for Post
 function post_limit() {
 
-	$options = get_option('gamwp_settings');
+	$help = NEW GAMWP_SETTINGS;
 
-	echo "<input type='checkbox' id='gamwp_setttings[action_list][post][limit]' name='gamwp_settings[action_list][post][limit]' value='1' " . checked( $options['action_list']['comment']['limit'], 1, false ) . "/>";
+	$action = 'post_action';
+	$field = 'limit';
+	$settings_title = $action . '_' . $field;
+	$settings_value = $help->input_setup( $action, $field );
+
+	echo '<input type="checkbox" id="gamwp_settings[' . esc_attr( $settings_title ) . ']" name="gamwp_settings[' . esc_attr( $settings_title ) . ']" value="1" '. checked( 1, isset( $settings_value ) ? $settings_value : 0, false ) .'/>';
 
 }
-
 
 function notification_section_cb() {
 
@@ -325,15 +377,14 @@ function notification_section_cb() {
 // Custom Notice CSS Textarea
 function notice_css() {
 
-	$options = get_option('gamwp-settings');
+	$help = NEW GAMWP_SETTINGS;
 
-	if ( ! isset( $options['notice_css'] ) ) {
+	$action = 'notice';
+	$field = 'css';
+	$settings_title = $action . '_' . $field;
+	$settings_value = $help->input_setup( $action, $field );
 
-		$options['notice_css'] = '';
-
-	}
-
-	echo "<textarea name='gamwp_options[notice_css]' rows='10' cols='60' type='textarea'>{$options['notice_css']}</textarea>";
+	echo '<textarea name="gamwp_settings[' . esc_attr( $settings_title ) . ']" rows="10" cols="60"type="textarea">' . $settings_value . '</textarea>';
 }
 
 
@@ -352,29 +403,16 @@ function validate_gamwp_settings( $input ) {
 
 	$output = array();
 
-
-
-
 	foreach( $input as $key => $value ) {
-
 		if ( $input['action_list'][$key]['points'] ) {
-
 			$points = $input['action_list'][$key]['points'];
-
 			if ( !is_int ( $points ) ) {
-
 				$points == 0;
-
 			}
-
 		}
-
 		if( isset( $input[$key] ) ) {
-
 			$output[$key] = strip_tags( stripslashes( $input[ $key ] ) );
-
 		}
-
 	}
 
 	return apply_filters( 'validate_gamwp_settings', $output, $input );
