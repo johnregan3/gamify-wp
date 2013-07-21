@@ -10,7 +10,7 @@ function gamwp_stats_shortcode() {
 
 	if ( is_User_logged_in() ) {
 
-		$stats = New GAMWP_Stats;
+		$stats = New GAMWP_Shortcode;
 
 		// Gather Vars
 

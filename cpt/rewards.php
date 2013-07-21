@@ -70,6 +70,7 @@ function gamwp_rew_image_box() {
 	add_meta_box( 'postimagediv', __('Reward Image'), 'post_thumbnail_meta_box', 'rewards', 'side', 'low' );
 
 }
+
 add_action('do_meta_boxes', 'gamwp_rew_image_box');
 
 
@@ -104,16 +105,18 @@ function gamwp_rew_meta_box_init() {
 add_action( 'add_meta_boxes', 'gamwp_rew_meta_box_init' );
 
 
-//contents of the Rewards Meta Box
-
+// Contents of the Rewards Meta Box
 function gamwp_rew_meta_box() {
 
+	$settings = New GAMWP_Settings;
+	$shortcode = New GAMWP_Shortcode;
+
 	global $post;
+	$postid = $post->ID;
 
 	//load field meta information
-	$gamwp_rew_type = get_post_meta( $post->ID, 'gamwp_rew_type', true );
-	$gamwp_rew_goal_points = get_post_meta( $post->ID, 'gamwp_rew_goal_points', true );
-	$gamwp_rew_action_types = get_post_meta( $post->ID, 'gamwp_rew_action_types', true );
+	$gamwp_rew_type = get_post_meta( $postid, 'gamwp_rew_type', true );
+	$gamwp_rew_goal_points = get_post_meta( $postid, 'gamwp_rew_goal_points', true );
 
 	if ( ! isset( $gamwp_rew_goal_points ) ) {
 		$gamwp_rew_goal_points = '';
@@ -123,9 +126,8 @@ function gamwp_rew_meta_box() {
 		$gamwp_rew_points = 0;
 	}
 
-	$actions_array = array( "Comment" => 1, "Registration" => 1, "Publish Post" => 1 );
-	$gamwp_rew_action_types = array_merge( $actions_array, $gamwp_rew_action_types );
 
+	// Generate Nonce
 	wp_nonce_field( basename( __FILE__ ), 'gamwp_nonce' );
 
 	?>
@@ -156,11 +158,22 @@ function gamwp_rew_meta_box() {
 		<?php
 			_e( '<p>Select which points apply toward this reward</p>', 'gamwp');
 
-			foreach( $gamwp_rew_action_types as $action => $val) {
-				?>
+			$gamwp_rew_action_types = $shortcode->get_all_actions($postid);
 
-				<input type="checkbox" name="<?php _e( $action, 'gamwp' ); ?>" id="<?php _e( $action, 'gamwp' ); ?>" value="1" <?php checked( $gamwp_rew_action_types[$action], 1, true ) ?> />
-				<label for="<?php _e( $action, 'gamwp' ); ?>"><?php _e( $action, 'gamwp' ); ?></label><br />
+			foreach( $gamwp_rew_action_types as $key => $val) {
+
+				$action_title = $val['action_title'];
+				$action_alias = $val['action_alias'];
+				// Is "not empty" the best way to check this?
+				if ( ! isset( $val['value'] ) ) {
+					$val['value'] = 0;
+			}
+
+			?>
+
+			<input type="checkbox" name="<?php _e( $action_alias, 'gamwp' ); ?>" id="<?php _e( $action_alias, 'gamwp' ); ?>" value="1"<?php checked( $val['value'], 1, true ) ?> />
+
+			<label for="<?php _e( $action_alias, 'gamwp' ); ?>"><?php _e( $action_title, 'gamwp' ); ?></label><br />
 
 			<?php } ?>
 
@@ -174,8 +187,17 @@ function gamwp_rew_meta_box() {
 }
 
 
-// save the points information
+
+/*
+ *
+ * Save Reward Data
+ *
+ */
+
+
 function gamwp_rew_save( $post_id ) {
+
+	$shortcode = New GAMWP_Shortcode;
 
 	if ( !isset( $_POST['gamwp_nonce'] ) || !wp_verify_nonce( $_POST['gamwp_nonce'], basename( __FILE__ ) ) ) {
 		return $post_id;
@@ -229,19 +251,17 @@ function gamwp_rew_save( $post_id ) {
 
 	//Checkboxes
 
-	$actions_array = array( "Comment" => 0, "Registration" => 0, "Publish Post" => 0 );
-
-	$action_type_array = array();
-
-	foreach( $actions_array as $action => $val ) {
-		if ( isset( $_POST[$action] ) ) {
-			$action_type_array[$action] = 1;
+	$gamwp_rew_action_types = $shortcode->get_all_actions( $post_id );
+	foreach( $gamwp_rew_action_types as $key => $val ) {
+		$action_alias = $val['action_alias'];
+		if ( isset( $_POST[$action_alias] ) ) {
+			$gamwp_rew_action_types[$key]['value'] = 1;
 		} else {
-			$action_type_array[$action] = 0;
-		}// End check = 1
+			$gamwp_rew_action_types[$key]['value'] = 0;
+		}// End if
 	} // End foreach
 
-	update_post_meta( $post_id, 'gamwp_rew_action_types', $action_type_array );
+	update_post_meta( $post_id, 'gamwp_rew_action_types',  $gamwp_rew_action_types );
 
 } //end gamwp_save_points
 

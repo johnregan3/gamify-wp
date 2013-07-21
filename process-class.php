@@ -152,30 +152,4 @@ Class GAMWP_Process {
 	} // End get_action_settings
 
 
-
-/*
-	/**
-	* Converts Post Titles into strings that can be used for variable names
-	* Used in default/custom-actions processing
-	*
-
-	public function prep_action_title( $string ) {
-
-		//lower case everything
-		$string = strtolower($string);
-
-		//make alphaunermic
-		$string = preg_replace("/[^a-z0-9_\s-]/", "", $string);
-
-		//Clean multiple dashes or whitespaces
-		$string = preg_replace("/[\s-]+/", " ", $string);
-
-		//Convert whitespaces and underscore to dash
-		$string = preg_replace("/[\s_]/", "-", $string);
-
-		return $string;
-
-	}
-*/
-
 } //End Class Process
