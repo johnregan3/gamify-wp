@@ -26,21 +26,23 @@ function gamwp_render_fields() {
 	add_settings_field( 'daily_limit_activate', __( 'Enforce Daily Points Limit', 'gamwp' ), 'daily_limit_activate', __FILE__, 'daily_limit_section' );
 	add_settings_field( 'daily_limit', __( 'Daily Limit Amount', 'gamwp' ), 'daily_limit', __FILE__, 'daily_limit_section' );
 
-	add_settings_field( 'set_default_actions', '', 'set_default_actions', __FILE__, 'default_actions_section' );
 	add_settings_section('default_actions_section', __( 'Default Actions', 'gamwp' ), 'default_actions_section_cb', __FILE__ );
+	add_settings_field( 'set_default_actions', '', 'set_default_actions', __FILE__, 'default_actions_section' );
 
-	add_settings_field( 'registration_amount', __( 'Points for <strong>Registering a New User</strong>', 'gamwp' ), 'registration_amount', __FILE__, 'default_actions_section' );
-	add_settings_field( 'registration_activate', __( 'Activate "Registraion" Action', 'gamwp' ), 'registration_activate', __FILE__, 'default_actions_section' );
-	add_settings_field( 'registration_limit', __( 'Include Registration in Daily Limit', 'gamwp' ), 'registration_limit', __FILE__, 'default_actions_section' );
+	add_settings_section('registration_section', __( 'Registration Action Settings', 'gamwp' ), 'registration_section_cb', __FILE__ );
+	add_settings_field( 'registration_amount', __( 'Points for <strong>Registering a New User</strong>', 'gamwp' ), 'registration_amount', __FILE__, 'registration_section' );
+	add_settings_field( 'registration_activate', __( 'Activate "Registraion" Action', 'gamwp' ), 'registration_activate', __FILE__, 'registration_section' );
+	add_settings_field( 'registration_limit', __( 'Include Registration in Daily Limit', 'gamwp' ), 'registration_limit', __FILE__, 'registration_section' );
 
-	add_settings_field( 'comment_amount', __( 'Points for <strong>Posting a Comment</strong>', 'gamwp' ), 'comment_amount', __FILE__, 'default_actions_section' );
-	add_settings_field( 'comment_activate', __( 'Activate "Comments" Action', 'gamwp' ), 'comment_activate', __FILE__, 'default_actions_section' );
-	add_settings_field( 'comment_limit', __( 'Include Comments in Daily Limit', 'gamwp' ), 'comment_limit', __FILE__, 'default_actions_section' );
+	add_settings_section('comment_section', __( 'Comment Action Settings', 'gamwp' ), 'comment_section_cb', __FILE__ );
+	add_settings_field( 'comment_amount', __( 'Points for <strong>Posting a Comment</strong>', 'gamwp' ), 'comment_amount', __FILE__, 'comment_section' );
+	add_settings_field( 'comment_activate', __( 'Activate "Comments" Action', 'gamwp' ), 'comment_activate', __FILE__, 'comment_section' );
+	add_settings_field( 'comment_limit', __( 'Include Comments in Daily Limit', 'gamwp' ), 'comment_limit', __FILE__, 'comment_section' );
 
-	add_settings_field( 'post_amount', __( 'Points for <strong>Publishing a Post</strong>', 'gamwp' ), 'post_amount', __FILE__, 'default_actions_section' );
-	add_settings_field( 'post_activate', __( 'Activate "Publish Post" Action', 'gamwp' ), 'post_activate', __FILE__, 'default_actions_section' );
-	add_settings_field( 'post_limit', __( 'Include Posts in Daily Limit', 'gamwp' ), 'post_limit', __FILE__, 'default_actions_section' );
-
+	add_settings_section('post_action_section', __( 'Comment Action Settings', 'gamwp' ), 'post_section_cb', __FILE__ );
+	add_settings_field( 'post_amount', __( 'Points for <strong>Publishing a Post</strong>', 'gamwp' ), 'post_amount', __FILE__, 'post_action_section' );
+	add_settings_field( 'post_activate', __( 'Activate "Publish Post" Action', 'gamwp' ), 'post_activate', __FILE__, 'post_action_section' );
+	add_settings_field( 'post_limit', __( 'Include Posts in Daily Limit', 'gamwp' ), 'post_limit', __FILE__, 'post_action_section' );
 
 	add_settings_section('notification_section', __( 'Notification Popup', 'gamwp' ), 'notification_section_cb', __FILE__ );
 	add_settings_field( 'notice_css', __( 'Custom CSS Properties', 'gamwp' ), 'notice_css', __FILE__, 'notification_section' );
@@ -101,6 +103,18 @@ function daily_limit_section_cb() {
 }
 
 
+function default_actions_section_cb() {}
+function registration_section_cb() {}
+function comment_section_cb() {}
+function post_section_cb() {}
+
+function notification_section_cb() {
+
+	_e( '<p>Enter custom CSS to style the Notification Popup.', 'gamwp' );
+
+}
+
+
 // Check for Daily Limit
 function daily_limit_activate() {
 
@@ -134,13 +148,6 @@ function set_default_actions() {
 			echo '<input type="hidden" name="gamwp_settings[' . esc_attr( $settings_title ) . ']" id="gamwp_settings[' . esc_attr( $settings_title ) . ']" value ="' . $field_value. '" >';
 		} // end foreach
 	} // end foreach
-
-}
-
-
-function default_actions_section_cb() {
-
-	_e( 'These Actions are set up by default by Gamify WP.  NEED MORE INFO.', 'gamwp' );
 
 }
 
@@ -279,15 +286,6 @@ function post_limit() {
 
 }
 
-function notification_section_cb() {
-
-	_e( '<p>Enter custom CSS to style the Notification Popup.<br />!!!!!MOVE THIS TO DOCS!!!!!!<br />You do not need to include the CSS Selector, just Properties.</p><p>Note how your CSS will be inserted:</p>  <pre>#spinner {
-
-&lt;Custom CSS&gt;
-
-}</pre>', 'gamwp' );
-
-}
 
 // Custom Notice CSS Textarea
 function notice_css() {
@@ -299,7 +297,7 @@ function notice_css() {
 	$settings_title = $action . '_' . $field;
 	$settings_value = $help->input_setup( $action, $field );
 
-	echo '<textarea name="gamwp_settings[' . esc_attr( $settings_title ) . ']" rows="10" cols="60"type="textarea">' . $settings_value . '</textarea>';
+	echo '<textarea name="gamwp_settings[' . esc_attr( $settings_title ) . ']" rows="5" cols="60"type="textarea">' . $settings_value . '</textarea>';
 }
 
 

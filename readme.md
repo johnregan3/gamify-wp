@@ -4,18 +4,4 @@
 
 ---
 
-## Instructions
-
-1.  Install Plugin
-
-2.  Configure Plugin
-
-3.  Set Up Actions/Points
-
-4.  Set Up Rewards
-
-5.  Set Up Pages Via Shortcodes
-
-5.  ???
-
-6.  Profit
+[Setup Instructions](https://github.com/johnregan3/gamify-wp-plugin/wiki/Gamify-WP-Setup "Setup Instructions")
