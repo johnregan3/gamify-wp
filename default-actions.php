@@ -19,7 +19,8 @@ function gamwp_register_user( $user_id ) {
 	$action = 'register';
 	$action_title = $process->get_action_settings($action, 'action_title');
 	$points = $process->get_action_settings($action, 'points');
-	$process->save_process_results( $user_id, $action_title, $points );
+	$action_daily_limit = $process->get_action_settings($action, 'limit');
+	$process->save_process_results( $user_id, $action_title, $points, $action_daily_limit );
 
 } // End gamwp_user_register
 
@@ -42,7 +43,8 @@ function gamwp_comment( $comment_id, $status ) {
 		$action = 'comment';
 		$action_title = $process->get_action_settings($action, 'action_title');
 		$points = $process->get_action_settings($action, 'points');
-		$process->save_process_results( $user_id, $action_title, $points );
+		$action_daily_limit = $process->get_action_settings($action, 'limit');
+		$process->save_process_results( $user_id, $action_title, $points, $action_daily_limit );
 	}
 
 } // End gamwp_comment
@@ -64,7 +66,8 @@ function gamwp_publish_post( $post_id ) {
 	$action = 'post_action';
 	$action_title = $process->get_action_settings($action, 'action_title');
 	$points = $process->get_action_settings($action, 'points');
-	$process->save_process_results( $user_id, $action_title, $points );
+	$action_daily_limit = $process->get_action_settings($action, 'limit');
+	$process->save_process_results( $user_id, $action_title, $points, $action_daily_limit );
 
 } // End gamwp_publish_post
 

@@ -39,7 +39,9 @@ function get_custom_actions() {
 			$action_id = get_the_ID();
 			$action_title = get_the_title();
 			$hook_value = get_post_meta ( $action_id, 'gamwp_ca_action_hook', 'single' );
-			$hook_array = array("action_id" => $action_id, "action_title" => $action_title );
+			$action_daily_limit = get_post_meta ( $action_id, 'gamwp_ca_limit', 'single' );
+			$hook_array = array("action_id" => $action_id, "action_title" => $action_title,
+			"action_daily_limit" => $action_daily_limit );
 			$master_array[$hook_value] = $hook_array;
 
 
@@ -54,8 +56,9 @@ function get_custom_actions() {
 
 	foreach( $master_array as $hook_value => $hook_array ) {
 		global $action_id, $action_title;
-		$action_id = $hook_array["action_id"];
-		$action_title = $hook_array["action_title"];
+		$action_id = $hook_array['action_id'];
+		$action_title = $hook_array['action_title'];
+		$action_daily_limit = $hook_array['action_daily_limit'];
 
 		$func_title = "process_custom_action_". $action_id;
 
@@ -66,7 +69,7 @@ function get_custom_actions() {
 				$process = New GAMWP_Process;
 
 				$points = get_post_meta( $action_id, 'gamwp_ca_points', 'single' );
-				$process->save_process_results( $user_id, $action_title, $action_id );
+				$process->save_process_results( $user_id, $action_title, $action_id, $action_daily_limit );
 
 		};
 

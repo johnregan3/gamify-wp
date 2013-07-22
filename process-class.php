@@ -37,11 +37,56 @@ Class GAMWP_Process {
 	}
 
 
+	//Total Daily Points from last 24 hours ($user_id)
+
+	public function daily_points_earned( $user_id ) {
+
+		//calculate time 24 hours ago
+		$time = current_time( 'timestamp', 1 );
+
+		//subract 1 day/24 hours
+		$one_day_ago = $time - 86400;
+
+		//Calculate new $daily_points earned
+		$daily_points_earned == 0;
+
+		//fetch Events Array from user meta
+		$actions_array = get_user_meta( $user_id, 'gamwp_actions', true );
+
+		if ( $actions_array ) {
+			foreach ( $actions_array as $timestamp => $value ) {
+				//if it occurred less than 24 hours ago
+				if( $timestamp >= $one_day_ago ) {
+					//extract points values from Action Array
+					$action_points = $value[ 'points' ];
+					//Add to $daily_points_total
+					$daily_points_earned = $daily_points_earned + $action_points;
+				} //endif
+			} //end foreach
+		} //end if $events_array
+
+		return $daily_points_earned;
+
+	} // end daily_points_earned
+
+
+
+
+
+	/**
+	* Checks to see if Daily Limit has been reached
+	*/
+
+
+
+
+
+
 	/**
 	* Retrieves score, then adds new points
 	*/
 
-	private function calc_score( $user_id, $points ) {
+	private function calc_score( $user_id, $points, $action_daily_limit ) {
 
 		//Add Points to User's Total Score
 		$total_score = get_user_meta( $user_id, 'gamwp_score', true );
@@ -50,9 +95,36 @@ Class GAMWP_Process {
 			$total_score = 0;
 		}
 
-		$new_score = $total_score + $points;
+		$options = get_option( 'gamwp_settings' );
+		$daily_points_limit = $options['daily_limit'];
+		$daily_points_limit_activate = $options['daily_limit_activate'];
 
-		return $new_score;
+		// Check to see if Daily Limit has been reached
+
+		if ( $action_daily_limit == 1 && $daily_points_limit_activate == 1 ) {
+
+			//check daily total field to see if total points from last 24 hours, plus the new amount, exceeds daily limit
+
+			//get all points earned in the last 24 hours from daily totals
+			$daily_points_earned = $this->daily_points_earned( $user_id );
+
+			//compare the daily points earned to pre-set daily limit total limit.
+			//if daily points total < daily limit, simply add current points to the total and save.
+			if ( $daily_points_earned < $daily_points_limit ) {
+				//Add Action Array (with Points) to Event Array, then save
+				 $new_score = $total_score;
+			} else {
+			//if Limit is reached, maybe return a message on User Profile Page
+				//"You've reached our your daily points limit for the last 24 hours."
+			}
+
+		} else {
+
+			$new_score = $total_score + $points;
+
+		}
+
+		return $daily_points_limit_activate;
 
 	}
 
@@ -118,10 +190,10 @@ Class GAMWP_Process {
 	* Used when points are earned/redeemed
 	*/
 
-	public function save_process_results( $user_id, $action_title, $points ) {
+	public function save_process_results( $user_id, $action_title, $points, $action_daily_limit ) {
 
 		// Retrieve score, then add new points
-		$new_score = $this->calc_score( $user_id, $points );
+		$new_score = $this->calc_score( $user_id, $points, $action_daily_limit );
 
 		// Save new score to user meta
 		$score_result = $this->save_score( $user_id, $points, $new_score );

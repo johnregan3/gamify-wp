@@ -167,7 +167,7 @@ function gamwp_rew_meta_box() {
 				// Is "not empty" the best way to check this?
 				if ( ! isset( $val['value'] ) ) {
 					$val['value'] = 0;
-			}
+				}
 
 			?>
 

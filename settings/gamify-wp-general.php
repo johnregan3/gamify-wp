@@ -120,7 +120,11 @@ function daily_limit_activate() {
 
 	$options = get_option('gamwp_settings');
 
-	echo "<input type='checkbox' id='daily_limit_activate' name='gamwp_settings[daily_limit_activate]' value='1' " . checked( $options['daily_limit_activate'], 1, false ) . "/>";
+	if ( ! isset( $options['daily_limit_activate'] ) ) {
+		$options['daily_limit_activate'] = 0;
+	}
+
+	echo "<input type='checkbox' id='gamwp_settings[daily_limit_activate]' name='gamwp_settings[daily_limit_activate]' value='1' " . checked( $options['daily_limit_activate'], 1, false ) . "/>";
 
 }
 
