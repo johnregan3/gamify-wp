@@ -11,7 +11,8 @@ function gamwp_link_shortcode( $atts, $content = null ) {
 	extract( shortcode_atts( array(
 		'url' => '',
 		'points' => 0,
-		'title' => 'Link Action'
+		'title' => 'Link Action',
+		'daily_limit' => 0
 	), $atts ) );
 
 	$user_id = get_current_user_id();
@@ -21,7 +22,7 @@ function gamwp_link_shortcode( $atts, $content = null ) {
 		$nonce = wp_create_nonce( 'gamwp_nonce' );
 	ob_end_clean();
 
-	$return_string = '<a href="' . esc_attr( $url ) . '" class="gamwp-link" data-action-title="' . esc_attr( $title ) . '" data-nonce="' . esc_attr( $nonce ) . '"  data-points="' . esc_attr($points) . '" data-user-id="' . esc_attr($user_id) . '" >';
+	$return_string = '<a href="' . esc_attr( $url ) . '" class="gamwp-link" data-action-title="' . esc_attr( $title ) . '" data-nonce="' . esc_attr( $nonce ) . '"  data-points="' . esc_attr($points) . '" data-user-id="' . esc_attr($user_id) . '" data-limit="' . esc_attr( $daily_limit ) . '" >';
 	$return_string = $return_string . $content;
 	$return_string = $return_string . '</a>';
 	return $return_string;

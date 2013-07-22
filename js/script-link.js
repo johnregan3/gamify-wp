@@ -41,13 +41,14 @@ jQuery(document).ready( function() {
 		user_id = jQuery( this ).attr( "data-user-id" );
 		action_title = jQuery( this ).attr( "data-action-title" );
 		points = jQuery( this ).attr( "data-points" );
+		daily_limit = jQuery( this ).attr( "data-limit" );
 
 		jQuery.ajax({
 			type : "post",
 			context: this,
 			dataType : "json",
 			url : gamwp_link_ajax.ajaxurl,
-			data : {action: "gamwp_processor", nonce: nonce, user_id: user_id, action_title: action_title, points: points },
+			data : {action: "gamwp_processor", nonce: nonce, user_id: user_id, action_title: action_title, points: points, daily_limit: daily_limit },
 
 			beforeSend: function() {
 

@@ -85,6 +85,7 @@ function gamwp_ca_meta_box() {
 	$gamwp_ca_action_hook = get_post_meta( $post->ID, 'gamwp_ca_action_hook', true );
 	$gamwp_ca_points = get_post_meta( $post->ID, 'gamwp_ca_points', true );
 	$gamwp_ca_limit = get_post_meta( $post->ID, 'gamwp_ca_limit', true );
+	$gamwp_ca_once = get_post_meta( $post->ID, 'gamwp_ca_once', true );
 
 	if ( ! isset( $gamwp_ca_action_hook ) ) {
 		$gamwp_ca_action_hook = '';
@@ -95,6 +96,10 @@ function gamwp_ca_meta_box() {
 	}
 
 	if ( ! isset( $gamwp_ca_limit ) ) {
+		$gamwp_ca_limit = 0;
+	}
+
+	if ( ! isset( $gamwp_ca_once ) ) {
 		$gamwp_ca_limit = 0;
 	}
 
@@ -111,9 +116,11 @@ function gamwp_ca_meta_box() {
 	<input type="text" name="gamwp_ca_points" id="gamwp_ca_points" value="' . esc_attr( $gamwp_ca_points ) . '" size="30" />
 	</td></tr>';
 
-	echo '<tr><td><label for="gamwp_ca_limit">Include in Daily Points Limit?</label><br /><input type="checkbox" id="gamwp_ca_limit" name="gamwp_ca_limit"" value="1" '. checked( $gamwp_ca_limit, 1, false ) . '/></td></tr>';
+	echo '<tr><td><input type="checkbox" id="gamwp_ca_limit" name="gamwp_ca_limit"" value="1" '. checked( $gamwp_ca_limit, 1, false ) . '/>&nbsp;<label for="gamwp_ca_limit">Include in Daily Points Limit</label></td></tr>';
 
-    echo '</table>';
+	echo '<tr><td><input type="checkbox" id="gamwp_ca_once" name="gamwp_ca_once"" value="1" '. checked( $gamwp_ca_once, 1, false ) . '/>&nbsp;<label for="gamwp_ca_once">Only count this Action once</label></td></tr>';
+
+	echo '</table>';
 
 }
 
@@ -175,6 +182,10 @@ function gamwp_ca_save( $post_id ) {
 	//daily total value
 	$check = isset( $_POST['gamwp_ca_limit'] ) ? 1 : 0 ;
 	update_post_meta( $post_id, 'gamwp_ca_limit', $check );
+
+	// Single-Use Action
+	$check = isset( $_POST['gamwp_ca_once'] ) ? 1 : 0 ;
+	update_post_meta( $post_id, 'gamwp_ca_once', $check );
 
 } //end gamwp_save_points
 

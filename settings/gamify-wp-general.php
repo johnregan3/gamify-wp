@@ -75,6 +75,7 @@ function gamwp_general_settings() {
 				<br />
 		</div>
 		<?php _e( '<h2>Gamify WP General Settings</h2>', 'gamwp'); ?>
+		<p><a href="https://github.com/johnregan3/gamify-wp-plugin/wiki/General-Settings">Get help for this page on our Wiki</a>.</p>
 		<form method="post" action="options.php" enctype="multipart/form-data">
 			<?php settings_fields( 'gamwp_settings' ); ?>
 			<?php do_settings_sections( __FILE__ ); ?>

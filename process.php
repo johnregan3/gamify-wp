@@ -23,9 +23,10 @@ function gamwp_process( ) {
 	$user_id = $_REQUEST['user_id'];
 	$points = $_REQUEST['points'];
 	$action_title = $_REQUEST['action_title'];
+	$daily_limit = $_REQUEST['daily_limit'];
 
 	//Save new score and events to user meta
-	$result = $process->save_process_results( $user_id, $action_title, $points );
+	$result = $process->save_process_results( $user_id, $action_title, $points, $daily_limit );
 
 	echo json_encode( $result );
 
