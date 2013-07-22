@@ -51,19 +51,13 @@ function gamwp_render_fields() {
 	//if settings not found, reset it to 0;
 
 	$options = get_option( 'gamwp_settings' );
-
 	$fields = array( 'points', 'active', 'limit' );
 
 	if ( isset( $options['action_list']['action_title'] ) ) {
-
 		$action_types = $options['action_list'][$fields];
-
 		foreach ( $fields as $value ) {
-
 			$options['action_list'][$fields][$value] = 0;
-
 		} // End foreach
-
 	} // Endif
 
 } // gamwp_render_fields
