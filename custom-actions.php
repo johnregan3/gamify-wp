@@ -6,12 +6,16 @@
  *
  */
 
+
+
+
 /*
  * this line is commented out.
  * cannot run this action twice on the same page "cannot redeclare process_custom_action()".
  * This is going to REQUIRE a variable in the function name.
- * add_action( 'init', 'get_custom_actions');
  */
+  add_action( 'init', 'get_custom_actions');
+
 
 
 
@@ -52,7 +56,10 @@ function get_custom_actions() {
 		global $action_id, $action_title;
 		$action_id = $hook_array["action_id"];
 		$action_title = $hook_array["action_title"];
-		function process_custom_action() {
+
+		$func_title = "process_custom_action_". $action_id;
+
+		${$func_title} = function() {
 
 			global $action_id, $action_title;
 				$user_id = wp_get_current_user();
@@ -63,7 +70,7 @@ function get_custom_actions() {
 
 		};
 
-		add_action( $hook_value, 'process_custom_action', 10);
+		add_action( $hook_value, $func_title, 10);
 
 	} // End foreach
 

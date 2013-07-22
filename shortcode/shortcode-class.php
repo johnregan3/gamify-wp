@@ -94,7 +94,7 @@ Class GAMWP_Shortcode {
 			$gamwp_rew_action_types = array();
 		}
 
-	/* If Action previously saved no longer exists (isn't in $ca_default_array), then remove it.*/
+	/* If Custom Action previously saved no longer exists (isn't in $ca_default_array), then remove it from gamwp_rew_action_types.*/
 	/////////////////////////////////////////////////////////////////////////////////////////////
 
 		// Overwrite default actions with saved data where actions (keys) don't already exist
