@@ -72,8 +72,11 @@ function gamwp_enqueue() {
 	wp_enqueue_script( 'gamwp_custom' );
 	wp_enqueue_script( 'gamwp_link' );
 
-	wp_register_style( 'gamwp_style', plugins_url( 'style.css', __FILE__ ), array(), '1.0', 'all' );
+	wp_register_style( 'gamwp_style', plugins_url( 'style/style.css', __FILE__ ), array(), '1.0', 'all' );
 	wp_enqueue_style( 'gamwp_style' );
+
+	wp_register_style('gamwp_custom_style', plugin_dir_url( __FILE__ ) . 'style/custom_style.php');
+	wp_enqueue_style( 'gamwp_custom_style');
 
 }
 
