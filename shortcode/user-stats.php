@@ -56,28 +56,12 @@ function gamwp_stats_shortcode() {
 
 	} else {
 
-		//Rename Register/Login Link
-		function register_replacement( $link ){
-
-			if ( get_option('users_can_register') ) {
-
-				$link = __('Sign Up');
-
-			} else {
-
-				$link =  __('Log In');
-
-			}
-
-			return $link;
-
-		}
-
-		add_action( 'register' , 'register_replacement' );
-
-		_e( '<p><em>You must be logged in to view your stats.</p>', 'gamwp' );
+		//Register/Login Link
+		_e( '<p><em>You must be logged in to view your stats.</em></p><p>', 'gamwp' );
 
 		wp_register('', '');
+
+		echo ' | <a href="' . wp_login_url() . '" title="Login">Login</a></p>';
 
 }
 
