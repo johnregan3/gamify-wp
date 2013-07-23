@@ -97,7 +97,11 @@ Class GAMWP_Process {
 
 		$options = get_option( 'gamwp_settings' );
 		$daily_points_limit = $options['daily_limit'];
-		$daily_points_limit_activate = $options['daily_limit_activate'];
+		if ( array_key_exists( 'daily_limit_activate', $options ) ) {
+			$daily_points_limit_activate = $options['daily_limit_activate'];
+		} else {
+			$daily_points_limit_activate = 0;
+		}
 
 		// Check to see if Daily Limit has been reached
 		if ( ( $action_daily_limit == '1' ) && ( $daily_points_limit_activate == '1' ) ) {
