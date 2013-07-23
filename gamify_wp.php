@@ -80,6 +80,28 @@ function gamwp_enqueue() {
 add_action( 'init', 'gamwp_enqueue' );
 
 
+/*
+ *
+ * Enqueue Admin Scripts
+ *
+ */
+
+
+function gamwp_enqueue_admin_scripts() {
+	wp_register_script( 'gamwp_settings_upload', plugin_dir_url( __FILE__ ) .'js/settings-upload.js', array('jquery','media-upload','thickbox') );
+
+		wp_enqueue_script('jquery');
+
+		wp_enqueue_script('thickbox');
+		wp_enqueue_style('thickbox');
+
+		wp_enqueue_script('media-upload');
+		wp_enqueue_script('gamwp_settings_upload');
+
+}
+add_action('admin_enqueue_scripts', 'gamwp_enqueue_admin_scripts');
+
+
 
 /*
  *

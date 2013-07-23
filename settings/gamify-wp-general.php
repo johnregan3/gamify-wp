@@ -46,7 +46,8 @@ function gamwp_render_fields() {
 
 	add_settings_section('notification_section', __( 'Notification Popup', 'gamwp' ), 'notification_section_cb', __FILE__ );
 	add_settings_field( 'notice_css', __( 'Custom CSS Properties', 'gamwp' ), 'notice_css', __FILE__, 'notification_section' );
-
+	add_settings_field( 'notice_spinner', __( 'Upload Custom Spinner', 'gamwp' ), 'notice_spinner', __FILE__, 'notification_section' );
+	add_settings_field('notice_spinner_preview',  __( 'Spinner Preview', 'wptuts' ), 'notice_spinner_preview', __FILE__, 'notification_section');
 
 	//if settings not found, reset it to 0;
 
@@ -299,8 +300,68 @@ function notice_css() {
 	echo '<textarea name="gamwp_settings[' . esc_attr( $settings_title ) . ']" rows="5" cols="60"type="textarea">' . $settings_value . '</textarea>';
 }
 
+function notice_spinner() {
+
+	$gamwp_settings = get_option('gamwp_settings');
+	$settings_title = "notice_spinner";
+	if ( ! isset( $options['notice_spinner'] ) ) {
+		$options['notice_spinner'] = '';
+	}
+	echo '<input type="hidden" id="gamwp_settings_notice_spinner" name="gamwp_settings[notice_spinner]" value="' . $gamwp_settings['notice_spinner'] .'" />';
+	echo '<input id="upload_spinner_button" type="button" class="button" value="Upload Custom Spinner" />';
+	if ( '' != $gamwp_settings['notice_spinner'] ) {
+		echo '<input id="delete_logo" name="gamwp_settings[delete_spinner]" type="submit" class="button" value="Delete Spinner" />';
+	}
+}
+
+function notice_spinner_preview() {
+	$gamwp_settings = get_option( 'gamwp_settings' );  ?>
+	<div id="notice_spinner_preview" style="min-height: 100px;">
+		<img style="max-width:100%;" src="<?php echo esc_url( $gamwp_settings['notice_spinner'] ); ?>" />
+	</div>
+	<?php
+}
+
+
+//Change image upload button text from "Insert into Post"
+function gamwp_thickbox_text_replace() {
+	global $pagenow;
+
+	if ( 'media-upload.php' == $pagenow || 'async-upload.php' == $pagenow ) {
+		// Now we'll replace the 'Insert into Post Button' inside Thickbox
+		add_filter( 'gettext', 'replace_thickbox_text'  , 1, 3 );
+	}
+}
+
+add_action( 'admin_init', 'gamwp_thickbox_text_replace' );
+
+function replace_thickbox_text($translated_text, $text, $domain) {
+	if ('Insert into Post' == $text) {
+		$referer = strpos( wp_get_referer(), 'gamwp_settings' );
+		if ( $referer != '' ) {
+			return __('Use as Spinner', 'gamwp' );
+		}
+	}
+	return $translated_text;
+}
+
+function delete_image( $image_url ) {
+	global $wpdb;
+
+	// We need to get the image's meta ID.
+	$query = "SELECT ID FROM wp_posts where guid = '" . esc_url($image_url) . "' AND post_type = 'attachment'";
+	$results = $wpdb->get_results($query);
+
+	// And delete it
+	foreach ( $results as $row ) {
+		wp_delete_attachment( $row->ID );
+	}
+}
+
 
 function validate_gamwp_settings( $input ) {
+
+	$gamwp_settings = get_option( 'gamwp_settings' );
 
 	/*
 	 * Validation script by Tom McFarlin
@@ -316,12 +377,14 @@ function validate_gamwp_settings( $input ) {
 	$output = array();
 
 	foreach( $input as $key => $value ) {
-		if ( $input['action_list'][$key]['points'] ) {
-			$points = $input['action_list'][$key]['points'];
-			if ( !is_int ( $points ) ) {
-				$points == 0;
-			}
+
+		$delete_logo = ! empty($input['delete_spinner']) ? true : false;
+
+		if ( $delete_logo ) {
+			delete_image( $gamwp_settings['notice_spinner'] );
+			$output['notice_spinner'] = '';
 		}
+
 		if( isset( $input[$key] ) ) {
 			$output[$key] = strip_tags( stripslashes( $input[ $key ] ) );
 		}
