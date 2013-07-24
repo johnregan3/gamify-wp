@@ -19,7 +19,7 @@ include_once( plugin_dir_path(__FILE__) . 'default-actions.php' ); 				//Default
 include_once( plugin_dir_path(__FILE__) . 'cpt/custom-actions.php' ); 			//Custom Actions Custom Post Type
 include_once( plugin_dir_path(__FILE__) . 'custom-actions.php' ); 				//Custom Actions
 
-include_once( plugin_dir_path(__FILE__) . 'shortcode/shortcode-class.php' ); 		//Stats Class
+include_once( plugin_dir_path(__FILE__) . 'shortcode/shortcode-class.php' ); 	//Shortcode Class
 include_once( plugin_dir_path(__FILE__) . 'shortcode/link.php' );				//Link Action Shortcode
 include_once( plugin_dir_path(__FILE__) . 'shortcode/user-stats.php' );			//User Stats Shortcode
 
@@ -35,17 +35,9 @@ include_once( plugin_dir_path(__FILE__) . 'cpt/rewards.php' ); 					//Rewards Cu
  */
 
 function gamwp_settings_link( $links ) {
-
-	//Get link to be generated
-
 	$settings_page = '<a href="' . admin_url('options-general.php?page=gamify_wp/settings.php' ) .'">Settings</a>';
-
-	//Add to front of $links array
-
 	array_unshift( $links, $settings_page );
-
 	return $links;
-
 }
 
 $plugin = plugin_basename(__FILE__);
@@ -61,7 +53,6 @@ add_filter( "plugin_action_links_$plugin", 'gamwp_settings_link' );
  */
 
 function gamwp_enqueue() {
-
 	wp_register_script( 'gamwp_custom', plugin_dir_url( __FILE__ ) . 'js/script-custom.js', array( 'jquery' ) );
 	wp_localize_script( 'gamwp_custom', 'gamwp_custom_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 
@@ -77,7 +68,6 @@ function gamwp_enqueue() {
 
 	wp_register_style('gamwp_custom_style', plugin_dir_url( __FILE__ ) . 'style/custom_style.php');
 	wp_enqueue_style( 'gamwp_custom_style');
-
 }
 
 add_action( 'init', 'gamwp_enqueue' );
@@ -102,6 +92,7 @@ function gamwp_enqueue_admin_scripts() {
 		wp_enqueue_script('gamwp_settings_upload');
 
 }
+
 add_action('admin_enqueue_scripts', 'gamwp_enqueue_admin_scripts');
 
 
@@ -148,9 +139,7 @@ function gamwp_deactivate() {
 
 
 function gamwp_textdomain() {
-
 	load_plugin_textdomain('gamwp');
-
 }
 
 add_action('init', 'gamwp_textdomain');
@@ -164,9 +153,7 @@ add_action('init', 'gamwp_textdomain');
  */
 
 function gamwp_ajax() {
-
 	die();
-
 }
 
 add_action( 'wp_ajax_gamwp_process', 'gamwp_ajax' );

@@ -14,16 +14,16 @@ Class GAMWP_Settings {
 
 	public $action_array = array(
 		'register' => array(
-			'action_title' => 'Registered',
-			'action_hook' => 'user_register'
+			'action_title'  => 'Registered',
+			'action_hook'   => 'user_register',
 		),
 		'comment' => array(
-			'action_title' => 'Commented',
-			'action_hook' => 'comment_post'
+			'action_title'  => 'Commented',
+			'action_hook'   => 'comment_post',
 		),
 		'post_action' => array(
-			'action_title' => 'Posted',
-			'action_hook' => 'publish_post'
+			'action_title'  => 'Posted',
+			'action_hook'   => 'publish_post',
 		)
 	);
 
@@ -83,9 +83,9 @@ Class GAMWP_Settings {
 
 		$options = get_option('gamwp_settings');
 		$settings_title = $action . '_' . $field;
-		$settings = (isset($options[$settings_title]) ? $options[$settings_title] : '');
+		$value = (isset( $options[$settings_title] ) ? $options[$settings_title] : '');
 
-		return $settings;
+		return $value;
 
 	} //input_setup
 

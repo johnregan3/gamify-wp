@@ -46,15 +46,17 @@ function get_custom_actions() {
 				$action_points = $hook_array['points'];
 				$action_daily_limit = $hook_array['action_daily_limit'];
 
+				//If we're having problems saving, replace $$func_title with ${func_title}
+
 				$func_title = "process_custom_action_" . $action_id;
-				$func_title1 = $func_title;
-				${$func_title} = function() {
+				$func_title_string = $func_title;
+				$$func_title = function() {
 					global $user_id, $action_id, $action_title, $points, $action_daily_limit;
 					$process = New GAMWP_Process;
 					$points = get_post_meta( $action_id, 'gamwp_ca_points', 'single' );
 					$process->save_process_results( $user_id, $action_title, $points, $action_daily_limit );
 				};
-				add_action( $hook_value, ${$func_title1}, 10, 0);
+				add_action( $hook_value, $$func_title_string, 10, 0);
 			} // End foreach
 
 		} // endwhile
