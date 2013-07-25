@@ -9,8 +9,9 @@
 	Version: 1.0
  */
 
-include_once( plugin_dir_path(__FILE__) . 'settings/settings-class.php' ); 		//Settings Class
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-wp-general.php' ); 	//Settings Page
+include_once( plugin_dir_path(__FILE__) . 'settings/settings-class.php' ); 				//Settings Class
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-wp-general.php' ); 			//Settings Page
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-wp-custom-actions.php' ); 	//Settings Page
 
 include_once( plugin_dir_path(__FILE__) . 'process-class.php' ); 				//Processor Class
 include_once( plugin_dir_path(__FILE__) . 'process.php' ); 						//Action Processor
@@ -79,14 +80,17 @@ add_action( 'init', 'gamwp_enqueue' );
 
 function gamwp_enqueue_admin_scripts() {
 	wp_register_script( 'gamwp_settings_upload', plugin_dir_url( __FILE__ ) .'js/settings-upload.js', array('jquery','media-upload','thickbox') );
+	wp_register_script( 'gamwp_jeditable', plugin_dir_url( __FILE__ ) .'js/jeditable.js', array('jquery') );
 
-		wp_enqueue_script('jquery');
+	wp_enqueue_script('jquery');
 
-		wp_enqueue_script('thickbox');
-		wp_enqueue_style('thickbox');
+	wp_enqueue_script('thickbox');
+	wp_enqueue_style('thickbox');
 
-		wp_enqueue_script('media-upload');
-		wp_enqueue_script('gamwp_settings_upload');
+	wp_enqueue_script('media-upload');
+	wp_enqueue_script('gamwp_settings_upload');
+
+	wp_enqueue_script('gamwp_jeditable');
 
 }
 

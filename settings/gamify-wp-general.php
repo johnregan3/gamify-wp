@@ -43,13 +43,12 @@ function generate_points() {
 	foreach ( $action_array as $actions => $val ) {
 		$checkbox_options = array( "limit", "active" );
 		$settings_title = $actions . '_points';
-		$settings_title_string = $settings_title;
-		$field_text = ucwords( str_replace( '_', ' ', $settings_title_string ) );
-		$$settings_title = function() use ( $actions, $settings_title_string ) {
+		$field_text = ucwords( str_replace( '_', ' ', $settings_title ) );
+		$$settings_title = function() use ( $actions, $settings_title ) {
 			$settings_value = GAMWP_SETTINGS::input_setup( $actions, 'points' );
-			echo "<input type='text' id='gamwp_settings[". esc_attr( $settings_title_string ) . "]' name='gamwp_settings[" . esc_attr( $settings_title_string ) . "]' value='" . $settings_value ."' />";
+			echo "<input type='text' id='gamwp_settings[". esc_attr( $settings_title ) . "]' name='gamwp_settings[" . esc_attr( $settings_title ) . "]' value='" . $settings_value ."' />";
 		};
-		add_settings_field( $settings_title, __( $field_text, 'gamwp' ), $$settings_title_string, __FILE__, $actions . '_section' );
+		add_settings_field( $settings_title, __( $field_text, 'gamwp' ), $$settings_title, __FILE__, $actions . '_section' );
 	}
 }
 
@@ -63,13 +62,12 @@ function generate_checkboxes() {
 		$checkbox_options = array( "limit", "active" );
 		foreach ( $checkbox_options as $checkbox ) {
 			$settings_title = $action_title . '_' . $checkbox;
-			$settings_title_string = $settings_title;
-			$field_text = ucwords( str_replace( '_', ' ', $settings_title_string ) );
-			$$settings_title = function() use ( $action_title, $checkbox, $settings_title_string ) {
+			$field_text = ucwords( str_replace( '_', ' ', $settings_title ) );
+			$$settings_title = function() use ( $action_title, $checkbox, $settings_title ) {
 				$settings_value = GAMWP_SETTINGS::input_setup( $action_title, $checkbox );
-				echo "<input type='checkbox' id='gamwp_settings[". esc_attr( $settings_title_string ) . "]' name='gamwp_settings[" . esc_attr( $settings_title_string ) . "]' value='1' " . checked( 1, isset( $settings_value ) ? $settings_value : 0, false ) ." />";
+				echo "<input type='checkbox' id='gamwp_settings[". esc_attr( $settings_title ) . "]' name='gamwp_settings[" . esc_attr( $settings_title ) . "]' value='1' " . checked( 1, isset( $settings_value ) ? $settings_value : 0, false ) ." />";
 			};
-			add_settings_field( $settings_title, __( $field_text, 'gamwp' ), $$settings_title_string, __FILE__, $action_title . '_section' );
+			add_settings_field( $settings_title, __( $field_text, 'gamwp' ), $$settings_title, __FILE__, $action_title . '_section' );
 		}
 	}
 }
