@@ -25,9 +25,6 @@ include_once( plugin_dir_path(__FILE__) . 'shortcode/user-stats.php' );			//User
 
 include_once( plugin_dir_path(__FILE__) . 'cpt/rewards.php' ); 					//Rewards Custom Post Type
 
-
-
-
 /*
  *
  * Add settings link on Plugins page

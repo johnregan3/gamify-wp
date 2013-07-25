@@ -22,37 +22,20 @@ function gamwp_render_fields() {
 	add_settings_field( 'daily_limit_activate', __( 'Enforce Daily Points Limit', 'gamwp' ), 'daily_limit_activate', __FILE__, 'daily_limit_section' );
 	add_settings_field( 'daily_limit', __( 'Daily Limit Amount', 'gamwp' ), 'daily_limit', __FILE__, 'daily_limit_section' );
 
-	add_settings_section('default_actions_section', __( 'Default Actions', 'gamwp' ), 'default_actions_section_cb', __FILE__ );
+	add_settings_section('default_actions_section', __( 'Default Actions', 'gamwp' ), '', __FILE__ );
 	add_settings_field( 'set_default_actions', '', 'set_default_actions', __FILE__, 'default_actions_section' );
 
-	add_settings_section('register_section', __( 'Registration Action Settings', 'gamwp' ), 'register_section_cb', __FILE__ );
-/*	add_settings_field( 'register_amount', __( 'Points for <strong>Registering a New User</strong>', 'gamwp' ), 'register_amount', __FILE__, 'register_section' );
-	add_settings_field( ${$register_active}, __( 'Activate "Registraion" Action', 'gamwp' ), 'register_active', __FILE__, 'registrer_section' );
-	add_settings_field( ${$register_limit}, __( 'Include Registration in Daily Limit', 'gamwp' ), 'register_limit', __FILE__, 'register_section' );
-*/
-	add_settings_section('comment_section', __( 'Comment Action Settings', 'gamwp' ), 'comment_section_cb', __FILE__ );
-/*	add_settings_field( 'comment_amount', __( 'Points for <strong>Posting a Comment</strong>', 'gamwp' ), 'comment_amount', __FILE__, 'comment_section' );
-	add_settings_field( ${$comment_active}, __( 'Activate "Comments" Action', 'gamwp' ), 'comment_active', __FILE__, 'comment_section' );
-	add_settings_field( ${$comment_limit}, __( 'Include Comments in Daily Limit', 'gamwp' ), 'comment_limit', __FILE__, 'comment_section' );
-*/
-	add_settings_section('post_action_section', __( 'Comment Action Settings', 'gamwp' ), 'post_action_section_cb', __FILE__ );
-/*	add_settings_field( 'post_action_amount', __( 'Points for <strong>Publishing a Post</strong>', 'gamwp' ), 'post_action_amount', __FILE__, 'post_action_section' );
-	add_settings_field( ${$post_action_active}, __( 'Activate "Publish Post" Action', 'gamwp' ), 'post_action_active', __FILE__, 'post_action_section' );
-	add_settings_field( ${$post_action_limit}, __( 'Include Posts in Daily Limit', 'gamwp' ), 'post_action_limit', __FILE__, 'post_action_section' );
-*/
+	add_settings_section('register_section', __( 'Registration Action Settings', 'gamwp' ), '', __FILE__ );
+
+	add_settings_section('comment_section', __( 'Comment Action Settings', 'gamwp' ), '', __FILE__ );
+
+	add_settings_section('post_action_section', __( 'Comment Action Settings', 'gamwp' ), '', __FILE__ );
+
 	add_settings_section('notification_section', __( 'Notification Popup', 'gamwp' ), 'notification_section_cb', __FILE__ );
-/*	add_settings_field( 'notice_css', __( 'Custom CSS Properties', 'gamwp' ), 'notice_css', __FILE__, 'notification_section' );
+	add_settings_field( 'notice_css', __( 'Custom CSS Properties', 'gamwp' ), 'notice_css', __FILE__, 'notification_section' );
 	add_settings_field( 'notice_spinner', __( 'Upload Custom Spinner', 'gamwp' ), 'notice_spinner', __FILE__, 'notification_section' );
 	add_settings_field('notice_spinner_preview',  __( 'Spinner Preview', 'wptuts' ), 'notice_spinner_preview', __FILE__, 'notification_section');
-*/
-	$options = get_option( 'gamwp_settings' );
-	$fields = array( 'points', 'active', 'limit' );
-	if ( isset( $options['action_list']['action_title'] ) ) {
-		$action_types = $options['action_list'][$fields];
-		foreach ( $fields as $value ) {
-			$options['action_list'][$fields][$value] = 0;
-		}
-	}
+
 }
 
 add_action( 'admin_init', 'gamwp_render_fields' );
@@ -127,7 +110,6 @@ function daily_limit_section_cb() {
 }
 
 
-function default_actions_section_cb() {}
 function register_section_cb() {}
 function comment_section_cb() {}
 function post_action_section_cb() {}
@@ -160,7 +142,7 @@ function set_default_actions() {
 		foreach ( $action_value as $field => $field_value ) {
 				$settings_title = $action . '_' . $field;
 				$settings_value = $help->input_setup( $action, $field );
-			echo "<input type='hidden' name='gamwp_settings[" . esc_attr( $settings_title ) . "]' id='gamwp_settings[". esc_attr( $settings_title ) . "]' value ='" . $settings_value. "'>";
+			echo "<input type='hidden' name='gamwp_settings[" . esc_attr( $settings_title ) . "]' id='gamwp_settings[". esc_attr( $settings_title ) . "]' value ='" . esc_html( $settings_value ) . "'>";
 		} // end foreach
 	} // end foreach
 
@@ -172,22 +154,20 @@ function notice_css() {
 	$field = 'css';
 	$settings_title = $action . '_' . $field;
 	$settings_value = $help->input_setup( $action, $field );
-	echo "<textarea name='gamwp_settings[" . esc_attr( $settings_title ) . "]' rows='5' cols='60' type='textarea'>" . $settings_value . "</textarea>";
+	echo "<textarea name='gamwp_settings[" . esc_attr( $settings_title ) . "]' rows='5' cols='60' type='textarea'>" . esc_html( $settings_value ) . "</textarea>";
 }
 
 function notice_spinner() {
 
 	$gamwp_settings = get_option('gamwp_settings');
-	$settings_title = "notice_spinner";
-	if ( ! isset( $options['notice_spinner'] ) ) {
-		$options['notice_spinner'] = '';
-	}
-	echo "<input type='hidden' id='gamwp_settings_notice_spinner' name='gamwp_settings[notice_spinner]' value='" . $gamwp_settings['notice_spinner'] . "' />";
+	$settings_value = isset( $gamwp_settings['notice_spinner'] ) ? $gamwp_settings['notice_spinner'] : '';
+	echo "<input type='hidden' id='gamwp_settings_notice_spinner' name='gamwp_settings[notice_spinner]' value='" . esc_html( $settings_value ) . "' />";
 	echo "<input id='upload_spinner_button' type='button' class='button' value='Upload Custom Spinner' />";
-	if ( '' != $gamwp_settings['notice_spinner'] ) {
-		echo "<input id='delete_logo' name='gamwp_settings[delete_spinner]' type='submit' class'button' value='Delete Spinner' />";
+	if ( '' != $settings_value ) {
+		echo "<input id='delete_logo' name='gamwp_settings[delete_spinner]' type='submit' class='button' value='Delete Spinner' />";
 	}
 }
+
 
 function notice_spinner_preview() {
 	$gamwp_settings = get_option( 'gamwp_settings' );  ?>
