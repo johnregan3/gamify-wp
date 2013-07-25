@@ -22,9 +22,6 @@ function gamwp_render_fields() {
 	add_settings_field( 'daily_limit_activate', __( 'Enforce Daily Points Limit', 'gamwp' ), 'daily_limit_activate', __FILE__, 'daily_limit_section' );
 	add_settings_field( 'daily_limit', __( 'Daily Limit Amount', 'gamwp' ), 'daily_limit', __FILE__, 'daily_limit_section' );
 
-	add_settings_section('default_actions_section', __( 'Default Actions', 'gamwp' ), '', __FILE__ );
-	add_settings_field( 'set_default_actions', '', 'set_default_actions', __FILE__, 'default_actions_section' );
-
 	add_settings_section('register_section', __( 'Registration Action Settings', 'gamwp' ), '', __FILE__ );
 
 	add_settings_section('comment_section', __( 'Comment Action Settings', 'gamwp' ), '', __FILE__ );
@@ -39,6 +36,7 @@ function gamwp_render_fields() {
 }
 
 add_action( 'admin_init', 'gamwp_render_fields' );
+
 
 function generate_points() {
 	$help = NEW GAMWP_SETTINGS;
@@ -58,7 +56,6 @@ function generate_points() {
 }
 
 add_action( 'admin_init', 'generate_points' );
-
 
 
 function generate_checkboxes() {
@@ -84,7 +81,6 @@ function generate_checkboxes() {
 add_action( 'admin_init', 'generate_checkboxes' );
 
 
-
 function gamwp_general_settings() {
 	?>
 	<div id="gamwp-settings-wrap" class="wrap">
@@ -106,7 +102,7 @@ function gamwp_general_settings() {
 
 
 function daily_limit_section_cb() {
-	_e('<p>The Daily Limit ensures that easily completed Actions are not overused.  <br />Those Actions selected as "Include in Daily Limit" can be repeated until their combined points reaches the Daily Points Limit.</p>', 'gamwp' );
+	_e('<p>The Daily Limit ensures that easily completed Actions are not overused.  <br />Those Actions selected as "Limit" can be repeated until their combined points reach the Daily Points Limit.</p>', 'gamwp' );
 }
 
 
@@ -119,34 +115,17 @@ function notification_section_cb() {
 
 
 function daily_limit_activate() {
-	$options = get_option('gamwp_settings');
-	if ( ! isset( $options['daily_limit_activate'] ) ) {
-		$options['daily_limit_activate'] = 0;
-	}
-	echo "<input type='checkbox' id='gamwp_settings[daily_limit_activate]' name='gamwp_settings[daily_limit_activate]' value='1' " . checked( $options['daily_limit_activate'], 1, false ) . "/>";
+	$gamwp_settings = get_option('gamwp_settings');
+	$settings_value = isset( $gamwp_settings['daily_limit_activate'] ) ? $gamwp_settings['daily_limit_activate'] : '';
+	echo "<input type='checkbox' id='gamwp_settings[daily_limit_activate]' name='gamwp_settings[daily_limit_activate]' value='1' " . checked( $settings_value, 1, false ) . "/>";
 }
 
 
-// Daily Limit Amount
 function daily_limit() {
-	$options = get_option('gamwp_settings');
-	echo "<input name='gamwp_settings[daily_limit]' type='text' value='{$options['daily_limit']}' />";
+	$gamwp_settings = get_option('gamwp_settings');
+	echo "<input name='gamwp_settings[daily_limit]' type='text' value='{$gamwp_settings['daily_limit']}' />";
 }
 
-
-// Set Default Actions
-function set_default_actions() {
-	$help = NEW GAMWP_SETTINGS;
-	$action_array = $help->action_array;
-	foreach( $action_array  as $action => $action_value ) {
-		foreach ( $action_value as $field => $field_value ) {
-				$settings_title = $action . '_' . $field;
-				$settings_value = $help->input_setup( $action, $field );
-			echo "<input type='hidden' name='gamwp_settings[" . esc_attr( $settings_title ) . "]' id='gamwp_settings[". esc_attr( $settings_title ) . "]' value ='" . esc_html( $settings_value ) . "'>";
-		} // end foreach
-	} // end foreach
-
-}
 
 function notice_css() {
 	$help = NEW GAMWP_SETTINGS;
@@ -157,14 +136,14 @@ function notice_css() {
 	echo "<textarea name='gamwp_settings[" . esc_attr( $settings_title ) . "]' rows='5' cols='60' type='textarea'>" . esc_html( $settings_value ) . "</textarea>";
 }
 
-function notice_spinner() {
 
+function notice_spinner() {
 	$gamwp_settings = get_option('gamwp_settings');
 	$settings_value = isset( $gamwp_settings['notice_spinner'] ) ? $gamwp_settings['notice_spinner'] : '';
-	echo "<input type='hidden' id='gamwp_settings_notice_spinner' name='gamwp_settings[notice_spinner]' value='" . esc_html( $settings_value ) . "' />";
+	echo "<input type='hidden' id='gamwp_settings_notice_spinner' name='gamwp_settings[notice_spinner]' value='" . esc_url( $settings_value ) . "' />";
 	echo "<input id='upload_spinner_button' type='button' class='button' value='Upload Custom Spinner' />";
 	if ( '' != $settings_value ) {
-		echo "<input id='delete_logo' name='gamwp_settings[delete_spinner]' type='submit' class='button' value='Delete Spinner' />";
+		echo "&nbsp;<input id='delete_logo' name='gamwp_settings[delete_spinner]' type='submit' class='button' value='Delete Spinner' />";
 	}
 }
 
@@ -182,12 +161,13 @@ function notice_spinner_preview() {
 function gamwp_thickbox_text_replace() {
 	global $pagenow;
 	if ( 'media-upload.php' == $pagenow || 'async-upload.php' == $pagenow ) {
-		// Now we'll replace the 'Insert into Post Button' inside Thickbox
 		add_filter( 'gettext', 'replace_thickbox_text'  , 1, 3 );
 	}
 }
 
 add_action( 'admin_init', 'gamwp_thickbox_text_replace' );
+
+
 
 function replace_thickbox_text($translated_text, $text, $domain) {
 	if ('Insert into Post' == $text) {
@@ -199,6 +179,7 @@ function replace_thickbox_text($translated_text, $text, $domain) {
 	return $translated_text;
 }
 
+
 function delete_image( $image_url ) {
 	global $wpdb;
 	$query = "SELECT ID FROM wp_posts where guid = '" . esc_url($image_url) . "' AND post_type = 'attachment'";
@@ -208,35 +189,36 @@ function delete_image( $image_url ) {
 	}
 }
 
-
 function validate_gamwp_settings( $input ) {
 
 	$gamwp_settings = get_option( 'gamwp_settings' );
-
-	/*
-	 * Validation script by Tom McFarlin
-	 * https://github.com/tommcfarlin/WordPress-Settings-Sandbox
-	 *
-	 * This isn't the best way to vaildate checkboxes, obviously.
-	 * Need some work here.
-	 */
-
-
-	//Need to check if some fields are int
-
 	$output = array();
 
 	foreach( $input as $key => $value ) {
-
-		$delete_logo = ! empty($input['delete_spinner']) ? true : false;
-
+		$delete_logo = ! empty( $input['delete_spinner'] ) ? true : false;
 		if ( $delete_logo ) {
 			delete_image( $gamwp_settings['notice_spinner'] );
 			$output['notice_spinner'] = '';
 		}
 
 		if( isset( $input[$key] ) ) {
-			$output[$key] = strip_tags( stripslashes( $input[ $key ] ) );
+			$help = NEW GAMWP_SETTINGS;
+			$action_array = $help->action_array;
+			foreach ( $action_array as $action => $val ) {
+				$checkbox_options = array( "limit", "active" );
+				foreach ( $checkbox_options as $checkbox ) {
+					$settings_title = $action . '_' . $checkbox;
+					$output[$key] = ( isset( $input[$settings_title] ) ? $input[$settings_title] : 0 );
+				}
+			}
+
+			$int_input = array( "daily_limit", "register_points", "comment_points", "post_action_points", );
+			foreach ( $int_input as $value ) {
+				$output[$value] = intval( $input[$value] );
+			}
+
+			$output[$key] = strip_tags( stripslashes( $input[$key] ) );
+
 		}
 	}
 

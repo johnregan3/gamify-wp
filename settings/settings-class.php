@@ -28,53 +28,6 @@ Class GAMWP_Settings {
 	);
 
 
-
-	/**
-	* Get the array of action names to dynamically generate hidden fields for default actions
-	*/
-
-	public function get_action_name_array( $action_name ) {
-
-		$action_array = $this->action_array;
-		$actions = array_keys( $action_array );
-
-		foreach ( $actions as $action => $value ) {
-			if ( $action_name = $action_array[$value] ) {
-				$value = $action_array[$value];
-			} else {
-				$value = '';
-			} // endif
-		} // endforeach
-
-		return $value;
-
-	} // get_action_name_array
-
-
-
-	/**
-	* Get the array of field names to dynamically generate hidden fields for default actions
-	*/
-
-	public function get_field_value( $action_name, $field_name ) {
-
-		$action_array = $this->action_array;
-		$action_fields = $this->get_action_name_array( $action_name );
-		$fields = array_keys( $action_fields );
-
-		foreach ( $fields as $field => $value ) {
-			if ( $field_name = $action_array[$action_name][$value] ) {
-				$value = $action_array[$action_name][$value];
-			} else {
-				$value = '';
-			} // endif
-		} // endforeach
-
-		return $value;
-
-	} //get_name_attr_field
-
-
 	/**
 	* Get if option is not set, set it to ''.
 	*/
