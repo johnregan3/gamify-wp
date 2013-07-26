@@ -31,12 +31,16 @@ function gamwp_stats_shortcode() {
 
 		//Calculate Daily Points Total
 		$todays_points = $stats->calc_daily_points( $user_id, $time );
-		echo sprintf( __( '<p><strong>Points Earned in Last 24 Hours:</strong> (need to add Daily Limit from Settings) %s', $todays_points, 'gamwp' ), $todays_points );
+		$options = get_option('gamwp_settings');
+		$daily_limit = $options['daily_limit'];
+		echo sprintf( __('<p><strong>Points Earned in Last 24 Hours:</strong>  %s / %s', 'gamwp' ), esc_html__( $todays_points, 'gamwp' ), esc_html__( $daily_limit, 'gamwp' ) );
 
-		//Recent Points Earned
-		_e( '<p><strong>Recent Activity</strong></p>', 'gamwp' );
+
 
 		if ( $actions) {
+
+			//Recent Points Earned
+			_e( '<p><strong>Recent Activity</strong></p>', 'gamwp' );
 
 			$recent_actions = array_reverse( $actions, true );
 			$recent_actions = array_slice( $recent_actions, 0, 10, true );

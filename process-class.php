@@ -69,6 +69,43 @@ Class GAMWP_Process {
 
 	} // end daily_points_earned
 
+	private function is_once_and_used( $user_id, $action_id, $action_title ) {
+		//Check to see if action is a one-time-use action
+		$options = get_option( 'gamwp_ca_settings' );
+		$once = isset( $options[$action_id]['once'] ) ? $options[$action_id]['once'] : 'unchecked';
+
+		if ( $once == 'checked' ) {
+			//check to see if action already extists in user actions array
+			$user_actions = get_user_meta( $user_id, 'gamwp_actions', true );
+			if ( !empty( $user_actions ) ) {
+				foreach ($user_actions as $row) {
+					if ( !empty( $row ) ) {
+						if ( array_key_exists('action_title', $row) ) {
+							$action_ids = wp_list_pluck( $user_actions, 'action_title' );
+							$action_ids = isset( $action_ids ) ? $action_ids : array() ;
+							foreach ( $action_ids as $action_id => $title ) {
+								if ( $action_title == $title ) {
+									return true;
+								} else {
+									return false;
+								}
+							}
+						} else {
+							return false;
+						}
+					} else {
+						return false;
+					}
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+
 	/**
 	* Retrieves score, then adds new points
 	*/
@@ -79,7 +116,7 @@ Class GAMWP_Process {
 		$total_score = get_user_meta( $user_id, 'gamwp_score', true );
 
 		if ( ! isset( $total_score ) ) {
-			$total_score = 0;
+			$total_score = '0';
 		}
 
 		$options = get_option( 'gamwp_settings' );
@@ -90,38 +127,32 @@ Class GAMWP_Process {
 			$daily_points_limit_activate = '0';
 		}
 
-		//Check to see if action is a one-time-use action
-		$options = get_option( 'gamwp_ca_settings' );
-		$once = $options[$action_id]['once'];
 
-		if ( $once == 'checked' ) {
-			//check to see if action already extists in user actions array
-			$user_actions = get_user_meta( $user_id, 'gamwp_actions', true );
-			$action_titles = wp_list_pluck( $user_actions, 'action_title' );
-			foreach ($action_titles as $title ) {
-				if ( $action_title == $title ) {
-					$new_score = $total_score;
+		$action_daily_limit = isset( $options[$action_id]['daily_limit'] ) ? $options[$action_id]['daily_limit'] : '';
+		$once_used = $this->is_once_and_used($user_id, $action_id, $action_title);
+		if ( $once_used == true ) {
+			$new_score = $total_score;
+			return $new_score;
+		} else {
+			// Check to see if Daily Limit has been reached
+			if ( ( $action_daily_limit == 'checked' ) && ( $daily_points_limit_activate == '1' ) ) {
+				//check daily total field to see if total points from last 24 hours, plus the new amount, exceeds daily limit
+				//get all points earned in the last 24 hours from daily totals
+				$daily_points_earned = $this->daily_points_earned( $user_id );
+				//compare the daily points earned to pre-set daily limit total limit.
+				//if daily points total < daily limit, simply add current points to the total and save.
+				if ( $daily_points_earned < $daily_points_limit ) {
+					//Add Action Array (with Points) to Event Array, then save
+					$new_score = $total_score + $points;
 				} else {
-					// Check to see if Daily Limit has been reached
-					if ( ( $action_daily_limit == 'checked' ) && ( $daily_points_limit_activate == '1' ) ) {
-						//check daily total field to see if total points from last 24 hours, plus the new amount, exceeds daily limit
-						//get all points earned in the last 24 hours from daily totals
-						$daily_points_earned = $this->daily_points_earned( $user_id );
-						//compare the daily points earned to pre-set daily limit total limit.
-						//if daily points total < daily limit, simply add current points to the total and save.
-						if ( $daily_points_earned < $daily_points_limit ) {
-							//Add Action Array (with Points) to Event Array, then save
-							$new_score = $total_score + $points;
-						} else {
-							$new_score = $total_score;
-						// Maybe return a message on User Profile Page
-							// "You've reached our your daily points limit for the last 24 hours."
-						}
-					} else {
-						$new_score = $total_score + $points;
-					}
+					$new_score = $total_score;
+				// Maybe return a message on User Profile Page
+					// "You've reached our your daily points limit for the last 24 hours."
 				}
+			} else {
+				$new_score = $total_score + $points;
 			}
+			$new_score = $total_score;
 		}
 		return $new_score;
 	}
@@ -133,25 +164,31 @@ Class GAMWP_Process {
 	* Used save actions that occur when points are earned/redeemed
 	*/
 
-	private function save_action( $user_id, $action_title, $points ) {
+	private function save_action( $user_id, $action_id, $action_title, $points ) {
 
-		//Add actions to User's action meta
-		$actions_array = get_user_meta( $user_id, 'gamwp_actions', true );
-		$time = current_time( 'timestamp', 1 );
-		$actions_array[$time]['action_title'] = $action_title;
-		$latest_action = $actions_array[$time]['action_title'];
-		$actions_array[$time]['points'] = $points;
 
-		// Save to User Meta
-		$updated_actions = update_user_meta( $user_id, 'gamwp_actions', $actions_array );
+		$once_used = $this->is_once_and_used($user_id, $action_id, $action_title);
+		if ( $once_used !== true ) {
 
-		if( $updated_actions === false ) {
-			$action_result['actions']['type'] = 'error';
-		}
+			//Add actions to User's action meta
+			$actions_array = get_user_meta( $user_id, 'gamwp_actions', true );
+			$time = current_time( 'timestamp', 1 );
+			$actions_array[$time]['action_title'] = $action_title;
+			$latest_action = $actions_array[$time]['action_title'];
+			$actions_array[$time]['points'] = $points;
 
-		else {
-			$action_result['actions']['type'] = 'success';
-			$action_result['actions']['action'] = $latest_action; //most recent action
+			$updated_actions = update_user_meta( $user_id, 'gamwp_actions', $actions_array );
+
+			if( $updated_actions === false ) {
+				$action_result['actions']['type'] = 'error';
+			}
+
+			else {
+				$action_result['actions']['type'] = 'success';
+				$action_result['actions']['action'] = $latest_action; //most recent action
+			}
+		} else {
+			$action_result = array();
 		}
 
 		return $action_result;
@@ -197,7 +234,7 @@ Class GAMWP_Process {
 		$score_result = $this->save_score( $user_id, $action_points, $new_score );
 
 		// Save actions to user meta
-		$actions_result = $this->save_action( $user_id, $action_title, $action_points );
+		$actions_result = $this->save_action( $user_id, $action_id, $action_title, $action_points );
 		$result = array_merge($score_result, $actions_result);
 
 		return $result;
