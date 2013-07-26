@@ -13,18 +13,15 @@ include_once( plugin_dir_path(__FILE__) . 'settings/settings-class.php' ); 				/
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-wp-general.php' ); 			//Settings Page
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-wp-custom-actions.php' ); 	//Custom ActionsSettings Page
 
-include_once( plugin_dir_path(__FILE__) . 'process-class.php' ); 				//Processor Class
+include_once( plugin_dir_path(__FILE__) . 'actions.php' ); 				//Actions
 include_once( plugin_dir_path(__FILE__) . 'process.php' ); 						//Action Processor
-
-include_once( plugin_dir_path(__FILE__) . 'default-actions.php' ); 				//Default Actions
-include_once( plugin_dir_path(__FILE__) . 'cpt/custom-actions.php' ); 			//Custom Actions Custom Post Type
-include_once( plugin_dir_path(__FILE__) . 'custom-actions.php' ); 				//Custom Actions
+include_once( plugin_dir_path(__FILE__) . 'process-class.php' ); 				//Processor Class
 
 include_once( plugin_dir_path(__FILE__) . 'shortcode/shortcode-class.php' ); 	//Shortcode Class
 include_once( plugin_dir_path(__FILE__) . 'shortcode/link.php' );				//Link Action Shortcode
 include_once( plugin_dir_path(__FILE__) . 'shortcode/user-stats.php' );			//User Stats Shortcode
 
-include_once( plugin_dir_path(__FILE__) . 'cpt/rewards.php' ); 					//Rewards Custom Post Type
+include_once( plugin_dir_path(__FILE__) . 'rewards.php' ); 					//Rewards Custom Post Type
 
 /*
  *

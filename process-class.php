@@ -188,16 +188,16 @@ Class GAMWP_Process {
 	* Used when points are earned/redeemed
 	*/
 
-	public function save_process_results( $user_id, $action_id, $action_title, $hook_points, $action_daily_limit, once ) {
+	public function save_process_results( $user_id, $action_id, $action_title, $action_points, $action_daily_limit, $once ) {
 
 		// Retrieve score, then add new points
-		$new_score = $this->calc_score( $user_id, $action_id, $action_title, $hook_points, $action_daily_limit, $once );
+		$new_score = $this->calc_score( $user_id, $action_id, $action_title, $action_points, $action_daily_limit, $once );
 
 		// Save new score to user meta
-		$score_result = $this->save_score( $user_id, $hook_points, $new_score );
+		$score_result = $this->save_score( $user_id, $action_points, $new_score );
 
 		// Save actions to user meta
-		$actions_result = $this->save_action( $user_id, $action_title, $hook_points );
+		$actions_result = $this->save_action( $user_id, $action_title, $action_points );
 		$result = array_merge($score_result, $actions_result);
 
 		return $result;
