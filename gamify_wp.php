@@ -11,7 +11,7 @@
 
 include_once( plugin_dir_path(__FILE__) . 'settings/settings-class.php' ); 				//Settings Class
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-wp-general.php' ); 			//Settings Page
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-wp-custom-actions.php' ); 	//Settings Page
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-wp-custom-actions.php' ); 	//Custom ActionsSettings Page
 
 include_once( plugin_dir_path(__FILE__) . 'process-class.php' ); 				//Processor Class
 include_once( plugin_dir_path(__FILE__) . 'process.php' ); 						//Action Processor
@@ -61,10 +61,10 @@ function gamwp_enqueue() {
 	wp_enqueue_script( 'gamwp_custom' );
 	wp_enqueue_script( 'gamwp_link' );
 
-	wp_register_style( 'gamwp_style', plugins_url( 'style/style.css', __FILE__ ), array(), '1.0', 'all' );
+	wp_register_style( 'gamwp_style', plugin_dir_url( __FILE__ ) . 'style/style.css', array(), '1.0', 'all' );
 	wp_enqueue_style( 'gamwp_style' );
 
-	wp_register_style('gamwp_custom_style', plugin_dir_url( __FILE__ ) . 'style/custom_style.php');
+	wp_register_style('gamwp_custom_style', plugin_dir_url( __FILE__ ) . 'style/custom-style.php', array(), '1.0', 'all');
 	wp_enqueue_style( 'gamwp_custom_style');
 }
 

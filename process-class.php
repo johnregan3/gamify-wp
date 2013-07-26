@@ -69,24 +69,11 @@ Class GAMWP_Process {
 
 	} // end daily_points_earned
 
-
-
-
-
-	/**
-	* Checks to see if Daily Limit has been reached
-	*/
-
-
-
-
-
-
 	/**
 	* Retrieves score, then adds new points
 	*/
 
-	private function calc_score( $user_id, $points, $action_daily_limit ) {
+	private function calc_score( $user_id, $action_id, $action_title, $points, $action_daily_limit ) {
 
 		//Add Points to User's Total Score
 		$total_score = get_user_meta( $user_id, 'gamwp_score', true );
@@ -100,38 +87,43 @@ Class GAMWP_Process {
 		if ( array_key_exists( 'daily_limit_activate', $options ) ) {
 			$daily_points_limit_activate = $options['daily_limit_activate'];
 		} else {
-			$daily_points_limit_activate = 0;
+			$daily_points_limit_activate = '0';
 		}
 
-		// Check to see if Daily Limit has been reached
-		if ( ( $action_daily_limit == '1' ) && ( $daily_points_limit_activate == '1' ) ) {
+		//Check to see if action is a one-time-use action
+		$options = get_option( 'gamwp_ca_settings' );
+		$once = $options[$action_id]['once'];
 
-			//check daily total field to see if total points from last 24 hours, plus the new amount, exceeds daily limit
-
-			//get all points earned in the last 24 hours from daily totals
-			$daily_points_earned = $this->daily_points_earned( $user_id );
-
-			//compare the daily points earned to pre-set daily limit total limit.
-			//if daily points total < daily limit, simply add current points to the total and save.
-			if ( $daily_points_earned < $daily_points_limit ) {
-				//Add Action Array (with Points) to Event Array, then save
-				 $new_score = $total_score + $points;
-			} else {
-				$new_score = $total_score;
-
-			// Maybe return a message on User Profile Page
-				// "You've reached our your daily points limit for the last 24 hours."
-
+		if ( $once == 'checked' ) {
+			//check to see if action already extists in user actions array
+			$user_actions = get_user_meta( $user_id, 'gamwp_actions', true );
+			$action_titles = wp_list_pluck( $user_actions, 'action_title' );
+			foreach ($action_titles as $title ) {
+				if ( $action_title == $title ) {
+					$new_score = $total_score;
+				} else {
+					// Check to see if Daily Limit has been reached
+					if ( ( $action_daily_limit == 'checked' ) && ( $daily_points_limit_activate == '1' ) ) {
+						//check daily total field to see if total points from last 24 hours, plus the new amount, exceeds daily limit
+						//get all points earned in the last 24 hours from daily totals
+						$daily_points_earned = $this->daily_points_earned( $user_id );
+						//compare the daily points earned to pre-set daily limit total limit.
+						//if daily points total < daily limit, simply add current points to the total and save.
+						if ( $daily_points_earned < $daily_points_limit ) {
+							//Add Action Array (with Points) to Event Array, then save
+							$new_score = $total_score + $points;
+						} else {
+							$new_score = $total_score;
+						// Maybe return a message on User Profile Page
+							// "You've reached our your daily points limit for the last 24 hours."
+						}
+					} else {
+						$new_score = $total_score + $points;
+					}
+				}
 			}
-
-		} else {
-
-			$new_score = $total_score + $points;
-
 		}
-
 		return $new_score;
-
 	}
 
 
@@ -196,38 +188,21 @@ Class GAMWP_Process {
 	* Used when points are earned/redeemed
 	*/
 
-	public function save_process_results( $user_id, $action_title, $points, $action_daily_limit ) {
+	public function save_process_results( $user_id, $action_id, $action_title, $hook_points, $action_daily_limit, once ) {
 
 		// Retrieve score, then add new points
-		$new_score = $this->calc_score( $user_id, $points, $action_daily_limit );
+		$new_score = $this->calc_score( $user_id, $action_id, $action_title, $hook_points, $action_daily_limit, $once );
 
 		// Save new score to user meta
-		$score_result = $this->save_score( $user_id, $points, $new_score );
+		$score_result = $this->save_score( $user_id, $hook_points, $new_score );
 
 		// Save actions to user meta
-		$actions_result = $this->save_action( $user_id, $action_title, $points );
+		$actions_result = $this->save_action( $user_id, $action_title, $hook_points );
 		$result = array_merge($score_result, $actions_result);
 
 		return $result;
 
 	} // End save_process_results
-
-
-
-	/**
-	* Returns the setting for a given field
-	* Used in default/custom-actions processing
-	*/
-
-	public function get_action_settings( $action, $field ) {
-
-		$options = get_option('gamwp_settings');
-		$settings_title = $action . '_' . $field;
-		$settings = (isset($options[$settings_title]) ? $options[$settings_title] : '');
-
-		return $settings;
-
-	} // End get_action_settings
 
 
 } //End Class Process

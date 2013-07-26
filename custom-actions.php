@@ -10,6 +10,32 @@ add_action( 'init', 'get_custom_actions');
 
 function get_custom_actions() {
 
+	$options = get_option('gamwp_ca_settings');
+	foreach($options as $action_id => $actions) {
+		foreach ($actions as $field) {
+			global $user_id, $action_title, $hook_points, $action_daily_limit, $once;
+			$user_id = get_current_user_id();
+			$action_title = $actions['action_title'];
+			$hook_value = $actions['hook_value'];
+			$hook_points = $actions['hook_points'];
+			$action_daily_limit = $actions['daily_limit'];
+			$once = $actions['once'];
+			$func_title = "custom_action_" . $action_id;
+
+			$$func_title = function() {
+				global $user_id, $action_title, $hook_points, $action_daily_limit, $once;
+				$process = New GAMWP_Process;
+				$process->save_process_results( $user_id, $action_id, $action_title, $hook_points, $action_daily_limit );
+			};
+
+			add_action( $hook_value, $func_title, 10, 0);
+		}
+	}
+
+
+
+	/*
+
 	$master_array = array();
 	$args=array(
 		'post_type' => 'customactions',
@@ -63,5 +89,6 @@ function get_custom_actions() {
 	} // endif
 
 	wp_reset_postdata();
+	*/
 
 }
