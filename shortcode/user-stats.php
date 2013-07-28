@@ -37,9 +37,9 @@ function gamwp_stats_shortcode() {
 			$recent_actions = array_reverse( $actions, true );
 			$recent_actions = array_slice( $recent_actions, 0, 10, true );
 			echo '<ul>';
-			foreach ( $recent_actions as $value => $key ) {
-				$offset = human_time_diff( $value, $time );
-				echo sprintf( "<li> %s for %s points ( %s ago)</li>", esc_html( $key['action_title'] ), esc_html( $key['points'] ), esc_html( $offset ) );
+			foreach ( $recent_actions as $key => $value ) {
+				$offset = human_time_diff( $key, $time );
+				echo sprintf( "<li> %s for %s points ( %s ago)</li>", esc_html( $value['action_title'] ), esc_html( $value['points'] ), esc_html( $offset ) );
 			}
 			echo '</ul>';
 		}
