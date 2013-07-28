@@ -9,20 +9,19 @@
 	Version: 1.0
  */
 
-include_once( plugin_dir_path(__FILE__) . 'settings/settings-class.php' ); 		//Settings Class
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-general.php' ); 		//General Settings Page
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' ); 		//Actions Settings Page
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-rewards.php' ); 		//Rewards Settings Page
+include_once( plugin_dir_path(__FILE__) . 'settings/settings-class.php' );		//Settings Class
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-general.php' );		//General Settings Page
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' );		//Actions Settings Page
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-rewards.php' );		//Rewards Settings Page
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-log.php' );			//Points Log Settings Page
 
-include_once( plugin_dir_path(__FILE__) . 'actions.php' ); 						//Action Hook Generator
-include_once( plugin_dir_path(__FILE__) . 'process.php' ); 						//Action Processor
-include_once( plugin_dir_path(__FILE__) . 'process-class.php' ); 				//Processor Class
+include_once( plugin_dir_path(__FILE__) . 'process-class.php' );				//Processor Class
+include_once( plugin_dir_path(__FILE__) . 'process.php' );						//AJAX Action Processor
+include_once( plugin_dir_path(__FILE__) . 'actions.php' );						//Action Hook Generator
 
-include_once( plugin_dir_path(__FILE__) . 'shortcode/shortcode-class.php' ); 	//Shortcode Class
+include_once( plugin_dir_path(__FILE__) . 'shortcode/shortcode-class.php' );	//Shortcode Class
 include_once( plugin_dir_path(__FILE__) . 'shortcode/link.php' );				//Link Action Shortcode
 include_once( plugin_dir_path(__FILE__) . 'shortcode/user-stats.php' );			//User Stats Shortcode
-
-include_once( plugin_dir_path(__FILE__) . 'rewards.php' ); 					//Rewards Custom Post Type
 
 /*
  *

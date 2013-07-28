@@ -4,12 +4,12 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
-window.send_to_editor = function(html) {
-	var image_url = $('img',html).attr('src');
-	$('#gamwp_settings_notice_spinner').val(image_url);
-	tb_remove();
-	$('#notice_spinner_preview img').attr('src',image_url);
+	window.send_to_editor = function(html) {
+		var image_url = $('img',html).attr('src');
+		$('#gamwp_settings_notice_spinner').val(image_url);
+		tb_remove();
+		$('#notice_spinner_preview img').attr('src',image_url);
 
-	$('#Submit').trigger('click');
-}
+		$('#Submit').trigger('click');
+	}
 });
