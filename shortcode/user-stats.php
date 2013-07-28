@@ -21,15 +21,25 @@ function gamwp_stats_shortcode() {
 		$score = isset( $score ) ? $score : '0';
 		$actions = get_user_meta( $user_id, 'gamwp_actions', true );
 
-		echo sprintf( __( '<h3>Points Totals for %s</h3>', 'gamwp' ), esc_html( $username ) );
+		//Print Header
+		echo sprintf( __( '<h3>Points Totals for %s</h3>', 'gamwp' ), $username );
 
-		echo sprintf( __( '<p><strong>Total Points:</strong> %s</p>', 'gamwp' ), esc_html( $score ) );
+		//Total Points Earned
+		echo sprintf( __( '<p><strong>Total Points:</strong> %s</p>', 'gamwp' ), $score );
+
+		//Calculate Daily Points Total
+		$todays_points = $stats->calc_daily_points( $user_id, $time );
+		$options = get_option('gamwp_settings');
+		$daily_limit = $options['daily_limit'];
+		echo sprintf( __('<p><strong>Points Earned in Last 24 Hours:</strong>  %s / %s', 'gamwp' ), esc_html__( $todays_points, 'gamwp' ), esc_html__( $daily_limit, 'gamwp' ) );
 
 		$todays_points = $shortcode->calc_daily_points( $user_id, $time );
 		//Do not include daily point limit.
 		echo sprintf( __( '<p><strong>Points Earned in Last 24 Hours:</strong>  %s', 'gamwp' ), esc_html__( $todays_points, 'gamwp' ) );
 		if ( $actions) {
+
 			echo sprintf( '<p><strong>%s</strong></p>', __( 'Recent Activity', 'gamwp' ) );
+
 			$recent_actions = array_reverse( $actions, true );
 			$recent_actions = array_slice( $recent_actions, 0, 10, true );
 			echo '<ul>';
