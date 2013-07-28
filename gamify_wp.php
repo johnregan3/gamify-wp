@@ -9,11 +9,12 @@
 	Version: 1.0
  */
 
-include_once( plugin_dir_path(__FILE__) . 'settings/settings-class.php' ); 				//Settings Class
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-general.php' ); 			//Settings Page
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' ); 	//Custom ActionsSettings Page
+include_once( plugin_dir_path(__FILE__) . 'settings/settings-class.php' ); 		//Settings Class
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-general.php' ); 		//General Settings Page
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' ); 		//Actions Settings Page
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-rewards.php' ); 		//Rewards Settings Page
 
-include_once( plugin_dir_path(__FILE__) . 'actions.php' ); 				//Actions
+include_once( plugin_dir_path(__FILE__) . 'actions.php' ); 						//Action Hook Generator
 include_once( plugin_dir_path(__FILE__) . 'process.php' ); 						//Action Processor
 include_once( plugin_dir_path(__FILE__) . 'process-class.php' ); 				//Processor Class
 
@@ -104,6 +105,8 @@ add_action('admin_enqueue_scripts', 'gamwp_enqueue_admin_scripts');
 function gamwp_activate() {
 
 // Load Default Settings
+
+	//load custom actions array in settings-class.php
 
 }
 

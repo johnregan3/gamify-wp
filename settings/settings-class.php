@@ -9,34 +9,12 @@
 
 Class GAMWP_Settings {
 
-	/**
-	* Array of Default Actions and their hooks
-	*
-	* @since 1.0
-	* @var array $action_array
-	*/
-
-	public static $action_array = array(
-		'register' => array(
-			'action_title'  => 'Registered',
-			'action_hook'   => 'user_register',
-		),
-		'comment' => array(
-			'action_title'  => 'Commented',
-			'action_hook'   => 'comment_post',
-		),
-		'post_action' => array(
-			'action_title'  => 'Posted',
-			'action_hook'   => 'publish_post',
-		)
-	);
-
 
 	/**
 	* Returns Setting value
 	*
 	* Combines two input strings to create a value for the Options array, then
-	* checks if that value exists.  If not, set it to blank.  If so, return the Settings value.
+	* checks if that value exists.  If so, return the Settings value.  If not, set it to blank.
 	*
 	* @since 1.0
 	*

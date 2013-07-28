@@ -54,27 +54,27 @@ function generate_ca_fields() {
 		foreach ( $field_array as $field => $val) {
 			ob_start();
 
-					$settings_value =(isset( $options[$action_id]['delete'] ) ? $options[$action_id]['delete'] : 'unchecked');
+					$settings_value =(isset( $options['action'][$action_id]['delete'] ) ? $options['action'][$action_id]['delete'] : 'unchecked');
 					echo "<td style='width:5%' ><input type='checkbox' id='gamwp_ca_settings[" . $action_id . "][delete]' name='gamwp_ca_settings[" . $action_id . "][delete]' value='checked' " . checked( 'checked', isset( $settings_value ) ? $settings_value : 'unchecked', false ) ." /></td>";
 
-					$settings_value =(isset( $options[$action_id]['action_title'] ) ? $options[$action_id]['action_title'] : '');
+					$settings_value =(isset( $options['action'][$action_id]['action_title'] ) ? $options['action'][$action_id]['action_title'] : '');
 					echo "<td><input type='text' id='gamwp_ca_settings[" . $action_id . "][action_title]' name='gamwp_ca_settings[" . $action_id . "][action_title]' value='" . esc_html( $settings_value ) . "' title='" . esc_html( $settings_value ) . "'placeholder='Action Title' /></td>";
 
-					$settings_value =(isset( $options[$action_id]['action_hook'] ) ? $options[$action_id]['action_hook'] : '');
+					$settings_value =(isset( $options['action'][$action_id]['action_hook'] ) ? $options['action'][$action_id]['action_hook'] : '');
 					echo "<td><input type='text' id='gamwp_ca_settings[" . $action_id . "][action_hook]' name='gamwp_ca_settings[" . $action_id . "][action_hook]' value='" . esc_html( $settings_value ) . "' title='" . esc_html( $settings_value ) . "' placeholder='Action Hook' /></td>";
 
-					$settings_value =(isset( $options[$action_id]['action_points'] ) ? $options[$action_id]['action_points'] : '');
+					$settings_value =(isset( $options['action'][$action_id]['action_points'] ) ? $options['action'][$action_id]['action_points'] : '');
 					echo "<td><input type='text' id='gamwp_ca_settings[" . $action_id . "][action_points]' name='gamwp_ca_settings[" . $action_id . "][action_points]' value='" . esc_html( $settings_value ) . "' placeholder='Points' /></td>";
 
-					$settings_value =(isset( $options[$action_id]['daily_limit'] ) ? $options[$action_id]['daily_limit'] : 'unchecked');
+					$settings_value =(isset( $options['action'][$action_id]['daily_limit'] ) ? $options['action'][$action_id]['daily_limit'] : 'unchecked');
 					echo "<td><input type='checkbox' id='gamwp_ca_settings[" . $action_id . "][daily_limit]' name='gamwp_ca_settings[" . $action_id . "][daily_limit]' value='checked' " . checked( 'checked', isset( $settings_value ) ? $settings_value : 'unchecked', false ) ." /></td>";
 
-					$settings_value =(isset( $options[$action_id]['once'] ) ? $options[$action_id]['once'] : 'unchecked');
+					$settings_value =(isset( $options['action'][$action_id]['once'] ) ? $options['action'][$action_id]['once'] : 'unchecked');
 					echo "<td><input type='checkbox' id='gamwp_ca_settings[" . $action_id . "][once]' name='gamwp_ca_settings[" . $action_id . "][once]' value='checked' " . checked( 'checked', isset( $settings_value ) ? $settings_value : 'unchecked', false ) ." /></td>";
-			if ( isset( $options[$action_id]['delete'] ) ) {
-				$ca_rows[$action_id] = '';
+			if ( isset( $options['action'][$action_id]['delete'] ) ) {
+				$ca_rows['action'][$action_id] = '';
 			} else {
-				$ca_rows[$action_id] = ob_get_contents();
+				$ca_rows['action'][$action_id] = ob_get_contents();
 			}
 			ob_end_clean();
 		}
@@ -112,14 +112,14 @@ function gamwp_custom_actions() {
 			<br />
 		</div>
 		<?php _e( '<h2>Gamify WP Actions</h2>', 'gamwp'); ?>
-		<p><a href="https://github.com/johnregan3/gamify-wp-plugin/wiki/General-Settings">Get help for this page on our Wiki</a>.</p>
+		<p><a href="">WIKI LINK</a>.</p>
 
 
 			<form method="post" action="options.php" enctype="multipart/form-data">
 				<?php settings_fields('gamwp_ca_settings_group'); ?>
 			<div class="tablenav top">
-				<input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
-				<input type="button" class="button" onclick="displayResult()" value="Add New Custom Action">
+				<input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes', 'gamwp' ); ?>" />
+				<input type="button" class="button" onclick="displayResult()" value="<?php esc_attr_e( 'Add New Action', 'gamwp' ); ?>">
 			</div>
 			<table class="wp-list-table widefat fixed posts" id="gamwp-ca-table">
 				<thead>
@@ -153,8 +153,8 @@ function gamwp_custom_actions() {
 				</tbody>
 			</table>
 			<div class="tablenav bottom">
-				<input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes' ); ?>" />
-				<input type="button" class="button" onclick="displayResult()" value="Add New Custom Action">
+				<input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes', 'gamwp' ); ?>" />
+				<input type="button" class="button" onclick="displayResult()" value="<?php esc_attr_e( 'Add New Action', 'gamwp' ); ?>">
 			</div>
 		</form>
 	</div>
