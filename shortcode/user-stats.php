@@ -27,12 +27,6 @@ function gamwp_stats_shortcode() {
 		//Total Points Earned
 		echo sprintf( __( '<p><strong>Total Points:</strong> %s</p>', 'gamwp' ), $score );
 
-		//Calculate Daily Points Total
-		$todays_points = $stats->calc_daily_points( $user_id, $time );
-		$options = get_option('gamwp_settings');
-		$daily_limit = $options['daily_limit'];
-		echo sprintf( __('<p><strong>Points Earned in Last 24 Hours:</strong>  %s / %s', 'gamwp' ), esc_html__( $todays_points, 'gamwp' ), esc_html__( $daily_limit, 'gamwp' ) );
-
 		$todays_points = $shortcode->calc_daily_points( $user_id, $time );
 		//Do not include daily point limit.
 		echo sprintf( __( '<p><strong>Points Earned in Last 24 Hours:</strong>  %s', 'gamwp' ), esc_html__( $todays_points, 'gamwp' ) );
