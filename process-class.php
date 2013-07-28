@@ -8,36 +8,6 @@
 
 Class GAMWP_Process {
 
-	var $i;
-
-	/**
-	* Reorders array by key value
-	* Used to order Rewards Items by price
-	*/
-
-	private function reorder_array( &$array, $key ) {
-
-		// Re-sort $rewards_array so rewards appear in order of price
-		// From http://stackoverflow.com/questions/2699086/sort-multidimensional-array-by-value-2
-
-		$sorter = array();
-		$ret = array();
-		reset ( $array );
-
-		foreach ( $array as $ii => $va ) {
-			$sorter[$ii] = $va[$key];
-		}
-
-		asort ( $sorter );
-
-		foreach ( $sorter as $ii => $va ) {
-			$ret[$ii] = $array[$ii];
-		}
-
-		$array = $ret;
-
-	}
-
 
 	//Total Daily Points from last 24 hours ($user_id)
 
@@ -85,23 +55,14 @@ Class GAMWP_Process {
 							foreach ( $action_ids as $action_id => $title ) {
 								if ( $action_title == $title ) {
 									return true;
-								} else {
-									return false;
 								}
 							}
-						} else {
-							return false;
 						}
-					} else {
-						return false;
 					}
 				}
-			} else {
-				return false;
 			}
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 
@@ -121,29 +82,9 @@ Class GAMWP_Process {
 		$daily_limit_activate = isset( $options_general['daily_limit_activate'] ) ? $options_general['daily_limit_activate'] : 0;
 		$daily_points_limit = $options_general['daily_limit'];
 		$daily_points_earned = $this->daily_points_earned( $user_id );
-
-		echo "action_title = ";
-		print_r($action_title);
-		echo "<br />";
-		echo "action_id: ";
-		print_r($action_id);
-		echo "<br />";
-		echo "action_daily_limit: ";
-		print_r($action_daily_limit);
-		echo "<br />";
-		echo "daily_limit_activate: ";
-		print_r($daily_limit_activate);
-		echo "<br />";
-		print_r($daily_points_earned);
-		echo " >= ";
-		print_r($daily_points_limit);
-		echo "<br />";
-
-
 		if ( $once_used == true ) {
 			return $total_score;
 		}
-
 		if ( ( 'checked' == $action_daily_limit ) && ( 1 == $daily_limit_activate ) && ( $daily_points_earned >= $daily_points_limit ) ) {
 			return $total_score;
 		} else {
@@ -196,7 +137,7 @@ Class GAMWP_Process {
 
 	private function save_score( $user_id, $action_points, $new_score ) {
 		$updated_score = update_user_meta( $user_id, 'gamwp_score', $new_score );
-			if( $updated_score === false ) {
+			if( false === $updated_score ) {
 				$score_result['score']['type'] = 'error';
 			} else {
 				$score_result['score']['type'] = 'success';
