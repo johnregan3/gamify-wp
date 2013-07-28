@@ -29,7 +29,7 @@ function gamwp_link_shortcode( $atts, $content = null ) {
 
 } // End gamwp_link_shortcode
 
-add_shortcode( 'gamwp-link', 'gamwp_link_shortcode' );
+add_shortcode( 'gamify-link', 'gamwp_link_shortcode' );
 
 /*
  *

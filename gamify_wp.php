@@ -10,8 +10,8 @@
  */
 
 include_once( plugin_dir_path(__FILE__) . 'settings/settings-class.php' ); 				//Settings Class
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-wp-general.php' ); 			//Settings Page
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-wp-custom-actions.php' ); 	//Custom ActionsSettings Page
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-general.php' ); 			//Settings Page
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' ); 	//Custom ActionsSettings Page
 
 include_once( plugin_dir_path(__FILE__) . 'actions.php' ); 				//Actions
 include_once( plugin_dir_path(__FILE__) . 'process.php' ); 						//Action Processor

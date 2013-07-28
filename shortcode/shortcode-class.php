@@ -19,7 +19,7 @@ Class GAMWP_Shortcode {
 		$daily_points_earned = 0;
 		$actions = get_user_meta( $user_id, 'gamwp_actions', true );
 
-			if ( isset( $actions ) ) {
+			if ( !empty( $actions ) ) {
 				foreach ( $actions as $timestamp => $value ) {
 					// If it occurred less than 24 hours ago
 					if ( $timestamp >= $one_day_ago ) {
@@ -34,7 +34,9 @@ Class GAMWP_Shortcode {
 						$daily_points_earned = $daily_points_earned + $points;
 					} // endif
 				} // End foreach
-			} // End if $actions
+			} else {
+				$daily_points_earned = '0';
+			}
 
 		return $daily_points_earned;
 
