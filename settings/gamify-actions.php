@@ -58,7 +58,7 @@ function generate_ca_fields() {
 		$settings_value =(isset( $options[$action_id]['activity_title'] ) ? $options[$action_id]['activity_title'] : '');
 		echo "<td><input type='text' id='gamwp_ca_settings[" . $action_id . "][activity_title]' name='gamwp_ca_settings[" . $action_id . "][activity_title]' value='" . esc_html( $settings_value ) . "' title='" . esc_html( $settings_value ) . "'placeholder='Action Title' /></td>";
 
-		$settings_value =(isset( $options[$action_id]['activity_hook'] ) ? $options[$action_id]['activity_hook'] : '');
+		$settings_value =(isset( $options[$action_id]['action_hook'] ) ? $options[$action_id]['action_hook'] : '');
 		echo "<td><input type='text' id='gamwp_ca_settings[" . $action_id . "][action_hook]' name='gamwp_ca_settings[" . $action_id . "][action_hook]' value='" . esc_html( $settings_value ) . "' title='" . esc_html( $settings_value ) . "' placeholder='Action Hook' /></td>";
 
 		$settings_value =(isset( $options[$action_id]['activity_points'] ) ? $options[$action_id]['activity_points'] : '');

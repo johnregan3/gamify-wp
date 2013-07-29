@@ -23,37 +23,17 @@ add_action('admin_init', 'gamwp_log_register_settings');
 function generate_log_fields() {
 
 	$options = get_option('gamwp_master_log');
-	if ( empty( $options ) ) {
-		$options = array(
-			"1" => array(
-				"username"   => "Commented On A Post",
-				"reward_type"   => "badge",
-				"points" => 10,
-			),
-			"2" => array(
-				"username"  => "Registered",
-				"reward_type"   => "level",
-				"points" => 11,
-			),
-			"3" => array(
-				"username"  => "Registered",
-				"reward_type"   => "badge",
-				"points" => 10,
-			),
-		);
-	}
-
-
 	$options = array_reverse( $options, true );
+
 	foreach ( $options as $activity_time => $field_array ) {
 		ob_start();
 
 		$settings_value =( isset( $options[$activity_time]['delete'] ) ? $options[$activity_time]['delete'] : 'unchecked' );
 		echo "<td style='width:5%' ><input type='checkbox' id='gamwp_master_log[" . $activity_time . "][delete]' name='gamwp_master_log[" . $activity_time . "][delete]' value='checked' " . checked( 'checked', isset( $settings_value ) ? $settings_value : 'unchecked', false ) . " /></td>";
 
-		echo "<td>" . gmdate( "d M y H:i:s", $activity_time ) . " GMT</td>";
+		echo "<td>" . $activity_time . " GMT</td>";
 
-		$settings_value =( isset( $options[$activity_time]['userid'] ) ? $options[$activity_time]['username'] : '' );
+		$settings_value =( isset( $options[$activity_time]['userid'] ) ? $options[$activity_time]['userid'] : '' );
 		echo "<td><span>";
 			$user = get_userdata( $settings_value );
 		echo $user->user_login;
@@ -79,6 +59,9 @@ function generate_log_fields() {
 
 function gamwp_points_log() {
 	?>
+
+
+<!-- Need to put this in a separate file -->
 
 <script>
 	function displayResult() {

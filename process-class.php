@@ -48,48 +48,50 @@ Class GAMWP_Process {
 	public function save_activity( $user_id, $activity_id) {
 
 		//get activity information
-		$activity_option_array = get_option( 'gamwp_ca_settings' );
-		foreach( $activity_option_array as $activity_option ) {
-			if ( $activity_id == $activity_option ) {
-				$activity_title = $activity_option['activity_title'];
-				$activity_points = $activity_option['activity_points'];
-				$activity_daily_limit = $activity_option['action_daily_limit'];
-				$once = $activity_option_id['once'];
+		$activity_options = get_option( 'gamwp_ca_settings' );
+
+		foreach( $activity_options as $activity => $value ) {
+			if ( $activity_id == $activity ) {
+				$activity_points = isset( $activity_options[$activity]['activity_points'] ) ? $activity_options[$activity]['activity_points'] : '';
+				$activity_title = isset( $activity_options[$activity]['activity_title'] ) ? $activity_options[$activity]['activity_title'] : '';
+				$activity_daily_limit = isset( $activity_options[$activity]['activity_daily_limit'] ) ? $activity_options[$activity]['activity_daily_limit'] : '';
+				$once_unused = $this->is_once_and_unused( $user_id, $activity_id);
+				if ( $once_unused == false ) {
+					return false;
+				}
+
+				$general_options = get_option( 'gamwp_settings' );
+				$daily_limit_active = isset ( $general_options['daily_limit_activate'] ) ? $general_options['daily_limit_activate'] : 0 ;
+				$daily_points_limit = isset( $general_options['daily_limit'] ) ? $general_options['daily_limit'] : 99999 ;
+				$daily_points_earned = $this->daily_points_earned( $user_id );
+				if ( ( 'checked' == $activity_daily_limit ) && ( 1 == $daily_limit_active ) && ( $daily_points_earned >= $daily_points_limit ) ) {
+					return false;
+				}
+
+				//create entry for master_log
+				$add_to_master_array = array();
+				$time = current_time( 'timestamp', 1 );
+				$add_to_master_array[$time] = array();
+				$add_to_master_array[$time]['userid'] = $user_id;
+				$add_to_master_array[$time]['activity_id'] = $activity_id;
+				$add_to_master_array[$time]['activity_title'] = $activity_title;
+				$add_to_master_array[$time]['activity_points'] = $activity_points;
+
+				//save activity array to master array
+				$master_log_array = get_option( 'gamwp_master_log' );
+				$master_log_array = !empty( $master_log_array ) ? $master_log_array : array();
+				$new_master_log_array = $master_log_array + $add_to_master_array;
+				$updated_option = update_option( 'gamwp_master_log', $new_master_log_array );
+
+
+				if( false === $updated_option ) {
+					$action_result['actions']['type'] = 'error';
+				} else {
+					$action_result['actions']['type'] = 'success';
+					$action_result['actions']['action'] = $activity_title;
+				}
+
 			}
-		}
-
-		$once_used = $this->is_once_and_unused( $user_id, $activity_id);
-		if ( $once_used == true ) {
-			return false;
-		}
-
-		$general_options = get_option( 'gamwp_settings' );
-		$daily_limit_active = isset ( $general_options['daily_limit_activate'] ) ? $general_options['daily_limit_activate'] : 0 ;
-		$daily_points_limit = isset( $general_options['daily_limit'] ) ? $general_options['daily_limit'] : 99999 ;
-		$daily_points_earned = $this->daily_points_earned( $user_id );
-		if ( ( 'checked' == $activity_daily_limit ) && ( 1 == $daily_limit_active ) && ( $daily_points_earned >= $daily_points_limit ) ) {
-			return false;
-		}
-
-		//create entry for master_log
-		$add_to_master_array = array();
-		$time = current_time( 'timestamp', 1 );
-		$add_to_master_array[$time]['userid'] = $user_id;
-		$add_to_master_array[$time]['activity_title'] = $activity_title;
-		$add_to_master_array[$time]['activity_points'] = $activity_points;
-
-		//save activity array to master array
-		$master_log_array = get_option( 'gamwp_master_log' );
-		$master_log_array = !empty( $master_log_array ) ? $master_log_array : array();
-		$new_master_log_array = array_merge( $master_log_array, $add_to_master_array );
-		$updated_option = update_option( 'gamwp_master_log', $new_master_log_array );
-		print_r($activity_option);
-
-		if( false === $updated_option ) {
-			$action_result['actions']['type'] = 'error';
-		} else {
-			$action_result['actions']['type'] = 'success';
-			$action_result['actions']['action'] = $activity_title;
 		}
 	}
 
