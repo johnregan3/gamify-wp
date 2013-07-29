@@ -81,25 +81,20 @@ Class GAMWP_Process {
 				//This saves looping through all actions ever just to get a single user's stats.
 
 				$master_log_array = get_option( 'gamwp_master_log' );
-				$master_log_array = !empty( $master_log_array ) ? $master_log_array : array();
-				$new_master_log_array = $master_log_array + $add_to_array;
+				if ( is_array( $master_log_array ) ) {
+					$new_master_log_array = $master_log_array + $add_to_array;
+				} else {
+					$new_master_log_array = $add_to_array;
+				}
 				$updated_option = update_option( 'gamwp_master_log', $new_master_log_array );
 
 				$user_log_array = get_user_meta( $user_id, 'gamwp_user_log' );
-
-				//if user log array is blank, just go straight ot add_to_array.  If not, add them together. /////////
-
-				$user_log_array = !empty( $user_log_array ) ? $user_log_array : array();
-				$new_user_log_array = $user_log_array + $add_to_array;
-				update_user_meta( $user_id, 'gamwp_user_log', $new_user_log_array );
-
-				if( false === $updated_option ) {
-					$action_result['actions']['type'] = 'error';
+				if ( is_array( $user_log_array ) ) {
+					$new_user_log_array = $user_log_array + $add_to_array;
 				} else {
-					$action_result['actions']['type'] = 'success';
-					$action_result['actions']['action'] = $activity_title;
+					$new_user_log_array = $add_to_array;
 				}
-
+				update_user_meta( $user_id, 'gamwp_user_log', $new_user_log_array );
 			}
 		}
 	}

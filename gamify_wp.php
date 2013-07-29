@@ -57,6 +57,14 @@ function gamwp_enqueue() {
 
 add_action( 'init', 'gamwp_enqueue' );
 
+function gamwp_admin_enqueue() {
+
+	wp_register_script( 'gamwp_admin_scripts', plugin_dir_url( __FILE__ ) . 'js/admin-scripts.js' );
+	wp_enqueue_script( 'gamwp_admin_scripts' );
+
+}
+add_action( 'admin_enqueue_scripts', 'gamwp_admin_enqueue' );
+
 
 /*
  *
