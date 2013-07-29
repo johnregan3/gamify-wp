@@ -31,7 +31,7 @@ function generate_log_fields() {
 		$settings_value =( isset( $options[$activity_time]['delete'] ) ? $options[$activity_time]['delete'] : 'unchecked' );
 		echo "<td style='width:5%' ><input type='checkbox' id='gamwp_master_log[" . $activity_time . "][delete]' name='gamwp_master_log[" . $activity_time . "][delete]' value='checked' " . checked( 'checked', isset( $settings_value ) ? $settings_value : 'unchecked', false ) . " /></td>";
 
-		echo "<td>" . $activity_time . " GMT</td>";
+		echo "<td>" . gmdate("M d Y H:i:s", $activity_time ) . " GMT</td>";
 
 		$settings_value =( isset( $options[$activity_time]['userid'] ) ? $options[$activity_time]['userid'] : '' );
 		echo "<td><span>";
@@ -94,7 +94,7 @@ function gamwp_points_log() {
 		</div>
 		<?php _e( '<h2>Gamify WP Activity Log</h2>', 'gamwp'); ?>
 		<?php if( isset($_GET['settings-updated']) ) { ?>
-			<div id="message" class="updated fade">
+			<div id="message" class="updated">
 				<p><?php _e('Settings saved.') ?></p>
 			</div>
 		<?php } ?>

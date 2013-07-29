@@ -26,23 +26,23 @@ function generate_ca_fields() {
 	if ( empty( $options ) ) {
 		$options = array(
 			"1" => array(
-				"action_title" => "Commented On A Post",
+				"activity_title" => "Commented On A Post",
 				"action_hook"  => "comment_post",
-				"action_points" => 10,
+				"activity_points" => 10,
 				"daily_limit"  => 'checked',
 				"once"         => 'unchecked',
 			),
 			"2" => array(
-				"action_title" => "Registered",
+				"activity_title" => "Registered",
 				"action_hook"  => "user_register",
-				"action_points" => 150,
+				"activity_points" => 150,
 				"daily_limit"  => 'checked',
 				"once"         => 'unchecked',
 			),
 			"3" => array(
-				"action_title" => "Published A Post",
+				"activity_title" => "Published A Post",
 				"action_hook"  => "draft_to_publish",
-				"action_points" => 30,
+				"activity_points" => 30,
 				"daily_limit"  => 'checked',
 				"once"         => 'unchecked',
 			),
@@ -96,7 +96,7 @@ function gamwp_custom_actions() {
 	var cell4=row.insertCell(3);
 	var cell5=row.insertCell(4);
 	var cell6=row.insertCell(5);
-	cell1.innerHTML="<td><input type='checkbox' id='gamwp_ca_settings[" + actionId + "][once]' name='gamwp_ca_settings[" + actionId + "][once]' value='checked' /></td>";
+	cell1.innerHTML="<td><input type='checkbox' id='gamwp_ca_settings[" + actionId + "][delete]' name='gamwp_ca_settings[" + actionId + "][delete]' value='checked' /></td>";
 	cell2.innerHTML="<td><input type='text' id='gamwp_ca_settings[" + actionId + "][activity_title]' name='gamwp_ca_settings[" + actionId + "][activity_title]' value='"+ settingsValue + "' title='"+ settingsValue + "' placeholder='Action Title' /></td>";
 	cell3.innerHTML="<td><input type='text' id='gamwp_ca_settings[" + actionId + "][action_hook]' name='gamwp_ca_settings[" + actionId + "][action_hook]' value='"+ settingsValue + "' title='"+ settingsValue + "' placeholder='Action Hook' /></td>";
 	cell4.innerHTML="<td><input type='text' id='gamwp_ca_settings[" + actionId + "][activity_points]' name='gamwp_ca_settings[" + actionId + "][activity_points]' value='"+ settingsValue + "' title='"+ settingsValue + "' placeholder='Points' /></td>";
@@ -112,7 +112,7 @@ function gamwp_custom_actions() {
 		</div>
 		<?php _e( '<h2>Gamify WP Actions</h2>', 'gamwp'); ?>
 		<?php if( isset($_GET['settings-updated']) ) { ?>
-			<div id="message" class="updated fade">
+			<div id="message" class="updated">
 				<p><?php _e('Settings saved.') ?></p>
 			</div>
 		<?php } ?>

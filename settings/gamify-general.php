@@ -41,7 +41,7 @@ function gamwp_general_settings() {
 		</div>
 		<?php _e( '<h2>Gamify WP General Settings</h2>', 'gamwp'); ?>
 				<?php if( isset($_GET['settings-updated']) ) { ?>
-			<div id="message" class="updated fade">
+			<div id="message" class="updated">
 				<p><?php _e('Settings saved.') ?></p>
 			</div>
 		<?php } ?>

@@ -69,19 +69,26 @@ Class GAMWP_Process {
 				}
 
 				//create entry for master_log
-				$add_to_master_array = array();
+				$add_to_array = array();
 				$time = current_time( 'timestamp', 1 );
-				$add_to_master_array[$time] = array();
-				$add_to_master_array[$time]['userid'] = $user_id;
-				$add_to_master_array[$time]['activity_id'] = $activity_id;
-				$add_to_master_array[$time]['activity_title'] = $activity_title;
-				$add_to_master_array[$time]['activity_points'] = $activity_points;
+				$add_to_array[$time] = array();
+				$add_to_array[$time]['userid'] = $user_id;
+				$add_to_array[$time]['activity_id'] = $activity_id;
+				$add_to_array[$time]['activity_title'] = $activity_title;
+				$add_to_array[$time]['activity_points'] = $activity_points;
 
-				//save activity array to master array
+				//Save activity array to two places:  Master Log, for tracking sitewide stats, and user_meta for user-focused stats.
+				//This saves looping through all actions ever just to get a single user's stats.
+
 				$master_log_array = get_option( 'gamwp_master_log' );
 				$master_log_array = !empty( $master_log_array ) ? $master_log_array : array();
-				$new_master_log_array = $master_log_array + $add_to_master_array;
+				$new_master_log_array = $master_log_array + $add_to_array;
 				$updated_option = update_option( 'gamwp_master_log', $new_master_log_array );
+
+				$user_meta_array = get_user_meta( $user_id, 'gamwp_user_log' );
+				$user_meta_array = !empty( $user_meta_array ) ? $user_meta_array : array();
+				$new_user_meta_array = $user_meta_array + $add_to_array;
+				update_user_meta( $user_id, 'gamwp_user_log', $new_user_meta_array );
 
 
 				if( false === $updated_option ) {
