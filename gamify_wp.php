@@ -14,7 +14,7 @@ include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' );		//Ac
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-rewards.php' );		//Rewards Settings Page
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-log.php' );			//Points Log Settings Page
 
-include_once( plugin_dir_path(__FILE__) . 'process-class.php' );				//Processor Class
+include_once( plugin_dir_path(__FILE__) . 'process-class.php' );				//Saves Action/Reward Activity
 include_once( plugin_dir_path(__FILE__) . 'process.php' );						//AJAX Action Processor
 include_once( plugin_dir_path(__FILE__) . 'actions.php' );						//Action Hook Generator
 
