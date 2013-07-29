@@ -17,29 +17,25 @@ function gamwp_stats_shortcode() {
 		$current_user = wp_get_current_user();
 		$username = $current_user->user_login;
 		$user_id =  $current_user->ID;
-		$score = get_user_meta( $user_id, 'gamwp_score', true );
-		$score = isset( $score ) ? $score : '0';
-		$actions = get_user_meta( $user_id, 'gamwp_actions', true );
+		$user_log_array = get_user_meta( $user_id, 'gamwp_user_log', true );
 
 		//Print Header
 		echo sprintf( __( '<h3>Points Totals for %s</h3>', 'gamwp' ), $username );
 
-		//Total Points Earned
-		echo sprintf( __( '<p><strong>Total Points:</strong> %s</p>', 'gamwp' ), $score );
-
 		$todays_points = $shortcode->calc_daily_points( $user_id, $time );
 		//Do not include daily point limit.
 		echo sprintf( __( '<p><strong>Points Earned in Last 24 Hours:</strong>  %s', 'gamwp' ), esc_html__( $todays_points, 'gamwp' ) );
-		if ( $actions) {
+		if ( $user_log_array ) {
 
 			echo sprintf( '<p><strong>%s</strong></p>', __( 'Recent Activity', 'gamwp' ) );
 
-			$recent_actions = array_reverse( $actions, true );
-			$recent_actions = array_slice( $recent_actions, 0, 10, true );
+			$reverse_user_log_array = array_reverse( $user_log_array, true );
+			$user_log_array = array_slice( $reverse_user_log_array, 0, 10, true );
+			print_r($user_log_array);
 			echo '<ul>';
-			foreach ( $recent_actions as $key => $value ) {
-				$offset = human_time_diff( $key, $time );
-				echo sprintf( "<li> %s for %s points ( %s ago)</li>", esc_html( $value['activity_title'] ), esc_html( $value['points'] ), esc_html( $offset ) );
+			foreach ( $user_log_array as $timestamp => $value ) {
+				$offset = human_time_diff( $timestamp, $time );
+				echo sprintf( "<li> %s for %s points ( %s ago)</li>", esc_html( $value['activity_title'] ), esc_html( $value['activity_points'] ), esc_html( $offset ) );
 			}
 			echo '</ul>';
 		}

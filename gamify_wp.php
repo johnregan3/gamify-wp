@@ -3,13 +3,12 @@
 /*
 	Plugin Name: Gamify WP
 	Plugin URI: http://johnregan3.com
-	Description: Reward your Users for completing actions on your site (e.g., leaving comments or clicking links).  Supports Rewards such as badges, downloads and levels.
+	Description: Reward your Users for completing actions on your site (e.g., leaving comments or clicking links).
 	Author: John Regan
 	Author URI: http://johnregan3.com
 	Version: 1.0
  */
 
-include_once( plugin_dir_path(__FILE__) . 'settings/settings-class.php' );		//Settings Class
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-general.php' );		//General Settings Page
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' );		//Actions Settings Page
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-rewards.php' );		//Rewards Settings Page
@@ -48,51 +47,15 @@ add_filter( "plugin_action_links_$plugin", 'gamwp_settings_link' );
  */
 
 function gamwp_enqueue() {
-	wp_register_script( 'gamwp_custom', plugin_dir_url( __FILE__ ) . 'js/script-custom.js', array( 'jquery' ) );
-	wp_localize_script( 'gamwp_custom', 'gamwp_custom_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 
 	wp_register_script( 'gamwp_link', plugin_dir_url( __FILE__ ) . 'js/script-link.js', array( 'jquery' ) );
 	wp_localize_script( 'gamwp_link', 'gamwp_link_ajax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 
 	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'gamwp_custom' );
 	wp_enqueue_script( 'gamwp_link' );
-
-	wp_register_style( 'gamwp_style', plugin_dir_url( __FILE__ ) . 'style/style.css', array(), '1.0', 'all' );
-	wp_enqueue_style( 'gamwp_style' );
-
-	wp_register_style('gamwp_custom_style', plugin_dir_url( __FILE__ ) . 'style/custom-style.php', array(), '1.0', 'all');
-	wp_enqueue_style( 'gamwp_custom_style');
 }
 
 add_action( 'init', 'gamwp_enqueue' );
-
-
-/*
- *
- * Enqueue Admin Scripts
- *
- */
-
-
-function gamwp_enqueue_admin_scripts() {
-	wp_register_script( 'gamwp_settings_upload', plugin_dir_url( __FILE__ ) .'js/settings-upload.js', array('jquery','media-upload','thickbox') );
-	wp_register_script( 'gamwp_jeditable', plugin_dir_url( __FILE__ ) .'js/jeditable.js', array('jquery') );
-
-	wp_enqueue_script('jquery');
-
-	wp_enqueue_script('thickbox');
-	wp_enqueue_style('thickbox');
-
-	wp_enqueue_script('media-upload');
-	wp_enqueue_script('gamwp_settings_upload');
-
-	wp_enqueue_script('gamwp_jeditable');
-
-}
-
-add_action('admin_enqueue_scripts', 'gamwp_enqueue_admin_scripts');
-
 
 
 /*

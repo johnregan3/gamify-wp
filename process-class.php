@@ -52,9 +52,9 @@ Class GAMWP_Process {
 
 		foreach( $activity_options as $activity => $value ) {
 			if ( $activity_id == $activity ) {
-				$activity_points = isset( $activity_options[$activity]['activity_points'] ) ? $activity_options[$activity]['activity_points'] : '';
-				$activity_title = isset( $activity_options[$activity]['activity_title'] ) ? $activity_options[$activity]['activity_title'] : '';
-				$activity_daily_limit = isset( $activity_options[$activity]['activity_daily_limit'] ) ? $activity_options[$activity]['activity_daily_limit'] : '';
+				$activity_points = isset( $value['activity_points'] ) ? $value['activity_points'] : '';
+				$activity_title = isset( $value['activity_title'] ) ? $value['activity_title'] : '';
+				$activity_daily_limit = isset( $value['activity_daily_limit'] ) ? $value['activity_daily_limit'] : '';
 				$once_unused = $this->is_once_and_unused( $user_id, $activity_id);
 				if ( $once_unused == false ) {
 					return false;
@@ -85,10 +85,13 @@ Class GAMWP_Process {
 				$new_master_log_array = $master_log_array + $add_to_array;
 				$updated_option = update_option( 'gamwp_master_log', $new_master_log_array );
 
-				$user_meta_array = get_user_meta( $user_id, 'gamwp_user_log' );
-				$user_meta_array = !empty( $user_meta_array ) ? $user_meta_array : array();
-				$new_user_meta_array = $user_meta_array + $add_to_array;
-				update_user_meta( $user_id, 'gamwp_user_log', $new_user_meta_array );
+				$user_log_array = get_user_meta( $user_id, 'gamwp_user_log' );
+
+				//if user log array is blank, just go straight ot add_to_array.  If not, add them together. /////////
+
+				$user_log_array = !empty( $user_log_array ) ? $user_log_array : array();
+				$new_user_log_array = $user_log_array + $add_to_array;
+				update_user_meta( $user_id, 'gamwp_user_log', $new_user_log_array );
 
 				if( false === $updated_option ) {
 					$action_result['actions']['type'] = 'error';
