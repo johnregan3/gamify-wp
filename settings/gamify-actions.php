@@ -8,10 +8,10 @@
 
 
 //Add To Menu
-add_action( 'admin_menu', 'gamwp_add_submenu_page' );
+add_action( 'admin_menu', 'gamwp_add_menu_pages' );
 
-function gamwp_add_submenu_page() {
-	add_submenu_page( 'gamify-general.php', __( 'Gamify Actions' ), __( 'Actions' ), 'administrator', basename(__FILE__), 'gamwp_custom_actions' );
+function gamwp_add_menu_pages() {
+	add_menu_page( __( 'Gamify WP Actions' ), __( 'Gamify WP' ), 'administrator', basename(__FILE__), 'gamwp_custom_actions' );
 }
 
 function gamwp_action_register_settings() {
@@ -99,11 +99,31 @@ function gamwp_custom_actions() {
 
 			<form method="post" action="options.php" enctype="multipart/form-data">
 				<?php settings_fields('gamwp_action_settings_group'); ?>
-			<div class="tablenav top">
-				<input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes', 'gamwp' ); ?>" />
-				<input type="button" class="button" onclick="addActionRows()" value="<?php esc_attr_e( 'Add New Action', 'gamwp' ); ?>">
-			</div>
-			<table class="wp-list-table widefat fixed posts" id="gamwp-ca-table">
+			<h3>Daily Points Limit</h3>
+			<p>The Daily Limit ensures that easily completed Actions are not overused.  <br />Actions checked "Daily Limit" can be repeated until their combined points reach the Daily Points Limit.</p>
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row">Enforce Daily Points Limit</th>
+					<td>
+						<?php
+						$gamwp_action_settings = get_option('gamwp_settings');
+						$settings_value = isset( $gamwp_action_settings['daily_limit_activate'] ) ? $gamwp_action_settings['daily_limit_activate'] : 0;
+						echo "<input type='checkbox' id='gamwp_settings[daily_limit_activate]' name='gamwp_settings[daily_limit_activate]' value='1' " . checked( 1, $settings_value, false ) . "/>";
+						?>
+					</td>
+				</tr>
+				<tr valign="top">
+					<th scope="row">Daily Points Limit</th>
+					<td>
+						<?php
+						$settings_value= isset( $gamwp_action_settings['daily_limit'] ) ? $gamwp_action_settings['daily_limit'] : 0 ;
+						echo "<input name='gamwp_settings[daily_limit]' type='text' value='" . esc_attr( $settings_value ) . "' />";
+						?>
+					</td>
+				</tr>
+			</table>
+			<h3>Actions List</h3>
+			<table class="wp-list-table widefat fixed posts" id="gamwp-action-table">
 				<thead>
 					<tr>
 						<th style='width:5%'><?php _e('Delete', 'gamwp'); ?></th>

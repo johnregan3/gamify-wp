@@ -11,7 +11,7 @@
 add_action( 'admin_menu', 'gamwp_add_rew_submenu_page' );
 
 function gamwp_add_rew_submenu_page() {
-	add_submenu_page( 'gamify-general.php', __( 'Gamify Rewards' ), __( 'Rewards' ), 'administrator', basename(__FILE__), 'gamwp_rewards' );
+	add_submenu_page( 'gamify-actions.php', __( 'Gamify Rewards' ), __( 'Rewards' ), 'administrator', basename(__FILE__), 'gamwp_rewards' );
 }
 
 function gamwp_rew_register_settings() {
@@ -94,10 +94,6 @@ function gamwp_rewards() {
 
 			<form method="post" action="options.php" enctype="multipart/form-data">
 				<?php settings_fields('gamwp_rew_settings_group'); ?>
-			<div class="tablenav top">
-				<input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e( 'Save Changes', 'gamwp' ); ?>" />
-				<input type="button" class="button" onclick="addRewardRows()" value="<?php esc_attr_e( 'Add New Reward', 'gamwp' ); ?>">
-			</div>
 			<table class="wp-list-table widefat fixed posts" id="gamwp-rew-table">
 				<thead>
 					<tr>
