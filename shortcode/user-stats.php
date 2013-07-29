@@ -39,7 +39,7 @@ function gamwp_stats_shortcode() {
 			echo '<ul>';
 			foreach ( $recent_actions as $key => $value ) {
 				$offset = human_time_diff( $key, $time );
-				echo sprintf( "<li> %s for %s points ( %s ago)</li>", esc_html( $value['action_title'] ), esc_html( $value['points'] ), esc_html( $offset ) );
+				echo sprintf( "<li> %s for %s points ( %s ago)</li>", esc_html( $value['activity_title'] ), esc_html( $value['points'] ), esc_html( $offset ) );
 			}
 			echo '</ul>';
 		}

@@ -108,11 +108,19 @@ Class GAMWP_Process {
 			//Add actions to User's action meta
 			$actions_array = get_user_meta( $user_id, 'gamwp_actions', true );
 			$time = current_time( 'timestamp', 1 );
-			$actions_array[$time]['action_title'] = $action_title;
-			$latest_action = $actions_array[$time]['action_title'];
+			$actions_array[$time]['activity_title'] = $action_title;
+			$latest_action = $actions_array[$time]['activity_title'];
 			$actions_array[$time]['points'] = $action_points;
+			$actions_array[$time]['username'] = $user_id;
 
 			$updated_actions = update_user_meta( $user_id, 'gamwp_actions', $actions_array );
+
+			$master_array = get_option( 'gamwp_master_log');
+			$master_array = array();
+			//array merge $actions_array with gamwp_master_array
+			$master_log_add = $master_array + $actions_array;
+			//update options(gamwp_master_array)
+			update_option( 'gamwp_master_log', $master_log_add );
 
 			if( false === $updated_actions ) {
 				$action_result['actions']['type'] = 'error';

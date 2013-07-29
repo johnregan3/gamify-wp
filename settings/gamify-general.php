@@ -40,7 +40,12 @@ function gamwp_general_settings() {
 			<br />
 		</div>
 		<?php _e( '<h2>Gamify WP General Settings</h2>', 'gamwp'); ?>
-		<p><a href="https://github.com/johnregan3/gamify-wp-plugin/wiki/General-Settings"><?php __( 'Get help for this page on our Wiki', 'gamwp' ) ?></a>.</p>
+				<?php if( isset($_GET['settings-updated']) ) { ?>
+			<div id="message" class="updated fade">
+				<p><?php _e('Settings saved.') ?></p>
+			</div>
+		<?php } ?>
+		<p><a href="https://github.com/johnregan3/gamify-wp-plugin/wiki/General-Settings"><?php _e( 'Get help for this page on our Wiki', 'gamwp' ) ?></a>.</p>
 		<form method="post" action="options.php" enctype="multipart/form-data">
 			<?php settings_fields( 'gamwp_settings' ); ?>
 			<?php do_settings_sections( __FILE__ ); ?>

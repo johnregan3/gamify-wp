@@ -111,6 +111,11 @@ function gamwp_custom_actions() {
 			<br />
 		</div>
 		<?php _e( '<h2>Gamify WP Actions</h2>', 'gamwp'); ?>
+		<?php if( isset($_GET['settings-updated']) ) { ?>
+			<div id="message" class="updated fade">
+				<p><?php _e('Settings saved.') ?></p>
+			</div>
+		<?php } ?>
 		<p><a href="">WIKI LINK</a>.</p>
 
 
