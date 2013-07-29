@@ -76,16 +76,14 @@ function daily_limit_activate() {
 
 function daily_limit() {
 	$gamwp_settings = get_option('gamwp_settings');
-	echo "<input name='gamwp_settings[daily_limit]' type='text' value='{$gamwp_settings['daily_limit']}' />";
+	echo "<input name='gamwp_settings[daily_limit]' type='text' value='" . esc_attr( $gamwp_settings['daily_limit'] ) . "' />";
 }
 
 
 function notice_css() {
-	$help = NEW GAMWP_SETTINGS;
-	$action = 'notice';
-	$field = 'css';
-	$settings_title = $action . '_' . $field;
-	$settings_value = $help->input_setup( $action, $field );
+	$options = get_option('gamwp_settings');
+	$settings_title = 'notice_css';
+	$settings_value = (isset( $options[$settings_title] ) ? $options[$settings_title] : '');
 	echo "<textarea name='gamwp_settings[" . esc_attr( $settings_title ) . "]' rows='5' cols='60' type='textarea'>" . esc_html( $settings_value ) . "</textarea>";
 }
 
