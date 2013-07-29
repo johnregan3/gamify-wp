@@ -31,7 +31,7 @@ Class GAMWP_Process {
 
 	private function is_once_and_unused( $user_id, $activity_id ) {
 		//Check to see if action is a one-time-use action
-		$options = get_option( 'gamwp_ca_settings' );
+		$options = get_option( 'gamwp_action_settings' );
 		$once = isset( $options[$activity_id]['once'] ) ? $options[$activity_id]['once'] : 'unchecked';
 
 		if ( 'checked' == $once ) {
@@ -48,7 +48,7 @@ Class GAMWP_Process {
 	public function save_activity( $user_id, $activity_id) {
 
 		//get activity information
-		$activity_options = get_option( 'gamwp_ca_settings' );
+		$activity_options = get_option( 'gamwp_action_settings' );
 
 		foreach( $activity_options as $activity => $value ) {
 			if ( $activity_id == $activity ) {

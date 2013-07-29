@@ -26,22 +26,19 @@ function generate_rew_fields() {
 	if ( empty( $options ) ) {
 		$options = array(
 			"1" => array(
-				"reward_name"   => "Commented On A Post",
-				"reward_type"   => "Badge",
-				"reward_points" => 10,
-				"image"         => '',
+				"reward_title"   => "n00b",
+				"reward_type"   => "Level",
+				"reward_points" => 100,
 			),
 			"2" => array(
-				"reward_title"  => "Registered",
+				"reward_title"  => "Apprentice",
 				"reward_type"   => "Level",
-				"reward_points" => 11,
-				"image"         => '',
+				"reward_points" => 500,
 			),
 			"3" => array(
-				"reward_title"  => "Registered",
-				"reward_type"   => "Purchase",
-				"reward_points" => 10,
-				"image"         => '',
+				"reward_title"  => "Master",
+				"reward_type"   => "Level",
+				"reward_points" => 10000,
 			),
 		);
 	}
@@ -57,9 +54,7 @@ function generate_rew_fields() {
 
 		$settings_value =( isset( $options[$reward_id]['reward_type'] ) ? $options[$reward_id]['reward_type'] : '' );
 		echo "<td><select id='gamwp_rew_settings[" . $reward_id . "][reward_type]' name='gamwp_rew_settings[" . $reward_id . "][reward_type]'>";
-			echo "<option " . selected( $settings_value, 'Badge' ) . ">Badge</option>";
 			echo "<option " . selected( $settings_value, 'Level' ) . ">Level</option>";
-			echo "<option " . selected( $settings_value, 'Purchase' ) . ">Purchase</option>";
 		echo "</select></td>";
 
 		$settings_value =( isset( $options[$reward_id]['reward_points'] ) ? $options[$reward_id]['reward_points'] : '' );

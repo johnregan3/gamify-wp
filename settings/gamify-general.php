@@ -59,14 +59,15 @@ function daily_limit_section_cb() {
 
 function daily_limit_activate() {
 	$gamwp_settings = get_option('gamwp_settings');
-	$settings_value = isset( $gamwp_settings['daily_limit_activate'] ) ? $gamwp_settings['daily_limit_activate'] : '';
-	echo "<input type='checkbox' id='gamwp_settings[daily_limit_activate]' name='gamwp_settings[daily_limit_activate]' value='1' " . checked( $settings_value, 1, false ) . "/>";
+	$settings_value = isset( $gamwp_settings['daily_limit_activate'] ) ? $gamwp_settings['daily_limit_activate'] : 0;
+	echo "<input type='checkbox' id='gamwp_settings[daily_limit_activate]' name='gamwp_settings[daily_limit_activate]' value='1' " . checked( 1, $settings_value, false ) . "/>";
 }
 
 
 function daily_limit() {
 	$gamwp_settings = get_option('gamwp_settings');
-	echo "<input name='gamwp_settings[daily_limit]' type='text' value='" . esc_attr( $gamwp_settings['daily_limit'] ) . "' />";
+	$settings_value= isset( $gamwp_settings['daily_limit'] ) ? $gamwp_settings['daily_limit'] : 0 ;
+	echo "<input name='gamwp_settings[daily_limit]' type='text' value='" . esc_attr( $settings_value ) . "' />";
 }
 
 

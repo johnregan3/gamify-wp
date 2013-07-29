@@ -23,9 +23,14 @@ add_action('admin_init', 'gamwp_log_register_settings');
 function generate_log_fields() {
 
 	$options = get_option('gamwp_master_log');
+	$options = is_array( $options ) ? $options : array() ;
 	$options = array_reverse( $options, true );
+	$activity_rows = array();
 
 	foreach ( $options as $activity_time => $field_array ) {
+
+		$activity_rows[$activity_time] = array();
+
 		ob_start();
 
 		echo "<td>" . gmdate("M d Y H:i:s", $activity_time ) . " GMT</td>";
@@ -43,14 +48,14 @@ function generate_log_fields() {
 		echo "<td><span>" . $settings_value . "</span>";
 
 		if ( isset( $options[$activity_time]['delete'] ) && ( 'checked' == $options[$activity_time]['delete'] ) ) {
-			$ca_rows[$activity_time] = '';
+			$activity_rows[$activity_time] = '';
 		} else {
-			$ca_rows[$activity_time] = ob_get_contents();
+			$activity_rows[$activity_time] = ob_get_contents();
 		}
 
 		ob_end_clean();
 	}
-	return $ca_rows;
+	return $activity_rows;
 }
 
 
