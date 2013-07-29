@@ -55,14 +55,14 @@ function generate_ca_fields() {
 		$settings_value =(isset( $options[$action_id]['delete'] ) ? $options[$action_id]['delete'] : 'unchecked');
 		echo "<td style='width:5%' ><input type='checkbox' id='gamwp_ca_settings[" . $action_id . "][delete]' name='gamwp_ca_settings[" . $action_id . "][delete]' value='checked' " . checked( 'checked', isset( $settings_value ) ? $settings_value : 'unchecked', false ) . " /></td>";
 
-		$settings_value =(isset( $options[$action_id]['action_title'] ) ? $options[$action_id]['action_title'] : '');
-		echo "<td><input type='text' id='gamwp_ca_settings[" . $action_id . "][action_title]' name='gamwp_ca_settings[" . $action_id . "][action_title]' value='" . esc_html( $settings_value ) . "' title='" . esc_html( $settings_value ) . "'placeholder='Action Title' /></td>";
+		$settings_value =(isset( $options[$action_id]['activity_title'] ) ? $options[$action_id]['activity_title'] : '');
+		echo "<td><input type='text' id='gamwp_ca_settings[" . $action_id . "][activity_title]' name='gamwp_ca_settings[" . $action_id . "][activity_title]' value='" . esc_html( $settings_value ) . "' title='" . esc_html( $settings_value ) . "'placeholder='Action Title' /></td>";
 
-		$settings_value =(isset( $options[$action_id]['action_hook'] ) ? $options[$action_id]['action_hook'] : '');
+		$settings_value =(isset( $options[$action_id]['activity_hook'] ) ? $options[$action_id]['activity_hook'] : '');
 		echo "<td><input type='text' id='gamwp_ca_settings[" . $action_id . "][action_hook]' name='gamwp_ca_settings[" . $action_id . "][action_hook]' value='" . esc_html( $settings_value ) . "' title='" . esc_html( $settings_value ) . "' placeholder='Action Hook' /></td>";
 
-		$settings_value =(isset( $options[$action_id]['action_points'] ) ? $options[$action_id]['action_points'] : '');
-		echo "<td><input type='text' id='gamwp_ca_settings[" . $action_id . "][action_points]' name='gamwp_ca_settings[" . $action_id . "][action_points]' value='" . esc_html( $settings_value ) . "' placeholder='Points' /></td>";
+		$settings_value =(isset( $options[$action_id]['activity_points'] ) ? $options[$action_id]['activity_points'] : '');
+		echo "<td><input type='text' id='gamwp_ca_settings[" . $action_id . "][activity_points]' name='gamwp_ca_settings[" . $action_id . "][activity_points]' value='" . esc_html( $settings_value ) . "' placeholder='Points' /></td>";
 
 		$settings_value =(isset( $options[$action_id]['daily_limit'] ) ? $options[$action_id]['daily_limit'] : 'unchecked');
 		echo "<td><input type='checkbox' id='gamwp_ca_settings[" . $action_id . "][daily_limit]' name='gamwp_ca_settings[" . $action_id . "][daily_limit]' value='checked' " . checked( 'checked', isset( $settings_value ) ? $settings_value : 'unchecked', false ) ." /></td>";
@@ -97,9 +97,9 @@ function gamwp_custom_actions() {
 	var cell5=row.insertCell(4);
 	var cell6=row.insertCell(5);
 	cell1.innerHTML="<td><input type='checkbox' id='gamwp_ca_settings[" + actionId + "][once]' name='gamwp_ca_settings[" + actionId + "][once]' value='checked' /></td>";
-	cell2.innerHTML="<td><input type='text' id='gamwp_ca_settings[" + actionId + "][action_title]' name='gamwp_ca_settings[" + actionId + "][action_title]' value='"+ settingsValue + "' title='"+ settingsValue + "' placeholder='Action Title' /></td>";
+	cell2.innerHTML="<td><input type='text' id='gamwp_ca_settings[" + actionId + "][activity_title]' name='gamwp_ca_settings[" + actionId + "][activity_title]' value='"+ settingsValue + "' title='"+ settingsValue + "' placeholder='Action Title' /></td>";
 	cell3.innerHTML="<td><input type='text' id='gamwp_ca_settings[" + actionId + "][action_hook]' name='gamwp_ca_settings[" + actionId + "][action_hook]' value='"+ settingsValue + "' title='"+ settingsValue + "' placeholder='Action Hook' /></td>";
-	cell4.innerHTML="<td><input type='text' id='gamwp_ca_settings[" + actionId + "][action_points]' name='gamwp_ca_settings[" + actionId + "][action_points]' value='"+ settingsValue + "' title='"+ settingsValue + "' placeholder='Points' /></td>";
+	cell4.innerHTML="<td><input type='text' id='gamwp_ca_settings[" + actionId + "][activity_points]' name='gamwp_ca_settings[" + actionId + "][activity_points]' value='"+ settingsValue + "' title='"+ settingsValue + "' placeholder='Points' /></td>";
 	cell5.innerHTML="<td><input type='checkbox' id='gamwp_ca_settings[" + actionId + "][daily_limit]' name='gamwp_ca_settings[" + actionId + "][daily_limit]' value='checked' /></td>";
 	cell6.innerHTML="<td><input type='checkbox' id='gamwp_ca_settings[" + actionId + "][once]' name='gamwp_ca_settings[" + actionId + "][once]' value='checked' /></td>";
 	}
