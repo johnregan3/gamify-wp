@@ -33,7 +33,9 @@ function generate_log_fields() {
 
 		ob_start();
 
-		echo "<td>" . gmdate("M d Y H:i:s", $activity_time ) . " GMT</td>";
+		$wp_offset = get_option( 'gmt_offset' ); // get WordPress offset in hours
+		date_default_timezone_set('Etc/GMT'.(($wp_offset < 0)?'+':'').-$wp_offset); // set the PHP timezone to match WordPress
+		echo "<td>" . date("M d Y H:i:s", $activity_time ) . "</td>";
 
 		$settings_value =( isset( $options[$activity_time]['userid'] ) ? $options[$activity_time]['userid'] : '' );
 		echo "<td><span>";

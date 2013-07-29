@@ -60,9 +60,8 @@ Class GAMWP_Process {
 					return false;
 				}
 
-				$general_options = get_option( 'gamwp_settings' );
-				$daily_limit_active = isset ( $general_options['daily_limit_activate'] ) ? $general_options['daily_limit_activate'] : 0 ;
-				$daily_points_limit = isset( $general_options['daily_limit'] ) ? $general_options['daily_limit'] : 99999 ;
+				$daily_limit_active = isset ( $activity_options['daily_limit_activate'] ) ? $activity_options['daily_limit_activate'] : 0 ;
+				$daily_points_limit = isset( $activity_options['daily_limit'] ) ? $activity_options['daily_limit'] : 99999 ;
 				$daily_points_earned = $this->daily_points_earned( $user_id );
 				if ( ( 'checked' == $activity_daily_limit ) && ( 1 == $daily_limit_active ) && ( $daily_points_earned >= $daily_points_limit ) ) {
 					return false;
