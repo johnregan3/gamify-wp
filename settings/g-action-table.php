@@ -19,7 +19,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class ACPT_Actions_Table extends WP_List_Table {
+class GAMWP_Actions_Table extends WP_List_Table {
 
     /**
      * Get things started
@@ -47,8 +47,8 @@ class ACPT_Actions_Table extends WP_List_Table {
     public function get_columns() {
         $columns = array(
             'name'      => __( 'Name', 'gamwp' ),
-            'field1'      => __( 'Field 1', 'gamwp' ),
-            'field2'  => __( 'Field 2', 'gamwp' ),
+            'action_hook'      => __( 'Action Hook', 'gamwp' ),
+            'action_points'  => __( 'Points', 'gamwp' ),
 
         );
 
@@ -83,9 +83,9 @@ class ACPT_Actions_Table extends WP_List_Table {
         $base         = admin_url( 'admin.php?page=table-test.php&item_id=' . $item['ID'] );
         $row_actions  = array();
 
-        $row_actions['edit'] = '<a href="' . add_query_arg( array( 'acpt-action' => 'edit_item', 'item_id' => $row->ID ) ) . '">' . __( 'Edit', 'gamwp' ) . '</a>';
+        $row_actions['edit'] = '<a href="' . add_query_arg( array( 'g_action-action' => 'edit_item', 'item_id' => $row->ID ) ) . '">' . __( 'Edit', 'gamwp' ) . '</a>';
 
-        $row_actions['delete'] = '<a href="' . wp_nonce_url( add_query_arg( array( 'acpt-action' => 'delete_action', 'item_id' => $row->ID ) ), 'acpt_item_nonce' ) . '">' . __( 'Delete', 'gamwp' ) . '</a>';
+        $row_actions['delete'] = '<a href="' . wp_nonce_url( add_query_arg( array( 'g_action-action' => 'delete_action', 'item_id' => $row->ID ) ), 'g_action_item_nonce' ) . '">' . __( 'Delete', 'gamwp' ) . '</a>';
 
         return $item['name'] . $this->row_actions( $row_actions );
     }
@@ -96,8 +96,8 @@ class ACPT_Actions_Table extends WP_List_Table {
      * @access public
      * @return array $action_111s_data Array of all the data for the action 111s
      */
-    public function acpt_table_data() {
-        $acpt_table_data = array();
+    public function g_action_table_data() {
+        $g_action_table_data = array();
 
         $args = array(
             'post_type' => 'g_action',
@@ -109,23 +109,23 @@ class ACPT_Actions_Table extends WP_List_Table {
 
 		if ( $items ) {
 			foreach ( $items as $item) {
-                $acpt_table_data[] = array(
+                $g_action_table_data[] = array(
                     'ID'            => $item->ID,
                     'name'          => get_the_title( $item->ID ),
-                    'field1'        => get_post_meta( $item->ID, '_acpt_item_field1', true ),
-                    'field2'        => get_post_meta( $item->ID, '_acpt_item_field2', true ),
+                    'action_hook'        => get_post_meta( $item->ID, '_g_action_item_action_hook', true ),
+                    'action_points'        => get_post_meta( $item->ID, '_g_action_item_action_points', true ),
                 );
             }
         }
 
-        return $acpt_table_data;
+        return $g_action_table_data;
     }
 
     public function prepare_items() {
 
         $columns = $this->get_columns();
 
-        $data = $this->acpt_table_data();
+        $data = $this->g_action_table_data();
 
         $hidden = array();
 
