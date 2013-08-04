@@ -2,7 +2,7 @@
 
 /*
 	Plugin Name: Gamify WP
-	Plugin URI: http://johnregan3.com
+	Plugin URI: http://johnregan3.github.io/gamify-wp-plugin
 	Description: Reward your Users for completing actions on your site (e.g., leaving comments or clicking links).
 	Author: John Regan
 	Author URI: http://johnregan3.com
