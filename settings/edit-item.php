@@ -8,20 +8,20 @@ if ( ! isset( $_GET['item_id'] ) || ! is_numeric( $_GET['item_id'] ) ) {
 }
 
 $item_id  = absint( $_GET['item_id'] );
-$item     = g_action_get_item( $item_id );
-$action_hook     = get_post_meta( $item_id, '_g_action_item_action_hook', true );
-$action_points     = get_post_meta( $item_id, '_g_action_item_action_points', true );
+$item     = gact_get_item( $item_id );
+$action_hook     = get_post_meta( $item_id, '_gact_item_action_hook', true );
+$action_points     = get_post_meta( $item_id, '_gact_item_action_points', true );
 ?>
-<h2><?php _e( 'Edit Item', 'gamwp' ); ?> - <a href="<?php echo admin_url( 'admin.php?post_type=g_action&page=gamify-actions.php' ); ?>" class="button-secondary"><?php _e( 'Go Back', 'gamwp' ); ?></a></h2>
-<form id="g_action-edit-tiem" action="" method="post">
+<h2><?php _e( 'Edit Item', 'gamwp' ); ?> - <a href="<?php echo admin_url( 'admin.php?post_type=gact&page=gamify-actions.php' ); ?>" class="button-secondary"><?php _e( 'Go Back', 'gamwp' ); ?></a></h2>
+<form id="gact-edit-tiem" action="" method="post">
 	<table class="form-table">
 		<tbody>
 			<tr class="form-field">
 				<th scope="row" valign="top">
-					<label for="g_action-name"><?php _e( 'Name', 'gamwp' ); ?></label>
+					<label for="gact-name"><?php _e( 'Name', 'gamwp' ); ?></label>
 				</th>
 				<td>
-					<input name="name" id="g_action-name" type="text" value="<?php echo esc_attr( $item->post_title ); ?>" style="width: 300px;"/>
+					<input name="name" id="gact-name" type="text" value="<?php echo esc_attr( $item->post_title ); ?>" style="width: 300px;"/>
 					<p class="description"><?php _e( 'The name of this discount', 'gamwp' ); ?></p>
 				</td>
 			</tr>
@@ -48,10 +48,10 @@ $action_points     = get_post_meta( $item_id, '_g_action_item_action_points', tr
 		</tbody>
 	</table>
 	<p class="submit">
-		<input type="hidden" name="g_action-action" value="edit_item"/>
+		<input type="hidden" name="gact-action" value="edit_item"/>
 		<input type="hidden" name="item_id" value="<?php echo absint( $_GET['item_id'] ); ?>"/>
-		<input type="hidden" name="g_action-redirect" value="<?php echo esc_url( admin_url( 'admin.php?post_type=g_action&page=gamify-actions.php' ) ); ?>"/>
-		<input type="hidden" name="g_action-item-nonce" value="<?php echo wp_create_nonce( 'g_action_item_nonce' ); ?>"/>
+		<input type="hidden" name="gact-redirect" value="<?php echo esc_url( admin_url( 'admin.php?post_type=gact&page=gamify-actions.php' ) ); ?>"/>
+		<input type="hidden" name="gact-item-nonce" value="<?php echo wp_create_nonce( 'gact_item_nonce' ); ?>"/>
 		<input type="submit" value="<?php _e( 'Update Action', 'gamwp' ); ?>" class="button-primary"/>
 	</p>
 </form>

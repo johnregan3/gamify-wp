@@ -37,7 +37,6 @@ class GAMWP_Actions_Table extends WP_List_Table {
         ) );
     }
 
-
     /**
      * Retrieve the table columns
      *
@@ -46,6 +45,7 @@ class GAMWP_Actions_Table extends WP_List_Table {
      */
     public function get_columns() {
         $columns = array(
+            'cb'        => '<input type="checkbox" />',
             'name'      => __( 'Name', 'gamwp' ),
             'action_hook'      => __( 'Action Hook', 'gamwp' ),
             'action_points'  => __( 'Points', 'gamwp' ),
@@ -53,6 +53,19 @@ class GAMWP_Actions_Table extends WP_List_Table {
         );
 
         return $columns;
+    }
+
+    /**
+     * Retrieve the table's sortable columns
+     *
+     * @access public
+     * @since 1.4
+     * @return array Array of all the sortable columns
+     */
+    public function get_sortable_columns() {
+        return array(
+            'name'   => array( 'name', true ),
+        );
     }
 
     /**
@@ -83,56 +96,145 @@ class GAMWP_Actions_Table extends WP_List_Table {
         $base         = admin_url( 'admin.php?page=table-test.php&item_id=' . $item['ID'] );
         $row_actions  = array();
 
-        $row_actions['edit'] = '<a href="' . add_query_arg( array( 'g_action-action' => 'edit_item', 'item_id' => $row->ID ) ) . '">' . __( 'Edit', 'gamwp' ) . '</a>';
+        $row_actions['edit'] = '<a href="' . add_query_arg( array( 'gact-action' => 'edit_item', 'item_id' => $row->ID ) ) . '">' . __( 'Edit', 'gamwp' ) . '</a>';
 
-        $row_actions['delete'] = '<a href="' . wp_nonce_url( add_query_arg( array( 'g_action-action' => 'delete_action', 'item_id' => $row->ID ) ), 'g_action_item_nonce' ) . '">' . __( 'Delete', 'gamwp' ) . '</a>';
+        $row_actions['delete'] = '<a href="' . wp_nonce_url( add_query_arg( array( 'gact-action' => 'delete_action', 'item_id' => $row->ID ) ), 'gact_item_nonce' ) . '">' . __( 'Delete', 'gamwp' ) . '</a>';
 
         return $item['name'] . $this->row_actions( $row_actions );
     }
 
     /**
-     * Retrieve all the data for all the action 111s
+     * Render the checkbox column
+     *
+     * @access public
+     * @since 1.4
+     * @param array $item Contains all the data for the checkbox column
+     * @return string Displays a checkbox
+     */
+    function column_cb( $item ) {
+        return sprintf(
+            '<input type="checkbox" name="%1$s[]" value="%2$s" />',
+            /*$1%s*/ $this->_args['singular'],
+            /*$2%s*/ $item['ID']
+        );
+    }
+
+
+    /**
+     * Show the search field
+     *
+     * @access public
+     * @since 1.4
+     *
+     * @param string $text Label for the search box
+     * @param string $input_id ID of the search box
+     *
+     * @return svoid
+     */
+    public function search_box( $text, $input_id ) {
+        if ( empty( $_REQUEST['s'] ) && !$this->has_items() )
+            return;
+
+        $input_id = $input_id . '-search-input';
+
+        if ( ! empty( $_REQUEST['orderby'] ) )
+            echo '<input type="hidden" name="orderby" value="' . esc_attr( $_REQUEST['orderby'] ) . '" />';
+        if ( ! empty( $_REQUEST['order'] ) )
+            echo '<input type="hidden" name="order" value="' . esc_attr( $_REQUEST['order'] ) . '" />';
+        ?>
+        <p class="search-box">
+            <label class="screen-reader-text" for="<?php echo $input_id ?>"><?php echo $text; ?>:</label>
+            <input type="search" id="<?php echo $input_id ?>" name="s" value="<?php _admin_search_query(); ?>" />
+            <?php submit_button( $text, 'button', false, false, array('ID' => 'search-submit') ); ?>
+        </p>
+    <?php
+    }
+
+    /**
+     * Retrieve the bulk actions
+     *
+     * @access public
+     * @since 1.4
+     * @return array $actions Array of the bulk actions
+     */
+    public function get_bulk_actions() {
+        $actions = array(
+            'delete' => __( 'Delete', 'edd' )
+        );
+
+        return $actions;
+    }
+
+    /**
+     * Process the bulk actions
+     *
+     * @access public
+     * @since 1.4
+     * @return void
+     */
+    public function process_bulk_action() {
+        $ids = isset( $_GET['gact'] ) ? $_GET['gact'] : false;
+
+        if ( ! is_array( $ids ) )
+            $ids = array( $ids );
+
+        foreach ( $ids as $id ) {
+            if ( 'delete' === $this->current_action() ) {
+                gact_delete_action( $id );
+            }
+        }
+
+    }
+
+    /**
+     * Retrieve all the data
      *
      * @access public
      * @return array $action_111s_data Array of all the data for the action 111s
      */
-    public function g_action_table_data() {
-        $g_action_table_data = array();
+    public function gact_table_data() {
+        $gact_table_data = array();
+
+        $orderby        = isset( $_GET['orderby'] )  ? $_GET['orderby']                  : 'ID';
+        $order          = isset( $_GET['order'] )    ? $_GET['order']                    : 'DESC';
 
         $args = array(
-            'post_type' => 'g_action',
+            'post_type' => 'gact',
             'post_status' => 'publish',
             'posts_per_page' => -1,
+            'orderby' => $orderby,
+            'order' => $order,
             );
 
         $items = get_posts( $args );
 
 		if ( $items ) {
 			foreach ( $items as $item) {
-                $g_action_table_data[] = array(
+                $gact_table_data[] = array(
                     'ID'            => $item->ID,
                     'name'          => get_the_title( $item->ID ),
-                    'action_hook'        => get_post_meta( $item->ID, '_g_action_item_action_hook', true ),
-                    'action_points'        => get_post_meta( $item->ID, '_g_action_item_action_points', true ),
+                    'action_hook'        => get_post_meta( $item->ID, '_gact_item_action_hook', true ),
+                    'action_points'        => get_post_meta( $item->ID, '_gact_item_action_points', true ),
                 );
             }
         }
 
-        return $g_action_table_data;
+        return $gact_table_data;
     }
 
     public function prepare_items() {
 
         $columns = $this->get_columns();
 
-        $data = $this->g_action_table_data();
+        $data = $this->gact_table_data();
 
         $hidden = array();
 
-        //right now, we're not using sortabl columns, so we'll leave this blank.
-        $sortable = '';
+        $sortable = $this->get_sortable_columns();
 
         $this->_column_headers = array( $columns, $hidden, $sortable );
+
+        $this->process_bulk_action();
 
         $this->items = $data;
 

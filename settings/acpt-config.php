@@ -8,4 +8,4 @@ $prefix = 'gamwp';
 
 $textdomain = 'gamwp';
 
-$post_name = 'g_action';
+$post_name = 'gact';
