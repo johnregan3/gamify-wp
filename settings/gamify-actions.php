@@ -20,8 +20,14 @@ function gact_render_menu_page(){
         $gact_items_table->prepare_items();
     ?>
     <div class="wrap">
+        <div class="icon32" id="icon-options-general">
+            <br />
+        </div>
         <h2><?php _e( 'Gamify WP Actions', 'gamwp' ); ?><a href="<?php echo add_query_arg( array( 'gact-action' => 'add_item' ) ); ?>" class="add-new-h2">Add New</a></h2>
         <form id="gact-items-filter" method="get" action="<?php echo admin_url( 'admin.php?page=gamify-actions.php&post-type=gact' ); ?>">
+            <input type="hidden" name="post_type" value="gcat" />
+            <input type="hidden" name="page" value="gamify-actions.php" />
+            <!-- search doesn't work because page=gamify-actions.php doesn't get added to URL -->
             <?php $gact_items_table->search_box( __( 'Search', 'gamwp' ), 'gamify-actions.php' ); ?>
             <?php $gact_items_table->display() ?>
         </form>

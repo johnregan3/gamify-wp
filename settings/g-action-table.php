@@ -93,7 +93,7 @@ class GAMWP_Actions_Table extends WP_List_Table {
      */
     function column_name( $item ) {
         $row     = get_post( $item['ID'] );
-        $base         = admin_url( 'admin.php?page=table-test.php&item_id=' . $item['ID'] );
+        $base         = admin_url( 'admin.php?page=gamify-actions.php&item_id=' . $item['ID'] );
         $row_actions  = array();
 
         $row_actions['edit'] = '<a href="' . add_query_arg( array( 'gact-action' => 'edit_item', 'item_id' => $row->ID ) ) . '">' . __( 'Edit', 'gamwp' ) . '</a>';
@@ -173,14 +173,14 @@ class GAMWP_Actions_Table extends WP_List_Table {
      * @return void
      */
     public function process_bulk_action() {
-        $ids = isset( $_GET['gact'] ) ? $_GET['gact'] : false;
+        $ids = isset( $_GET['item'] ) ? $_GET['item'] : false;
 
         if ( ! is_array( $ids ) )
             $ids = array( $ids );
 
         foreach ( $ids as $id ) {
             if ( 'delete' === $this->current_action() ) {
-                gact_delete_action( $id );
+                gact_remove_item( $id );
             }
         }
 
@@ -190,7 +190,7 @@ class GAMWP_Actions_Table extends WP_List_Table {
      * Retrieve all the data
      *
      * @access public
-     * @return array $action_111s_data Array of all the data for the action 111s
+     * @return array Array of all the data for the action 111s
      */
     public function gact_table_data() {
         $gact_table_data = array();
@@ -226,8 +226,6 @@ class GAMWP_Actions_Table extends WP_List_Table {
 
         $columns = $this->get_columns();
 
-        $data = $this->gact_table_data();
-
         $hidden = array();
 
         $sortable = $this->get_sortable_columns();
@@ -235,6 +233,8 @@ class GAMWP_Actions_Table extends WP_List_Table {
         $this->_column_headers = array( $columns, $hidden, $sortable );
 
         $this->process_bulk_action();
+
+        $data = $this->gact_table_data();
 
         $this->items = $data;
 

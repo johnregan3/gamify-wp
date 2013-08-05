@@ -131,4 +131,17 @@ function gact_delete_action( $data ) {
 }
 add_action( 'gact_delete_action', 'gact_delete_action' );
 
+/**
+ * Deletes a discount code.
+ *
+ * @since 1.0
+ * @param int $discount_id Discount ID (default: 0)
+ * @return void
+ */
+function gact_remove_item( $item_id = 0 ) {
+	wp_delete_post( $item_id, true );
+	delete_post_meta($item_id, '_gact_item_action_hook');
+	delete_post_meta($item_id, '_gact_item_action_points');
+}
+
 
