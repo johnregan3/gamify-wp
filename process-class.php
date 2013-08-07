@@ -81,20 +81,6 @@ Class GAMWP_Process {
 		$action_hook = get_post_meta( $item->ID, '_gact_item_action_hook', true );
 		$action_points = get_post_meta( $item->ID, '_gact_item_action_points', true );
 
-/*
-		$activity_daily_limit = isset( $value['activity_daily_limit'] ) ? $value['activity_daily_limit'] : '';
-		$once_unused = $this->is_once_and_unused( $user_id, $activity_id);
-		if ( $once_unused == false ) {
-			return false;
-		}
-
-		$daily_limit_active = isset ( $activity_options['daily_limit_activate'] ) ? $activity_options['daily_limit_activate'] : 0 ;
-		$daily_points_limit = isset( $activity_options['daily_limit'] ) ? $activity_options['daily_limit'] : 99999 ;
-		$daily_points_earned = $this->daily_points_earned( $user_id );
-		if ( ( 'checked' == $activity_daily_limit ) && ( 1 == $daily_limit_active ) && ( $daily_points_earned >= $daily_points_limit ) ) {
-			return false;
-		}
-*/
 		//create entry for master_log
 		$time = current_time( 'timestamp', 1 );
 		$add_to_array[$time]['userid']          = $user_id;

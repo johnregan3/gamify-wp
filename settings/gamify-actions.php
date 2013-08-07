@@ -1,6 +1,6 @@
 <?php
 
-include_once( plugin_dir_path(__FILE__) . 'g-action-table.php' );
+include_once( plugin_dir_path(__FILE__) . 'item-table.php' );
 include_once( plugin_dir_path(__FILE__) . 'item-actions.php' );
 
 add_action( 'admin_menu', 'register_gact_menu_page' );
