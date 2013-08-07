@@ -1,17 +1,24 @@
 <?php
 
-/*
- *
+/**
  * Class for Generating User Statistics
  *
+ * @since 1.0
  */
 
 Class GAMWP_Shortcode {
 
 	/**
-	* Calculates Points earned during the last 24 hour period.
-	* Used in shortcode-user.php
-	*/
+	 * Calculate a user's points earned in the last 24 hours
+	 *
+	 * Cycles through all of a user's activity where the timestamp is less than 24 hours ago.
+	 * Used by User Stats sortcode.
+	 *
+	 * @since  1.0
+	 * @param  int $user_id             User ID to calculate points for
+	 * @param  int $time                Current time
+	 * @return int $daily_points_earned Total points earned by user in last 24 hours
+	 */
 
 	public function calc_daily_points( $user_id, $time ) {
 

@@ -1,9 +1,9 @@
 <?php
 
-/*
+/**
  * Plugin Name: Gamify WP
  * Plugin URI: http://johnregan3.github.io/gamify-wp-plugin
- * Description: Reward your Users for completing actions on your site (e.g., leaving comments or clicking links).
+ * Description: Reward your Users for interacting with your WordPress website.
  * Author: John Regan
  * Author URI: http://johnregan3.me
  * Version: 1.0
@@ -22,25 +22,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @package SCCSS
+ * @package Gamify WP
  * @author John Regan
  * @version 1.0
  */
 
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' );		//Actions age
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-log.php' );			//Points Log Page
 
-include_once( plugin_dir_path(__FILE__) . 'processors/process-class.php' );				//Saves Activity
-include_once( plugin_dir_path(__FILE__) . 'processors/actions.php' );						//Action Hook Generator
+//Actions Admin Page
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' );
 
-include_once( plugin_dir_path(__FILE__) . 'shortcode/shortcode-class.php' );	//Shortcode Class
-include_once( plugin_dir_path(__FILE__) . 'shortcode/user-stats.php' );			//User Stats Shortcode
+//Points Log Admin Page
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-log.php' );
+
+//Save Activity Class
+include_once( plugin_dir_path(__FILE__) . 'processors/process-class.php' );
+
+//Action Hook Generator/Processor
+include_once( plugin_dir_path(__FILE__) . 'processors/actions.php' );
+
+//Shortcode Class
+include_once( plugin_dir_path(__FILE__) . 'shortcode/shortcode-class.php' );
+
+//User Stats Shortcode
+include_once( plugin_dir_path(__FILE__) . 'shortcode/user-stats.php' );
 
 
-/*
- *
+/**
  * Register text domain
  *
+ * @since 1.0
  */
 
 function gamwp_textdomain() {
@@ -48,5 +58,3 @@ function gamwp_textdomain() {
 }
 
 add_action('init', 'gamwp_textdomain');
-
-
