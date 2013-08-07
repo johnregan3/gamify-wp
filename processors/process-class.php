@@ -1,12 +1,35 @@
 <?php
 
-/*
+/**
+ * Initialize Action creation
  *
+ * @since 1.0
+ */
+
+function initialize_actions() {
+	$user_id = get_current_user_id();
+	GAMWP_Process::create_actions( $user_id );
+}
+
+add_action( 'init', 'initialize_actions' );
+
+
+
+/**
  * Class for Processing Actions
  *
+ * @since 1.0
  */
 
 Class GAMWP_Process {
+
+	/**
+	 * Get all Actions
+	 *
+	 * Uses get_posts() to get all Gamify WP Actions
+	 *
+	 * @since 1.0
+	 */
 
 	static function get_all_actions() {
 
@@ -21,6 +44,16 @@ Class GAMWP_Process {
 		return $items;
 
 	}
+
+
+
+	/**
+	 * Get a single Action's attribute array
+	 *
+	 * @since  1.0
+	 * @param  int   $action_id $post->ID of requested Action
+	 * @return array Array of attributes of requested Action
+	 */
 
 	public static function get_single_action( $action_id ) {
 
@@ -37,41 +70,49 @@ Class GAMWP_Process {
 	}
 
 
-	//Total Daily Points from last 24 hours ($user_id)
 
-	public function daily_points_earned( $user_id ) {
 
-		$time = current_time( 'timestamp', 1 );
-		$one_day_ago = $time - 86400;
-		$daily_points_earned = 0;
+	/**
+	 * Dynamically adds Actions and their associated callback functions
+	 *
+	 * Fetches all saved Actions (from Settings Page), then for each Action, generate
+	 * an add_action and callback function.
+	 *
+	 * @since 1.0
+	 * @param int $user_id Current User ID
+	 */
+	static function create_actions( $user_id ) {
 
-		$master_array = get_option( 'gamwp_master_log' );
-		if ( $master_array ) {
-			foreach ( $master_array as $timestamp => $value ) {
-				if( ( $timestamp >= $one_day_ago ) && ( $user_id == $value['userid'] ) ) {
-					$activity_points = $value[ 'activity_points' ];
-					$daily_points_earned = $daily_points_earned + $activity_points;
+		$items = self::get_all_actions();
+
+		if ( $items ) {
+			foreach ( $items as $item) {
+				$action_id = $item->ID;
+				$action_hook = get_post_meta( $item->ID, '_gact_item_action_hook', true );
+
+				$$action_id = function() use ( $user_id, $action_id ){
+					self::save_action( $user_id, $action_id );
+				};
+
+				if ( isset( $action_hook ) ) {
+					add_action( $action_hook, $$action_id, 10, 0);
 				}
 			}
 		}
-		return $daily_points_earned;
 	}
 
-	private function is_once_and_unused( $user_id, $activity_id ) {
-		//Check to see if action is a one-time-use action
-		$options = get_option( 'gamwp_action_settings' );
-		$once = isset( $options[$activity_id]['once'] ) ? $options[$activity_id]['once'] : 'unchecked';
 
-		if ( 'checked' == $once ) {
-			$master_array = get_option( 'gamwp_master_log' );
-			foreach ( $master_array as $timestamp ) {
-				if ( ( $user_id == $timestamp['userid'] ) && ( $activity_id == $timestamp['activity_id'] ) ) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
+
+	/**
+	 * Save Point-earning activity to Logs
+	 *
+	 * Gathers information from completed Action and puts it into an array ($add_to_array), with the current time as its index.
+	 * This array is then saved to a Master array used for the Admin Logs, and to the User's Meta for personal stat calculations.
+	 *
+	 * @since  1.0
+	 * @param  int $user_id   User ID who completed the Action
+	 * @param  int $action_id The Action completed
+	 */
 
 	public static function save_action( $user_id, $action_id) {
 
@@ -89,7 +130,6 @@ Class GAMWP_Process {
 		$add_to_array[$time]['activity_points'] = $action_points;
 
 		//Save activity array to two places:  master_log, for tracking sitewide stats, and user_meta for focused stats.
-		//This saves looping through all actions ever just to get a single user's stats.
 
 		//Save to master log
 
@@ -117,5 +157,4 @@ Class GAMWP_Process {
 
 	}
 
-
-} //End Class GAMWP_Process
+}

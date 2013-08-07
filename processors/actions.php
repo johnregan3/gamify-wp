@@ -1,9 +1,12 @@
 <?php
 
-/*
+/**
+ * Dynamically adds Actions and their associated callback functions
  *
- * Get Custom Actions (Custom Post Type) and create action hooks
+ * Fetches all saved Actions (from Settings Page), then for each Action, generate
+ * an add_action and callback function.
  *
+ * @since 1.0
  */
 
 add_action( 'init', 'create_actions');

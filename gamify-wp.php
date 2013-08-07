@@ -37,9 +37,6 @@ include_once( plugin_dir_path(__FILE__) . 'settings/gamify-log.php' );
 //Save Activity Class
 include_once( plugin_dir_path(__FILE__) . 'processors/process-class.php' );
 
-//Action Hook Generator/Processor
-include_once( plugin_dir_path(__FILE__) . 'processors/actions.php' );
-
 //Shortcode Class
 include_once( plugin_dir_path(__FILE__) . 'shortcode/shortcode-class.php' );
 

@@ -22,9 +22,9 @@ include_once( plugin_dir_path(__FILE__) . 'item-actions.php' );
 
 add_action( 'admin_menu', 'register_gact_menu_page' );
 
-function register_gact_menu_page()
+function register_gact_menu_page() {
 	add_menu_page( __( 'Gamify WP', 'gamwp' ), __( 'Gamify WP', 'gamwp' ), 'manage_options', basename(__FILE__), 'gact_render_menu_page' );
-
+}
 
 
 /**
