@@ -10,7 +10,6 @@
  */
 
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' );		//Actions Settings Page
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-rewards.php' );		//Rewards Settings Page
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-log.php' );			//Points Log Settings Page
 
 include_once( plugin_dir_path(__FILE__) . 'process-class.php' );				//Saves Action/Reward Activity
