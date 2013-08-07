@@ -35,6 +35,6 @@ Class GAMWP_Shortcode {
 
 		return $daily_points_earned;
 
-	} // End calc_daily_points
+	}
 
-} // End GAMWP_Stats Class
+}
