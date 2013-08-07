@@ -7,10 +7,10 @@
  */
 
 //Table View
-include_once( plugin_dir_path(__FILE__) . 'item-table.php' );
+include_once( plugin_dir_path(__FILE__) . '/actions/item-table.php' );
 
 //Process Add/Edit pages
-include_once( plugin_dir_path(__FILE__) . 'item-actions.php' );
+include_once( plugin_dir_path(__FILE__) . '/actions/item-actions.php' );
 
 
 
@@ -23,7 +23,7 @@ include_once( plugin_dir_path(__FILE__) . 'item-actions.php' );
 add_action( 'admin_menu', 'register_gact_menu_page' );
 
 function register_gact_menu_page() {
-	add_menu_page( __( 'Gamify WP', 'gamwp' ), __( 'Gamify WP', 'gamwp' ), 'manage_options', basename(__FILE__), 'gact_render_menu_page' );
+	add_menu_page( __( 'Gamify WP', 'gamwp' ), __( 'Action Hooks', 'gamwp' ), 'manage_options', basename(__FILE__), 'gact_render_menu_page' );
 }
 
 
@@ -38,9 +38,9 @@ function register_gact_menu_page() {
 function gact_render_menu_page(){
 
 	if ( isset( $_GET['gact-action'] ) && $_GET['gact-action'] == 'edit_item' ) {
-		require_once plugin_dir_path(__FILE__) . 'edit-item.php';
+		require_once plugin_dir_path(__FILE__) . '/actions/edit-item.php';
 	} elseif ( isset( $_GET['gact-action'] ) && $_GET['gact-action'] == 'add_item' ) {
-		require_once plugin_dir_path(__FILE__) . 'add-item.php';
+		require_once plugin_dir_path(__FILE__) . '/actions/add-item.php';
 	} else {
 		require_once plugin_dir_path(__FILE__) . 'gamify-actions.php';
 

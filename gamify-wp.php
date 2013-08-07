@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: Gamify WP
- * Plugin URI: http://johnregan3.github.io/gamify-wp-plugin
+ * Plugin URI: http://johnregan3.github.io/gamify-wp
  * Description: Reward your Users for interacting with your WordPress website.
  * Author: John Regan
  * Author URI: http://johnregan3.me
@@ -34,8 +34,8 @@ include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' );
 //Points Log Admin Page
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-log.php' );
 
-//Save Activity Class
-include_once( plugin_dir_path(__FILE__) . 'processors/process-class.php' );
+//Generate Hooks & Save Activity Class
+include_once( plugin_dir_path(__FILE__) . 'process-class.php' );
 
 //Shortcode Class
 include_once( plugin_dir_path(__FILE__) . 'shortcode/shortcode-class.php' );
@@ -55,3 +55,28 @@ function gamwp_textdomain() {
 }
 
 add_action('init', 'gamwp_textdomain');
+
+
+/**
+ * Plugin activation actions
+ *
+ * @since 1.0
+ */
+
+function gamwp_activation() {
+
+	//Insert User Stats page
+	wp_insert_post(
+		array(
+			'post_title'     => __( 'User Stats', 'gamwp' ),
+			'post_content'   => '[user_stats]',
+			'post_status'    => 'publish',
+			'post_author'    => 1,
+			'post_type'      => 'page',
+			'comment_status' => 'closed'
+		)
+	);
+
+}
+
+register_activation_hook( __FILE__, 'gamwp_activation' );
