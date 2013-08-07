@@ -31,8 +31,6 @@ function gamwp_stats_shortcode() {
 
 			$reverse_user_log_array = array_reverse( $user_log_array, true );
 			$user_log_array = array_slice( $reverse_user_log_array, 0, 10, true );
-			print_r($user_log_array);
-			echo '<ul>';
 			foreach ( $user_log_array as $timestamp => $value ) {
 				$offset = human_time_diff( $timestamp, $time );
 				echo sprintf( "<li> %s for %s points ( %s ago)</li>", esc_html( $value['activity_title'] ), esc_html( $value['activity_points'] ), esc_html( $offset ) );

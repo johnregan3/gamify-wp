@@ -19,17 +19,12 @@ Class GAMWP_Shortcode {
 		$daily_points_earned = 0;
 		$actions = get_user_meta( $user_id, 'gamwp_user_log', true );
 
-			if ( !empty( $actions ) ) {
+			if ( $actions ) {
 				foreach ( $actions as $timestamp => $value ) {
 					// If it occurred less than 24 hours ago
 					if ( $timestamp >= $one_day_ago ) {
 						// Extract points values from action_title Array
 						$points = $value['activity_points'];
-						// if reward
-						if ( isset( $value['reward'] ) ) {
-							// Make points negative
-							$points = -1 * abs($points);
-						}
 						// Add to $daily_points_earned
 						$daily_points_earned = $daily_points_earned + $points;
 					} // endif

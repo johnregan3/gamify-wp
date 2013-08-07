@@ -18,11 +18,13 @@ Class GAMWP_Process {
 
 		$items = get_posts( $args );
 
+		return $items;
+
 	}
 
-	public function get_single_action( $action_id ) {
+	public static function get_single_action( $action_id ) {
 
-		$actions = $this->get_all_actions();
+		$items = self::get_all_actions();
 
 		if ( $items ) {
 			foreach ( $items as $item ) {
@@ -71,11 +73,11 @@ Class GAMWP_Process {
 		return true;
 	}
 
-	public function save_action( $user_id, $action_id) {
+	public static function save_action( $user_id, $action_id) {
 
 		//get activity information
-		$item = $this->get_single_action( $action_id );
-		$action_title = $item->name;
+		$item = self::get_single_action( $action_id );
+		$action_title = get_the_title( $action_id );
 		$action_hook = get_post_meta( $item->ID, '_gact_item_action_hook', true );
 		$action_points = get_post_meta( $item->ID, '_gact_item_action_points', true );
 
@@ -97,9 +99,9 @@ Class GAMWP_Process {
 		$add_to_array = array();
 		$time = current_time( 'timestamp', 1 );
 		$add_to_array[$time] = array();
-		$add_to_array[$time]['userid'] = $user_id;
-		$add_to_array[$time]['activity_id'] = $action_id;
-		$add_to_array[$time]['activity_title'] = $action_title;
+		$add_to_array[$time]['userid']          = $user_id;
+		$add_to_array[$time]['activity_id']     = $action_id;
+		$add_to_array[$time]['activity_title']  = $action_title;
 		$add_to_array[$time]['activity_points'] = $action_points;
 
 		//Save activity array to two places:  master_log, for tracking sitewide stats, and user_meta for focused stats.

@@ -45,9 +45,9 @@ class GAMWP_Actions_Table extends WP_List_Table {
      */
     public function get_columns() {
         $columns = array(
-            'cb'        => '<input type="checkbox" />',
-            'name'      => __( 'Name', 'gamwp' ),
-            'action_hook'      => __( 'Action Hook', 'gamwp' ),
+            'cb'             => '<input type="checkbox" />',
+            'name'           => __( 'Name', 'gamwp' ),
+            'action_hook'    => __( 'Action Hook', 'gamwp' ),
             'action_points'  => __( 'Points', 'gamwp' ),
 
         );

@@ -14,13 +14,12 @@ function create_actions() {
 
 	if ( $items ) {
 		foreach ( $items as $item) {
-			$action_hook = get_post_meta( $item->ID, '_gact_item_action_hook', true );
 			$action_id = $item->ID;
 			$user_id = get_current_user_id();
-			$action_hook = isset( $action_hook ) ? $action_hook : '' ;
+			$action_hook = get_post_meta( $item->ID, '_gact_item_action_hook', true );
 
 			$$action_id = function() use ( $user_id, $action_id ){
-				GAMWP_Process::save_activity( $user_id, $action_id );
+				GAMWP_Process::save_action( $user_id, $action_id );
 			};
 
 			if ( isset( $action_hook ) ) {

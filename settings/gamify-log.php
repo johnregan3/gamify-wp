@@ -33,9 +33,18 @@ function generate_log_fields() {
 
 		ob_start();
 
-		$wp_offset = get_option( 'gmt_offset' ); // get WordPress offset in hours
-		date_default_timezone_set('Etc/GMT'.(($wp_offset < 0)?'+':'').-$wp_offset); // set the PHP timezone to match WordPress
-		echo "<td>" . date("M d Y H:i:s", $activity_time ) . "</td>";
+
+		$tz = get_option('timezone_string');
+		if ( $tz ) {
+			$prev_tz = date_default_timezone_get();
+			date_default_timezone_set( $tz );
+			echo "<td>" . date("M d Y H:i:s", $activity_time ) . "</td>";
+			//reset the timezone to original settings so it doesn't mess with other function settings.
+			date_default_timezone_set($prev_tz);
+		} else {
+			echo "<td>" . date("M d Y H:i:s", $activity_time ) . "</td>";
+		}
+
 
 		$settings_value =( isset( $options[$activity_time]['userid'] ) ? $options[$activity_time]['userid'] : '' );
 		echo "<td><span>";
@@ -81,7 +90,7 @@ function gamwp_points_log() {
 						<th><?php _e('Time', 'gamwp'); ?></th>
 						<th><?php _e('User', 'gamwp'); ?></th>
 						<th><?php _e('Activity', 'gamwp'); ?></th>
-						<th><?php _e('Points Earned/Spent', 'gamwp'); ?></th>
+						<th><?php _e('Points Earned', 'gamwp'); ?></th>
 					</tr>
 				</thead>
 				<tfoot>
@@ -89,31 +98,27 @@ function gamwp_points_log() {
 						<th><?php _e('Time', 'gamwp'); ?></th>
 						<th><?php _e('User', 'gamwp'); ?></th>
 						<th><?php _e('Activity', 'gamwp'); ?></th>
-						<th><?php _e('Points Earned/Spent', 'gamwp'); ?></th>
+						<th><?php _e('Points Earned', 'gamwp'); ?></th>
 					</tr>
 				</tfoot>
 				<tbody>
 						<?php $rows = generate_log_fields();
-						foreach ( $rows as $row ) {
-							?>
-							<tr>
-								<?php echo $row ?>
-							</tr>
-						<?php } ?>
+							if ( $rows ) :
+								foreach ( $rows as $row ) : ?>
+									<tr>
+										<?php echo $row ?>
+									</tr>
+								<?php endforeach;
+							else : ?>
+								<tr>
+									<td>
+										<?php _e( 'No Log activity yet', 'gamwp' ); ?>
+									</td>
+								</tr>
+							<?php endif; ?>
 				</tbody>
 			</table>
 	</div>
 
 <?php
-}
-
-
-function validate_gamwp_master_log( $input ) {
-	$output = array();
-	foreach( $input as $key => $value ) {
-		if( isset( $input[$key] ) ) {
-			$output[$key] = strip_tags( stripslashes( $input[$key] ) );
-		}
-	}
-	return apply_filters( 'validate_gamwp_master_log', $output, $input );
 }
