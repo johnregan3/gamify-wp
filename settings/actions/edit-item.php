@@ -1,16 +1,24 @@
 <?php
 
+ /**
+  * Content of the Edit Action Page
+  *
+  * @since 1.0
+  */
+
+
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! isset( $_GET['item_id'] ) || ! is_numeric( $_GET['item_id'] ) ) {
+if ( ! isset( $_GET['item_id'] ) || ! is_numeric( $_GET['item_id'] ) )
 	wp_die( __( 'Error.', 'gamwp' ), __( 'Error', 'gamwp' ) );
-}
+
 
 $item_id  = absint( $_GET['item_id'] );
 $item     = gact_get_item( $item_id );
 $action_hook     = get_post_meta( $item_id, '_gact_item_action_hook', true );
 $action_points     = get_post_meta( $item_id, '_gact_item_action_points', true );
+
 ?>
 <h2><?php _e( 'Edit Item', 'gamwp' ); ?> - <a href="<?php echo admin_url( 'admin.php?post_type=gact&page=gamify-actions.php' ); ?>" class="button-secondary"><?php _e( 'Go Back', 'gamwp' ); ?></a></h2>
 <form id="gact-edit-tiem" action="" method="post">

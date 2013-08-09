@@ -31,6 +31,9 @@
 //Actions Admin Page
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' );
 
+//Rewards Admin Page
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-rewards.php' );
+
 //Points Log Admin Page
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-log.php' );
 

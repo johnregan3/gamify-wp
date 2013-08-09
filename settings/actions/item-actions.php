@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Functions used by Gamify WP Actions admin pages
+ *
+ * @since  1.0
+ */
+
+
+/**
+ * Fetches all Actions
+ *
+ * @since  1.0
+ */
 function gact_get_gact_actions() {
     if ( isset( $_GET['gact-action'] ) ) {
         do_action( 'gact_' . $_GET['gact-action'], $_GET );
@@ -8,6 +20,12 @@ function gact_get_gact_actions() {
 add_action( 'init', 'gact_get_gact_actions' );
 
 
+
+/**
+ * Checks for POST/GET
+ *
+ * @since  1.0
+ */
 function gact_process_actions() {
     if ( isset( $_POST['gact-action'] ) ) {
         do_action( 'gact_' . $_POST['gact-action'], $_POST );
@@ -20,6 +38,13 @@ function gact_process_actions() {
 add_action( 'admin_init', 'gact_process_actions' );
 
 
+
+/**
+ * Fetches array of new item information, then sends it to be saved.
+ *
+ * @since  1.0
+ * @param  array  $data  Data of item to be added
+ */
 function gact_add_item( $data ) {
 	if ( isset( $data['gact-item-nonce'] ) && wp_verify_nonce( $data['gact-item-nonce'], 'gact_item_nonce' ) ) {
 		// Setup the action code details
@@ -42,6 +67,14 @@ function gact_add_item( $data ) {
 add_action( 'gact_add_item', 'gact_add_item' );
 
 
+
+/**
+ * Fetches array of new item information, then saves it and redirects.
+ *
+ * @since  1.0
+ * @param  array  $details  Data of item to be added
+ * @param  int    $item_id  Item for which to store the data.
+ */
 function gact_store_item( $details, $item_id = null ) {
 
 	$meta = array(
@@ -80,6 +113,14 @@ function gact_store_item( $details, $item_id = null ) {
 	}
 }
 
+
+
+/**
+ * Fetches array of new item information, then sends it to be saved.
+ *
+ * @since  1.0
+ * @param  array  $data  Data of item to be added
+ */
 function gact_edit_item( $data ) {
 	if ( isset( $data['gact-item-nonce'] ) && wp_verify_nonce( $data['gact-item-nonce'], 'gact_item_nonce' ) ) {
 
@@ -101,6 +142,13 @@ add_action( 'gact_edit_item', 'gact_edit_item' );
 
 
 
+/**
+ * Checks to see if item exists
+ *
+ * @since  1.0
+ * @param  int  $item_id  Item for which to store the data.
+ * @return bool
+ */
 function gact_item_exists( $item_id ) {
 	if ( gact_get_item( $item_id ) )
 		return true;
@@ -108,6 +156,15 @@ function gact_item_exists( $item_id ) {
 	return false;
 }
 
+
+
+/**
+ * Checks to see if item exists
+ *
+ * @since  1.0
+ * @param  int  item_id  Item for which to store the data.
+ * @return object $item  Post object for requested item ID.
+ */
 function gact_get_item( $item_id ) {
 	$item = get_post( $item_id );
 
@@ -118,9 +175,12 @@ function gact_get_item( $item_id ) {
 }
 
 
+
 /**
- * Listens for when a action delete button is clicked and deletes the
- * action code
+ * Listens for when a delete link is clicked and deletes the item
+ *
+ * @since  1.0
+ * @param  array  $data
  */
 function gact_delete_action( $data ) {
 	if ( ! isset( $data['_wpnonce'] ) || ! wp_verify_nonce( $data['_wpnonce'], 'gact_item_nonce' ) )
@@ -131,17 +191,16 @@ function gact_delete_action( $data ) {
 }
 add_action( 'gact_delete_action', 'gact_delete_action' );
 
+
+
 /**
- * Deletes a discount code.
+ * Deletes an item
  *
  * @since 1.0
- * @param int $discount_id Discount ID (default: 0)
- * @return void
+ * @param int $item_id Item ID
  */
 function gact_remove_item( $item_id = 0 ) {
 	wp_delete_post( $item_id, true );
 	delete_post_meta($item_id, '_gact_item_action_hook');
 	delete_post_meta($item_id, '_gact_item_action_points');
 }
-
-

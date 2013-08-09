@@ -1,4 +1,15 @@
-<?php ?>
+<?php
+
+ /**
+  * Content of the Add Action Page
+  *
+  * @since 1.0
+  */
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+?>
 
 <h2><?php _e( 'Add New Action', 'gamwp' ); ?> - <a href="<?php echo admin_url( 'admin.php?page=gamify-actions.php&post_type=gact' ); ?>" class="button-secondary"><?php _e( 'Go Back', 'gamwp' ); ?></a></h2>
 <form id="gact-add-item" action="" method="POST">
@@ -34,6 +45,7 @@
 		</tbody>
 	</table>
 	<p class="submit">
+		<input type="hidden" name="activity" value="action">
 		<input type="hidden" name="gact-action" value="add_item"/>
 		<input type="hidden" name="gact-redirect" value="<?php echo esc_url( admin_url( 'admin.php?page=gamify-actions.php' ) ); ?>"/>
 		<input type="hidden" name="gact-item-nonce" value="<?php echo wp_create_nonce( 'gact_item_nonce' ); ?>"/>

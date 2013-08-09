@@ -49,8 +49,8 @@ function gact_render_menu_page(){
 		?>
 
 		<div class="wrap">
-			<div class="icon32" id="icon-options-general">
-				<br />
+			<div class="icon32">
+				<img src="<?php echo plugins_url( 'icons/gamify-icon-32.png', __FILE__ ) ?>" />
 			</div>
 			<h2><?php _e( 'Gamify WP Actions', 'gamwp' ); ?><a href="<?php echo add_query_arg( array( 'gact-action' => 'add_item' ) ); ?>" class="add-new-h2">Add New</a></h2>
 			<form id="gact-items-filter" method="get" action="<?php echo admin_url( 'admin.php?page=gamify-actions.php&post-type=gact' ); ?>">
