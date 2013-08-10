@@ -27,6 +27,8 @@
  * @version 1.0
  */
 
+//General Admin Page
+include_once( plugin_dir_path(__FILE__) . 'settings/gamify-general.php' );
 
 //Actions Admin Page
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' );
@@ -83,3 +85,44 @@ function gamify_activation() {
 }
 
 register_activation_hook( __FILE__, 'gamify_activation' );
+
+
+/**
+ * Function used to uninstall Post Types on Uninstall of the plugin
+ *
+ * @param string $post_type  Post Type to be uninstalled
+ * @since 1.0
+ */
+function unregister_post_type( $post_type ) {
+    global $wp_post_types;
+    if ( isset( $wp_post_types[ $post_type ] ) ) {
+        unset( $wp_post_types[ $post_type ] );
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Delete Options on Uninstall
+ *
+ * @since 1.0
+ */
+function gamify_uninstall() {
+	//Delete master array of activity
+	delete_option('gamify_master_array');
+	//Delete Actions
+	$wpdb->delete( 'table', array( 'post_type' => 'gact' ) );
+	//Delete Rewards
+	$wpdb->delete( 'table', array( 'post_type' => 'rew' ) );
+	//remove gact post type
+	unregister_post_type( 'gact' );
+	//remove ew post type
+	unregister_post_type( 'rew' );
+	//delete all usermeta
+	$users = get_users();
+	foreach( $users as $user) {
+		delete_post_meta( $user->ID, 'gamify_user_array' );
+	}
+}
+
+register_uninstall_hook( __FILE__, 'gamify_uninstall' );

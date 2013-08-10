@@ -20,10 +20,10 @@ include_once( plugin_dir_path(__FILE__) . '/actions/item-actions.php' );
  * @since  1.0
  */
 
-add_action( 'admin_menu', 'register_gact_menu_page' );
+add_action( 'admin_menu', 'register_gact_submenu_page' );
 
-function register_gact_menu_page() {
-	add_menu_page( __( 'Gamify WP', 'gamify' ), __( 'Action Hooks', 'gamify' ), 'manage_options', basename(__FILE__), 'gact_render_menu_page' );
+function register_gact_submenu_page() {
+	add_submenu_page( 'gamify-general.php', __( 'Gamify WP Actions', 'gamify' ), __( 'Actions', 'gamify' ), 'manage_options', basename(__FILE__), 'gact_render_menu_page' );
 }
 
 

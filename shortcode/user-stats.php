@@ -20,17 +20,19 @@ function gamify_stats_shortcode() {
 
 	//Set up user log array
 	$user_log_array = get_user_meta( $user_id, 'gamify_user_log', true );
-	$reverse_user_log_array = array_reverse( $user_log_array, true );
+	if ( $user_log_array ) {
+		$reverse_user_log_array = array_reverse( $user_log_array, true );
 
-	// Get array of all rewards
-	foreach ( $reverse_user_log_array as $timestamp => $value ) {
-		if ( $value['activity_type'] == 'reward' ) {
-			$user_reward_array[$timestamp] = $value;
+		// Get array of all rewards
+		foreach ( $reverse_user_log_array as $timestamp => $value ) {
+			if ( $value['activity_type'] == 'reward' ) {
+				$user_reward_array[$timestamp] = $value;
+			}
 		}
-	}
 
-	//Trim User Activites displayed to 10 most recent
-	$user_activity_array = array_slice( $reverse_user_log_array, 0, 10, true );
+		//Trim User Activites displayed to 10 most recent
+		$user_activity_array = array_slice( $reverse_user_log_array, 0, 10, true );
+	}
 
 	if ( is_user_logged_in() ) : ?>
 

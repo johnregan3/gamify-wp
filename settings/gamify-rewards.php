@@ -23,7 +23,7 @@ include_once( plugin_dir_path(__FILE__) . '/rewards/item-actions.php' );
 add_action( 'admin_menu', 'register_rew_submenu_page' );
 
 function register_rew_submenu_page() {
-	add_submenu_page( 'gamify-actions.php', __( 'Gamify WP Rewards', 'gamify' ), __( 'Rewards', 'gamify' ), 'manage_options', basename(__FILE__), 'rew_render_menu_page' );
+	add_submenu_page( 'gamify-general.php', __( 'Gamify WP Rewards', 'gamify' ), __( 'Rewards', 'gamify' ), 'manage_options', basename(__FILE__), 'rew_render_menu_page' );
 }
 
 

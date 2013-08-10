@@ -11,7 +11,7 @@
 add_action( 'admin_menu', 'gamify_add_log_submenu_page' );
 
 function gamify_add_log_submenu_page() {
-	add_submenu_page( 'gamify-actions.php', __( 'Gamify WP Activity Log' ), __( 'Activity Log' ), 'administrator', basename(__FILE__), 'gamify_points_log' );
+	add_submenu_page( 'gamify-general.php', __( 'Gamify WP Activity Log' ), __( 'Activity Log' ), 'administrator', basename(__FILE__), 'gamify_points_log' );
 }
 
 function gamify_log_register_settings() {
