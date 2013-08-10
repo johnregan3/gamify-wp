@@ -53,11 +53,11 @@ include_once( plugin_dir_path(__FILE__) . 'shortcode/user-stats.php' );
  * @since 1.0
  */
 
-function gamwp_textdomain() {
-	load_plugin_textdomain('gamwp');
+function gamify_textdomain() {
+	load_plugin_textdomain('gamify');
 }
 
-add_action('init', 'gamwp_textdomain');
+add_action('init', 'gamify_textdomain');
 
 
 /**
@@ -66,12 +66,12 @@ add_action('init', 'gamwp_textdomain');
  * @since 1.0
  */
 
-function gamwp_activation() {
+function gamify_activation() {
 
 	//Insert User Stats page
 	wp_insert_post(
 		array(
-			'post_title'     => __( 'User Stats', 'gamwp' ),
+			'post_title'     => __( 'User Stats', 'gamify' ),
 			'post_content'   => '[user_stats]',
 			'post_status'    => 'publish',
 			'post_author'    => 1,
@@ -82,4 +82,4 @@ function gamwp_activation() {
 
 }
 
-register_activation_hook( __FILE__, 'gamwp_activation' );
+register_activation_hook( __FILE__, 'gamify_activation' );

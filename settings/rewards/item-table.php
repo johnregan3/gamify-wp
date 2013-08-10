@@ -14,7 +14,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class GAMWP_Rewards_Table extends WP_List_Table {
+class gamify_Rewards_Table extends WP_List_Table {
 
 	/**
 	 * Set up Table
@@ -44,8 +44,8 @@ class GAMWP_Rewards_Table extends WP_List_Table {
 	public function get_columns() {
 		$columns = array(
 			'cb'             => '<input type="checkbox" />',
-			'name'           => __( 'Name', 'gamwp' ),
-			'rew_points'  => __( 'Points', 'gamwp' ),
+			'name'           => __( 'Name', 'gamify' ),
+			'activity_points'  => __( 'Points', 'gamify' ),
 
 		);
 
@@ -101,9 +101,9 @@ class GAMWP_Rewards_Table extends WP_List_Table {
 		$base         = admin_url( 'admin.php?page=gamify-rewards.php&item_id=' . $item['ID'] );
 		$row_actions  = array();
 
-		$row_actions['edit'] = '<a href="' . add_query_arg( array( 'rew-action' => 'edit_item', 'item_id' => $row->ID ) ) . '">' . __( 'Edit', 'gamwp' ) . '</a>';
+		$row_actions['edit'] = '<a href="' . add_query_arg( array( 'rew-action' => 'edit_item', 'item_id' => $row->ID ) ) . '">' . __( 'Edit', 'gamify' ) . '</a>';
 
-		$row_actions['delete'] = '<a href="' . wp_nonce_url( add_query_arg( array( 'rew-action' => 'delete_action', 'item_id' => $row->ID ) ), 'rew_item_nonce' ) . '">' . __( 'Delete', 'gamwp' ) . '</a>';
+		$row_actions['delete'] = '<a href="' . wp_nonce_url( add_query_arg( array( 'rew-action' => 'delete_action', 'item_id' => $row->ID ) ), 'rew_item_nonce' ) . '">' . __( 'Delete', 'gamify' ) . '</a>';
 
 		return $item['name'] . $this->row_actions( $row_actions );
 	}
@@ -196,7 +196,7 @@ class GAMWP_Rewards_Table extends WP_List_Table {
 				$rew_table_data[] = array(
 					'ID'            => $item->ID,
 					'name'          => get_the_title( $item->ID ),
-					'rew_points'        => get_post_meta( $item->ID, '_rew_item_rew_points', true ),
+					'activity_points'        => get_post_meta( $item->ID, '_gamify_item_activity_points', true ),
 				);
 			}
 		}

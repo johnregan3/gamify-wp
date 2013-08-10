@@ -79,7 +79,7 @@ function gact_store_item( $details, $item_id = null ) {
 
 	$meta = array(
 		'action_hook' => isset( $details['action_hook'] ) ? $details['action_hook'] : '',
-		'action_points' => isset( $details['action_points'] ) ? $details['action_points'] : '',
+		'activity_points' => isset( $details['activity_points'] ) ? $details['activity_points'] : '',
 	);
 
 	if ( gact_item_exists( $item_id ) && ! empty( $item_id ) ) {
@@ -91,7 +91,7 @@ function gact_store_item( $details, $item_id = null ) {
 		) );
 
 		foreach( $meta as $key => $value ) {
-			update_post_meta( $item_id, '_gact_item_' . $key, $value );
+			update_post_meta( $item_id, '_gamify_item_' . $key, $value );
 		}
 
 		// Item updated
@@ -105,7 +105,7 @@ function gact_store_item( $details, $item_id = null ) {
 			'post_status' => 'publish',
 		) );
 		foreach( $meta as $key => $value ) {
-			update_post_meta( $item_id, '_gact_item_' . $key, $value );
+			update_post_meta( $item_id, '_gamify_item_' . $key, $value );
 		}
 
 		// Item created
@@ -184,7 +184,7 @@ function gact_get_item( $item_id ) {
  */
 function gact_delete_action( $data ) {
 	if ( ! isset( $data['_wpnonce'] ) || ! wp_verify_nonce( $data['_wpnonce'], 'gact_item_nonce' ) )
-		wp_die( __( 'Failed nonce verification', 'gact' ), __( 'Error', 'gamwp' ) );
+		wp_die( __( 'Failed nonce verification', 'gact' ), __( 'Error', 'gamify' ) );
 
 	$item_id = $data['item_id'];
 	wp_delete_post( $item_id, true );
@@ -201,6 +201,7 @@ add_action( 'gact_delete_action', 'gact_delete_action' );
  */
 function gact_remove_item( $item_id = 0 ) {
 	wp_delete_post( $item_id, true );
+	delete_post_meta($item_id, '_gamify_item_activity_type');
 	delete_post_meta($item_id, '_gact_item_action_hook');
-	delete_post_meta($item_id, '_gact_item_action_points');
+	delete_post_meta($item_id, '_gact_item_activity_points');
 }

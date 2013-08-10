@@ -14,7 +14,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class GAMWP_Actions_Table extends WP_List_Table {
+class gamify_Actions_Table extends WP_List_Table {
 
 	/**
 	 * Set up Table
@@ -44,9 +44,9 @@ class GAMWP_Actions_Table extends WP_List_Table {
 	public function get_columns() {
 		$columns = array(
 			'cb'             => '<input type="checkbox" />',
-			'name'           => __( 'Name', 'gamwp' ),
-			'action_hook'    => __( 'Action Hook', 'gamwp' ),
-			'action_points'  => __( 'Points', 'gamwp' ),
+			'name'           => __( 'Name', 'gamify' ),
+			'action_hook'    => __( 'Action Hook', 'gamify' ),
+			'activity_points'  => __( 'Points', 'gamify' ),
 
 		);
 
@@ -102,9 +102,9 @@ class GAMWP_Actions_Table extends WP_List_Table {
 		$base         = admin_url( 'admin.php?page=gamify-actions&page=gact&item_id=' . $item['ID'] );
 		$row_actions  = array();
 
-		$row_actions['edit'] = '<a href="' . add_query_arg( array( 'gact-action' => 'edit_item', 'item_id' => $row->ID ) ) . '">' . __( 'Edit', 'gamwp' ) . '</a>';
+		$row_actions['edit'] = '<a href="' . add_query_arg( array( 'gact-action' => 'edit_item', 'item_id' => $row->ID ) ) . '">' . __( 'Edit', 'gamify' ) . '</a>';
 
-		$row_actions['delete'] = '<a href="' . wp_nonce_url( add_query_arg( array( 'gact-action' => 'delete_action', 'item_id' => $row->ID ) ), 'gact_item_nonce' ) . '">' . __( 'Delete', 'gamwp' ) . '</a>';
+		$row_actions['delete'] = '<a href="' . wp_nonce_url( add_query_arg( array( 'gact-action' => 'delete_action', 'item_id' => $row->ID ) ), 'gact_item_nonce' ) . '">' . __( 'Delete', 'gamify' ) . '</a>';
 
 		return $item['name'] . $this->row_actions( $row_actions );
 	}
@@ -197,8 +197,8 @@ class GAMWP_Actions_Table extends WP_List_Table {
 				$gact_table_data[] = array(
 					'ID'            => $item->ID,
 					'name'          => get_the_title( $item->ID ),
-					'action_hook'        => get_post_meta( $item->ID, '_gact_item_action_hook', true ),
-					'action_points'        => get_post_meta( $item->ID, '_gact_item_action_points', true ),
+					'action_hook'        => get_post_meta( $item->ID, '_gamify_item_action_hook', true ),
+					'activity_points'        => get_post_meta( $item->ID, '_gamify_item_activity_points', true ),
 				);
 			}
 		}

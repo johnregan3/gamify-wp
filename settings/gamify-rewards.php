@@ -23,7 +23,7 @@ include_once( plugin_dir_path(__FILE__) . '/rewards/item-actions.php' );
 add_action( 'admin_menu', 'register_rew_submenu_page' );
 
 function register_rew_submenu_page() {
-	add_submenu_page( 'gamify-actions.php', __( 'Gamify WP Rewards', 'gamwp' ), __( 'Rewards', 'gamwp' ), 'manage_options', basename(__FILE__), 'rew_render_menu_page' );
+	add_submenu_page( 'gamify-actions.php', __( 'Gamify WP Rewards', 'gamify' ), __( 'Rewards', 'gamify' ), 'manage_options', basename(__FILE__), 'rew_render_menu_page' );
 }
 
 
@@ -44,7 +44,7 @@ function rew_render_menu_page(){
 	} else {
 		require_once plugin_dir_path(__FILE__) . 'gamify-rewards.php';
 
-		$rew_items_table = new GAMWP_Rewards_Table();
+		$rew_items_table = new gamify_Rewards_Table();
 		$rew_items_table->prepare_items();
 		?>
 
@@ -52,7 +52,7 @@ function rew_render_menu_page(){
 			<div class="icon32" id="icon-options-general">
 				<br />
 			</div>
-			<h2><?php _e( 'Gamify WP Rewards', 'gamwp' ); ?><a href="<?php echo add_query_arg( array( 'rew-action' => 'add_item' ) ); ?>" class="add-new-h2">Add New</a></h2>
+			<h2><?php _e( 'Gamify WP Rewards', 'gamify' ); ?><a href="<?php echo add_query_arg( array( 'rew-action' => 'add_item' ) ); ?>" class="add-new-h2">Add New</a></h2>
 			<form id="rew-items-filter" method="get" action="<?php echo admin_url( 'admin.php?page=gamify-actions.php&post-type=rew' ); ?>">
 				<input type="hidden" name="post_type" value="rew" />
 				<input type="hidden" name="page" value="gamify-rewards.php" />

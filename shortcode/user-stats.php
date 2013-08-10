@@ -6,9 +6,9 @@
  * @since 1.0
  */
 
-function gamwp_stats_shortcode() {
+function gamify_stats_shortcode() {
 
-	$shortcode = New GAMWP_Shortcode;
+	$shortcode = New gamify_Shortcode;
 
 	// Gather Vars
 	$time = current_time( 'timestamp', 1 );
@@ -19,41 +19,39 @@ function gamwp_stats_shortcode() {
 	$todays_points = $shortcode->calc_daily_points( $user_id, $time );
 
 	//Set up user log array
-	$user_log_array = get_user_meta( $user_id, 'gamwp_user_log', true );
+	$user_log_array = get_user_meta( $user_id, 'gamify_user_log', true );
 	$reverse_user_log_array = array_reverse( $user_log_array, true );
-	$user_log_array = array_slice( $reverse_user_log_array, 0, 10, true );
+
+	// Get array of all rewards
+	foreach ( $reverse_user_log_array as $timestamp => $value ) {
+		if ( $value['activity_type'] == 'reward' ) {
+			$user_reward_array[$timestamp] = $value;
+		}
+	}
+
+	//Trim User Activites displayed to 10 most recent
+	$user_activity_array = array_slice( $reverse_user_log_array, 0, 10, true );
 
 	if ( is_user_logged_in() ) : ?>
 
-		<h3><?php echo sprintf( __( 'Points Totals for %s ', 'gamwp' ), esc_html( $username ) ); ?></h3>
+		<div id="gamify-wp-user=stats-wrap">
+			<h3 class="gamify-title"><?php echo sprintf( __( 'Points Totals for %s ', 'gamify' ), esc_html( $username ) ); ?></h3>
+			<p class="gamify-24hrs"><?php _e( 'Points Earned in Last 24 Hours: ', 'gamify' ); echo esc_html( $todays_points ); ?></p>
 
-		<p><strong><?php echo sprintf( __( 'Points Earned in Last 24 Hours:  %s', 'gamwp' ), esc_html( $todays_points ) ); ?></strong></p>
-
-		<?php if ( $user_log_array ) : ?>
-
-			<p><strong><?php _e( 'Recent Activity', 'gamwp' ) ?></strong></p>
-
-			<ul>
-				<?php
-				//Generate recent activity
-				foreach ( $user_log_array as $timestamp => $value ) :
-					$offset = human_time_diff( $timestamp, $time );
-					?>
-					<li>
-						<?php echo esc_html( $value['activity_title'] ); ?>&nbsp;<?php _e( 'for', 'gamwp' ); ?>&nbsp;<?php echo esc_html( $value['activity_points'] ); ?>&nbsp;<?php _e( 'points', 'gamwp' ); ?>&nbsp;(<?php echo esc_html( $offset ); ?>&nbsp;<?php _e( 'ago', 'gamwp' ); ?>)
-					</li>
-				<?php endforeach; ?>
-			</ul>
-
-		<?php endif; ?>
+			<?php if ( $user_log_array ) : ?>
+				<p class="gamify-rewards-list"><?php _e( 'Recent Levels Achieved', 'gamify' ) ?></p>
+				<?php $shortcode->produce_list( $user_reward_array ); ?>
+				<p class="gamify-activity-list"><?php _e( 'Recent Points', 'gamify' ) ?></p>
+				<?php $shortcode->produce_list( $user_activity_array ); ?>
+			<?php endif; ?>
+		</div>
 
 	<?php else : ?>
 
-		<p><em><?php _e( 'You must be logged in to view your stats.', 'gamwp' ); ?></em></p>
-
-		<?php wp_register('', ''); ?>&nbsp;|&nbsp;<a href="<?php esc_url( wp_login_url() ); ?>" title="<?php __( 'Login', 'gamwp' ); ?>"><?php __( 'Login', 'gamwp' ); ?></a></p>
+		<p><em><?php _e( 'You must be logged in to view your stats.', 'gamify' ); ?></em></p>
+		<?php wp_register('', ''); ?>&nbsp;|&nbsp;<a href="<?php esc_url( wp_login_url() ); ?>" title="<?php __( 'Login', 'gamify' ); ?>"><?php __( 'Login', 'gamify' ); ?></a></p>
 
 	<?php endif;
 }
 
-add_shortcode( 'gamwp-stats', 'gamwp_stats_shortcode' );
+add_shortcode( 'gamify-stats', 'gamify_stats_shortcode' );

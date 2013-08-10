@@ -6,7 +6,7 @@
  * @since 1.0
  */
 
-Class GAMWP_Shortcode {
+Class gamify_Shortcode {
 
 	/**
 	 * Calculate a user's points earned in the last 24 hours
@@ -24,7 +24,7 @@ Class GAMWP_Shortcode {
 
 		$one_day_ago = $time - 86400;
 		$daily_points_earned = 0;
-		$actions = get_user_meta( $user_id, 'gamwp_user_log', true );
+		$actions = get_user_meta( $user_id, 'gamify_user_log', true );
 
 			if ( $actions ) {
 				foreach ( $actions as $timestamp => $value ) {
@@ -41,6 +41,31 @@ Class GAMWP_Shortcode {
 			}
 
 		return $daily_points_earned;
+
+	}
+
+
+	/**
+	 * Display an unordered list of rewards/achievements
+	 *
+	 * @since  1.0
+	 * @param  array $input_array  Array to convert to a list
+	 * @return array $list_items   Items to be echoed to produce the list
+	 */
+	public static function produce_list( $input_array ) {
+		$time = current_time( 'timestamp', 1 );
+
+		echo "<ul>";
+		foreach ( $input_array as $timestamp => $value ) {
+			$offset = human_time_diff( $timestamp, $time );
+
+			if ( $value['activity_type'] == 'action')
+				echo "<li>" . esc_html( $value['activity_title'] ) . "&nbsp;" . __( 'for', 'gamify' ) . "&nbsp;" . esc_html( $value['activity_points'] ) . "&nbsp;" . __( 'points', 'gamify' ) . "&nbsp;(" . esc_html( $offset ) . "&nbsp;" . __( 'ago', 'gamify' ) . ")</li>";
+
+			elseif ( $value['activity_type'] == 'reward')
+				echo "<li>" . esc_html( $value['activity_title'] ) . "&nbsp;(" . esc_html( $offset ) . "&nbsp;" . __( 'ago', 'gamify' ) . ")</li>";
+		}
+		echo "</ul>";
 
 	}
 

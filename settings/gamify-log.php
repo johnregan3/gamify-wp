@@ -8,21 +8,21 @@
 
 
 //Add To Menu
-add_action( 'admin_menu', 'gamwp_add_log_submenu_page' );
+add_action( 'admin_menu', 'gamify_add_log_submenu_page' );
 
-function gamwp_add_log_submenu_page() {
-	add_submenu_page( 'gamify-actions.php', __( 'Gamify WP Activity Log' ), __( 'Activity Log' ), 'administrator', basename(__FILE__), 'gamwp_points_log' );
+function gamify_add_log_submenu_page() {
+	add_submenu_page( 'gamify-actions.php', __( 'Gamify WP Activity Log' ), __( 'Activity Log' ), 'administrator', basename(__FILE__), 'gamify_points_log' );
 }
 
-function gamwp_log_register_settings() {
-	register_setting('gamwp_master_log_group', 'gamwp_master_log');
+function gamify_log_register_settings() {
+	register_setting('gamify_master_log_group', 'gamify_master_log');
 }
 
-add_action('admin_init', 'gamwp_log_register_settings');
+add_action('admin_init', 'gamify_log_register_settings');
 
 function generate_log_fields() {
 
-	$options = get_option('gamwp_master_log');
+	$options = get_option('gamify_master_log');
 	$options = is_array( $options ) ? $options : array() ;
 	$options = array_reverse( $options, true );
 	$activity_rows = array();
@@ -70,35 +70,35 @@ function generate_log_fields() {
 }
 
 
-function gamwp_points_log() {
+function gamify_points_log() {
 	?>
 
-	<div id="gamwp-settings-wrap" class="wrap">
+	<div id="gamify-settings-wrap" class="wrap">
 		<div class="icon32" id="icon-options-general">
 			<br />
 		</div>
-		<?php _e( '<h2>Gamify WP Activity Log</h2>', 'gamwp'); ?>
+		<?php _e( '<h2>Gamify WP Activity Log</h2>', 'gamify'); ?>
 		<?php if( isset($_GET['settings-updated']) ) { ?>
 			<div id="message" class="updated">
 				<p><?php _e('Settings saved.') ?></p>
 			</div>
 		<?php } ?>
 		<p><a href="#">WIKI LINK</a>.</p>
-			<table class="wp-list-table widefat fixed posts" id="gamwp-log-table">
+			<table class="wp-list-table widefat fixed posts" id="gamify-log-table">
 				<thead>
 					<tr>
-						<th><?php _e('Time', 'gamwp'); ?></th>
-						<th><?php _e('User', 'gamwp'); ?></th>
-						<th><?php _e('Activity', 'gamwp'); ?></th>
-						<th><?php _e('Points Earned', 'gamwp'); ?></th>
+						<th><?php _e('Time', 'gamify'); ?></th>
+						<th><?php _e('User', 'gamify'); ?></th>
+						<th><?php _e('Activity', 'gamify'); ?></th>
+						<th><?php _e('Points Earned', 'gamify'); ?></th>
 					</tr>
 				</thead>
 				<tfoot>
 					<tr>
-						<th><?php _e('Time', 'gamwp'); ?></th>
-						<th><?php _e('User', 'gamwp'); ?></th>
-						<th><?php _e('Activity', 'gamwp'); ?></th>
-						<th><?php _e('Points Earned', 'gamwp'); ?></th>
+						<th><?php _e('Time', 'gamify'); ?></th>
+						<th><?php _e('User', 'gamify'); ?></th>
+						<th><?php _e('Activity', 'gamify'); ?></th>
+						<th><?php _e('Points Earned', 'gamify'); ?></th>
 					</tr>
 				</tfoot>
 				<tbody>
@@ -112,7 +112,7 @@ function gamwp_points_log() {
 							else : ?>
 								<tr>
 									<td>
-										<?php _e( 'No Log activity yet', 'gamwp' ); ?>
+										<?php _e( 'No Log activity yet', 'gamify' ); ?>
 									</td>
 								</tr>
 							<?php endif; ?>

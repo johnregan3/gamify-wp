@@ -78,7 +78,7 @@ add_action( 'rew_add_item', 'rew_add_item' );
 function rew_store_item( $details, $item_id = null ) {
 
 	$meta = array(
-		'rew_points' => isset( $details['rew_points'] ) ? $details['rew_points'] : '',
+		'activity_points' => isset( $details['activity_points'] ) ? $details['activity_points'] : '',
 	);
 
 	if ( rew_item_exists( $item_id ) && ! empty( $item_id ) ) {
@@ -90,7 +90,7 @@ function rew_store_item( $details, $item_id = null ) {
 		) );
 
 		foreach( $meta as $key => $value ) {
-			update_post_meta( $item_id, '_rew_item_' . $key, $value );
+			update_post_meta( $item_id, '_gamify_item_' . $key, $value );
 		}
 
 		// Item updated
@@ -104,7 +104,7 @@ function rew_store_item( $details, $item_id = null ) {
 			'post_status' => 'publish',
 		) );
 		foreach( $meta as $key => $value ) {
-			update_post_meta( $item_id, '_rew_item_' . $key, $value );
+			update_post_meta( $item_id, '_gamify_item_' . $key, $value );
 		}
 
 		// Item created
@@ -183,7 +183,7 @@ function rew_get_item( $item_id ) {
  */
 function rew_delete_action( $data ) {
 	if ( ! isset( $data['_wpnonce'] ) || ! wp_verify_nonce( $data['_wpnonce'], 'rew_item_nonce' ) )
-		wp_die( __( 'Failed nonce verification', 'rew' ), __( 'Error', 'gamwp' ) );
+		wp_die( __( 'Failed nonce verification', 'rew' ), __( 'Error', 'gamify' ) );
 
 	$item_id = $data['item_id'];
 	wp_delete_post( $item_id, true );
@@ -200,5 +200,6 @@ add_action( 'rew_delete_action', 'rew_delete_action' );
  */
 function rew_remove_item( $item_id = 0 ) {
 	wp_delete_post( $item_id, true );
-	delete_post_meta($item_id, '_rew_item_rew_points');
+	delete_post_meta($item_id, '_gamify_item_activity_type');
+	delete_post_meta($item_id, '_gamify_item_activity_points');
 }
