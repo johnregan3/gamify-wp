@@ -14,7 +14,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class gamify_Rewards_Table extends WP_List_Table {
+class Gamify_Badges_Table extends WP_List_Table {
 
 	/**
 	 * Set up Table
@@ -98,12 +98,12 @@ class gamify_Rewards_Table extends WP_List_Table {
 	 */
 	function column_name( $item ) {
 		$row     = get_post( $item['ID'] );
-		$base         = admin_url( 'admin.php?page=gamify-rewards.php&item_id=' . $item['ID'] );
+		$base         = admin_url( 'admin.php?page=gamify-levels.php&item_id=' . $item['ID'] );
 		$row_actions  = array();
 
 		$row_actions['edit'] = '<a href="' . add_query_arg( array( 'rew-action' => 'edit_item', 'item_id' => $row->ID ) ) . '">' . __( 'Edit', 'gamify' ) . '</a>';
 
-		$row_actions['delete'] = '<a href="' . wp_nonce_url( add_query_arg( array( 'rew-action' => 'delete_action', 'item_id' => $row->ID ) ), 'rew_item_nonce' ) . '">' . __( 'Delete', 'gamify' ) . '</a>';
+		$row_actions['delete'] = '<a href="' . wp_nonce_url( add_query_arg( array( 'rew-action' => 'delete_action', 'item_id' => $row->ID ) ), 'badges_item_nonce' ) . '">' . __( 'Delete', 'gamify' ) . '</a>';
 
 		return $item['name'] . $this->row_actions( $row_actions );
 	}
@@ -160,7 +160,7 @@ class gamify_Rewards_Table extends WP_List_Table {
 
 		foreach ( $ids as $id ) {
 			if ( 'delete' === $this->current_action() ) {
-				rew_remove_item( $id );
+				badges_remove_item( $id );
 			}
 		}
 
@@ -175,14 +175,14 @@ class gamify_Rewards_Table extends WP_List_Table {
 	 * @since  1.0
 	 * @return array Array of all the data for the action 111s
 	 */
-	public function rew_table_data() {
-		$rew_table_data = array();
+	public function badges_table_data() {
+		$badges_table_data = array();
 
 		$orderby        = isset( $_GET['orderby'] )  ? $_GET['orderby']                  : 'ID';
 		$order          = isset( $_GET['order'] )    ? $_GET['order']                    : 'DESC';
 
 		$args = array(
-			'post_type' => 'rew',
+			'post_type' => 'badge',
 			'post_status' => 'publish',
 			'posts_per_page' => -1,
 			'orderby' => $orderby,
@@ -193,7 +193,7 @@ class gamify_Rewards_Table extends WP_List_Table {
 
 		if ( $items ) {
 			foreach ( $items as $item) {
-				$rew_table_data[] = array(
+				$badges_table_data[] = array(
 					'ID'            => $item->ID,
 					'name'          => get_the_title( $item->ID ),
 					'activity_points'        => get_post_meta( $item->ID, '_gamify_item_activity_points', true ),
@@ -201,7 +201,7 @@ class gamify_Rewards_Table extends WP_List_Table {
 			}
 		}
 
-		return $rew_table_data;
+		return $badges_table_data;
 	}
 
 
@@ -217,7 +217,7 @@ class gamify_Rewards_Table extends WP_List_Table {
 		$sortable = $this->get_sortable_columns();
 		$this->_column_headers = array( $columns, $hidden, $sortable );
 		$this->process_bulk_action();
-		$data = $this->rew_table_data();
+		$data = $this->badges_table_data();
 		$this->items = $data;
 
 	}

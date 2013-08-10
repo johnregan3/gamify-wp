@@ -108,7 +108,9 @@ Class gamify_Process {
 
 
 		//loop through activites to ensure the current reward isn't already there (already earned).
-		$rewards = self::get_all_activities( 'rew' );
+		$levels = self::get_all_activities( 'level' );
+		$badges = self::get_all_activities( 'badges' );
+		$rewards = $levels + $badges;
 
 		foreach ( $rewards as $rew_obj ) {
 
@@ -143,7 +145,6 @@ Class gamify_Process {
 
 		//get activity information
 		$post_type = get_post_type( $activity_id );
-		$activity_type = ( $post_type == 'rew' ) ? 'reward' : 'action';
 		$activity_title  = get_the_title( $activity_id );
 		$activity_points = get_post_meta( $activity_id, '_gamify_item_activity_points', true );
 
@@ -151,7 +152,7 @@ Class gamify_Process {
 		$time = current_time( 'timestamp', 1 );
 		$add_to_array[$time]['userid']          = $user_id;
 		$add_to_array[$time]['activity_id']     = $activity_id;
-		$add_to_array[$time]['activity_type']   = $activity_type;
+		$add_to_array[$time]['activity_type']   = $post_type;
 		$add_to_array[$time]['activity_title']  = $activity_title;
 		$add_to_array[$time]['activity_points'] = $activity_points;
 

@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 ?>
 
-<h2><?php _e( 'Add New Reward', 'gamify' ); ?> - <a href="<?php echo admin_url( 'admin.php?page=gamify-rewards.php&post_type=rew' ); ?>" class="button-secondary"><?php _e( 'Go Back', 'gamify' ); ?></a></h2>
+<h2><?php _e( 'Add New Reward', 'gamify' ); ?> - <a href="<?php echo admin_url( 'admin.php?page=gamify-levels.php&post_type=rew' ); ?>" class="button-secondary"><?php _e( 'Go Back', 'gamify' ); ?></a></h2>
 <form id="rew-add-item" action="" method="POST">
 	<table class="form-table">
 		<tbody>
@@ -36,9 +36,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		</tbody>
 	</table>
 	<p class="submit">
-		<input type="hidden" name="activity_title" value="reward">
+		<input type="hidden" name="activity_title" value="level">
 		<input type="hidden" name="rew-action" value="add_item"/>
-		<input type="hidden" name="rew-redirect" value="<?php echo esc_url( admin_url( 'admin.php?page=gamify-rewards.php' ) ); ?>"/>
+		<input type="hidden" name="rew-redirect" value="<?php echo esc_url( admin_url( 'admin.php?page=gamify-levels.php' ) ); ?>"/>
 		<input type="hidden" name="rew-item-nonce" value="<?php echo wp_create_nonce( 'rew_item_nonce' ); ?>"/>
 		<input type="submit" value="<?php _e( 'Add New Reward', 'gamify' ); ?>" class="button-primary"/>
 	</p>

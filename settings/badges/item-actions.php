@@ -12,12 +12,12 @@
  *
  * @since  1.0
  */
-function rew_get_rew_actions() {
+function badges_get_badges_actions() {
     if ( isset( $_GET['rew-action'] ) ) {
-        do_action( 'rew_' . $_GET['rew-action'], $_GET );
+        do_action( 'badges_' . $_GET['rew-action'], $_GET );
         }
     }
-add_action( 'init', 'rew_get_rew_actions' );
+add_action( 'init', 'badges_get_badges_actions' );
 
 
 
@@ -26,16 +26,16 @@ add_action( 'init', 'rew_get_rew_actions' );
  *
  * @since  1.0
  */
-function rew_process_actions() {
+function badges_process_actions() {
     if ( isset( $_POST['rew-action'] ) ) {
-        do_action( 'rew_' . $_POST['rew-action'], $_POST );
+        do_action( 'badges_' . $_POST['rew-action'], $_POST );
     }
 
     if ( isset( $_GET['rew-action'] ) ) {
-        do_action( 'rew_' . $_GET['rew-action'], $_GET );
+        do_action( 'badges_' . $_GET['rew-action'], $_GET );
     }
 }
-add_action( 'admin_init', 'rew_process_actions' );
+add_action( 'admin_init', 'badges_process_actions' );
 
 
 
@@ -45,8 +45,8 @@ add_action( 'admin_init', 'rew_process_actions' );
  * @since  1.0
  * @param  array  $data  Data of item to be added
  */
-function rew_add_item( $data ) {
-	if ( isset( $data['rew-item-nonce'] ) && wp_verify_nonce( $data['rew-item-nonce'], 'rew_item_nonce' ) ) {
+function badges_add_item( $data ) {
+	if ( isset( $data['rew-item-nonce'] ) && wp_verify_nonce( $data['rew-item-nonce'], 'badges_item_nonce' ) ) {
 		// Setup the action code details
 		$posted = array();
 
@@ -56,7 +56,7 @@ function rew_add_item( $data ) {
 			}
 		}
 				// Set the action code's default status to active
-		if ( rew_store_item( $posted ) ) {
+		if ( badges_store_item( $posted ) ) {
 			wp_redirect( add_query_arg( 'item-message', 'item_added', $data['rew-redirect'] ) ); die();
 		} else {
 			wp_redirect( add_query_arg( 'item-message', 'item_add_failed', $data['rew-redirect'] ) ); die();
@@ -64,7 +64,7 @@ function rew_add_item( $data ) {
 
 	}
 }
-add_action( 'rew_add_item', 'rew_add_item' );
+add_action( 'badges_add_item', 'badges_add_item' );
 
 
 
@@ -75,13 +75,13 @@ add_action( 'rew_add_item', 'rew_add_item' );
  * @param  array  $details  Data of item to be added
  * @param  int    $item_id  Item for which to store the data.
  */
-function rew_store_item( $details, $item_id = null ) {
+function badges_store_item( $details, $item_id = null ) {
 
 	$meta = array(
 		'activity_points' => isset( $details['activity_points'] ) ? $details['activity_points'] : '',
 	);
 
-	if ( rew_item_exists( $item_id ) && ! empty( $item_id ) ) {
+	if ( badges_item_exists( $item_id ) && ! empty( $item_id ) ) {
 		// Update an existing Item
 
 		wp_update_post( array(
@@ -99,7 +99,7 @@ function rew_store_item( $details, $item_id = null ) {
 	} else {
 		// Add the Item
 		$item_id = wp_insert_post( array(
-			'post_type'   => 'rew',
+			'post_type'   => 'badge',
 			'post_title'  => isset( $details['name'] ) ? $details['name'] : '',
 			'post_status' => 'publish',
 		) );
@@ -120,8 +120,8 @@ function rew_store_item( $details, $item_id = null ) {
  * @since  1.0
  * @param  array  $data  Data of item to be added
  */
-function rew_edit_item( $data ) {
-	if ( isset( $data['rew-item-nonce'] ) && wp_verify_nonce( $data['rew-item-nonce'], 'rew_item_nonce' ) ) {
+function badges_edit_item( $data ) {
+	if ( isset( $data['rew-item-nonce'] ) && wp_verify_nonce( $data['rew-item-nonce'], 'badges_item_nonce' ) ) {
 
 		$item = array();
 		foreach ( $data as $key => $value ) {
@@ -130,14 +130,14 @@ function rew_edit_item( $data ) {
 			}
 		}
 
-		if ( rew_store_item( $item, $data['item_id'] ) ) {
+		if ( badges_store_item( $item, $data['item_id'] ) ) {
 			wp_redirect( add_query_arg( 'rew-message', 'item_updated', $data['rew-redirect'] ) ); die();
 		} else {
 			wp_redirect( add_query_arg( 'rew-message', 'item_update_failed', $data['rew-redirect'] ) ); die();
 		}
 	}
 }
-add_action( 'rew_edit_item', 'rew_edit_item' );
+add_action( 'badges_edit_item', 'badges_edit_item' );
 
 
 
@@ -148,8 +148,8 @@ add_action( 'rew_edit_item', 'rew_edit_item' );
  * @param  int  $item_id  Item for which to store the data.
  * @return bool
  */
-function rew_item_exists( $item_id ) {
-	if ( rew_get_item( $item_id ) )
+function badges_item_exists( $item_id ) {
+	if ( badges_get_item( $item_id ) )
 		return true;
 
 	return false;
@@ -164,7 +164,7 @@ function rew_item_exists( $item_id ) {
  * @param  int  item_id  Item for which to store the data.
  * @return object $item  Post object for requested item ID.
  */
-function rew_get_item( $item_id ) {
+function badges_get_item( $item_id ) {
 	$item = get_post( $item_id );
 
 	if ( get_post_type( $item_id ) != 'rew' )
@@ -181,14 +181,14 @@ function rew_get_item( $item_id ) {
  * @since  1.0
  * @param  array  $data
  */
-function rew_delete_action( $data ) {
-	if ( ! isset( $data['_wpnonce'] ) || ! wp_verify_nonce( $data['_wpnonce'], 'rew_item_nonce' ) )
+function badges_delete_action( $data ) {
+	if ( ! isset( $data['_wpnonce'] ) || ! wp_verify_nonce( $data['_wpnonce'], 'badges_item_nonce' ) )
 		wp_die( __( 'Failed nonce verification', 'rew' ), __( 'Error', 'gamify' ) );
 
 	$item_id = $data['item_id'];
 	wp_delete_post( $item_id, true );
 }
-add_action( 'rew_delete_action', 'rew_delete_action' );
+add_action( 'badges_delete_action', 'badges_delete_action' );
 
 
 
@@ -198,7 +198,7 @@ add_action( 'rew_delete_action', 'rew_delete_action' );
  * @since 1.0
  * @param int $item_id Item ID
  */
-function rew_remove_item( $item_id = 0 ) {
+function badges_remove_item( $item_id = 0 ) {
 	wp_delete_post( $item_id, true );
 	delete_post_meta($item_id, '_gamify_item_activity_type');
 	delete_post_meta($item_id, '_gamify_item_activity_points');

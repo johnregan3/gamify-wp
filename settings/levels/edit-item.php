@@ -19,7 +19,7 @@ $item     = rew_get_item( $item_id );
 $activity_points     = get_post_meta( $item_id, '_rew_item_activity_points', true );
 
 ?>
-<h2><?php _e( 'Edit Reward', 'gamify' ); ?> - <a href="<?php echo admin_url( 'admin.php?post_type=rew&page=gamify-rewards.php' ); ?>" class="button-secondary"><?php _e( 'Go Back', 'gamify' ); ?></a></h2>
+<h2><?php _e( 'Edit Reward', 'gamify' ); ?> - <a href="<?php echo admin_url( 'admin.php?post_type=rew&page=gamify-levels.php' ); ?>" class="button-secondary"><?php _e( 'Go Back', 'gamify' ); ?></a></h2>
 <form id="rew-edit-tiem" action="" method="post">
 	<table class="form-table">
 		<tbody>
@@ -48,7 +48,7 @@ $activity_points     = get_post_meta( $item_id, '_rew_item_activity_points', tru
 	<p class="submit">
 		<input type="hidden" name="rew-action" value="edit_item"/>
 		<input type="hidden" name="item_id" value="<?php echo absint( $_GET['item_id'] ); ?>"/>
-		<input type="hidden" name="rew-redirect" value="<?php echo esc_url( admin_url( 'admin.php?post_type=rew&page=gamify-rewards.php' ) ); ?>"/>
+		<input type="hidden" name="rew-redirect" value="<?php echo esc_url( admin_url( 'admin.php?post_type=rew&page=gamify-levels.php' ) ); ?>"/>
 		<input type="hidden" name="rew-item-nonce" value="<?php echo wp_create_nonce( 'rew_item_nonce' ); ?>"/>
 		<input type="submit" value="<?php _e( 'Update Reward', 'gamify' ); ?>" class="button-primary"/>
 	</p>

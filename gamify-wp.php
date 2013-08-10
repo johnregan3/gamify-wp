@@ -30,15 +30,6 @@
 //General Admin Page
 include_once( plugin_dir_path(__FILE__) . 'settings/gamify-general.php' );
 
-//Actions Admin Page
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-actions.php' );
-
-//Rewards Admin Page
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-rewards.php' );
-
-//Points Log Admin Page
-include_once( plugin_dir_path(__FILE__) . 'settings/gamify-log.php' );
-
 //Generate Hooks & Save Activity Class
 include_once( plugin_dir_path(__FILE__) . 'process-class.php' );
 
